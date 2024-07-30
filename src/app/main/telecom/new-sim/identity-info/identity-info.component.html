@@ -1,0 +1,28 @@
+<div id="table-striped" *blockUI="'section-block'">
+    <div class="col-12" *ngIf="!personal">
+        <div class="row">
+            <div class="col-12">
+                <h4>Tổ chức/Doanh nghiệp</h4>
+            </div>
+        </div>
+        <form-organiration [organization]="currentTask && currentTask.customer && currentTask.customer.organization ? currentTask.customer.organization:''" [csubmitted]="csubmitted" [isDelegation]="isDelegation"
+            (emitSubmitOrganization)="fromOrganizationData($event)"></form-organiration>
+    </div>
+
+
+    <div class="col-12" *ngIf="!personal">
+        <h4>Người đại diện tổ chức/Doanh nghiệp</h4>
+        <br>
+        <form-people [people]="currentTask && currentTask.customer && currentTask.customer.people ? currentTask.customer.people:''" [csubmitted]="csubmitted" (outPeople)="formPeopleData($event)"></form-people>
+    </div>
+
+    <div class="col-12 mt-2" *ngIf="personal">
+        <form-people [csubmitted]="csubmitted" (outPeople)="formPeopleData($event)" [people]="dataPeople"></form-people>
+    </div>
+    <div class="col-12">
+        <button (click)="onNextStep()" type="button" class="btn btn-block btn-primary btn-next" rippleEffect>
+            <span class="align-middle ">Tiếp tục</span>
+            <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+        </button>
+    </div>
+</div>

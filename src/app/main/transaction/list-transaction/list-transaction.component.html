@@ -1,0 +1,160 @@
+<div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+<div class="row" id="table-striped">
+    <div class="col-12">
+      <div class="card">
+        <!-- <div class="card-body statistics-body">
+          <div class="row">
+            <div class="col-sm-6 col-xl-4 mb-2 mb-xl-0">
+              <div class="media">
+                <div class="avatar bg-light-primary mr-2">
+                  <div class="avatar-content">
+                    <i data-feather="box" class="avatar-icon"></i>
+                  </div>
+                </div>
+                <div class="media-body my-auto">
+                  <h4 class="font-weight-bolder mb-0">{{ total | currency:' ':'symbol':'0.0-1' }}</h4>
+                  <p class="card-text font-small-3 mb-0">Tổng số giao dịch</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-sm-6 col-xl-4">
+              <div class="media">
+                <div class="avatar bg-light-success mr-2">
+                  <div class="avatar-content">
+                    <i data-feather="dollar-sign" class="avatar-icon"></i>
+                  </div>
+                </div>
+                <div class="media-body my-auto">
+                  <h4 class="font-weight-bolder mb-0">{{ sums?.sum_amount | currency:' ':'symbol':'0.0-1' }}</h4>
+                  <p class="card-text font-small-3 mb-0">Tổng doanh thu</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-xl-4">
+              <div class="media">
+                <div class="avatar bg-light-success mr-2">
+                  <div class="avatar-content">
+                    <i data-feather="dollar-sign" class="avatar-icon"></i>
+                  </div>
+                </div>
+                <div class="media-body my-auto">
+                  <h4 class="font-weight-bolder mb-0">{{ sums?.sum_fee | currency:' ':'symbol':'0.0-1' }}</h4>
+                  <p class="card-text font-small-3 mb-0">Tổng phí</p>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div> -->
+      </div>
+      <div class="card">
+        <div class="card-header"><h4 class="card-title">{{ contentHeader.headerTitle }}</h4></div>
+        <div class="card-body">
+          <form (ngSubmit)="onSubmitSearch()">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <select
+                  class="form-control"
+                  name="status"
+                  [(ngModel)]="searchForm.topup"
+                >
+                  <option value="">Chọn loại</option>
+                  <option value="{{ item.value }}" *ngFor="let item of selectTopup">{{ item.label }}</option>                        
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <input type="text" 
+                placeholder="Khoảng thời gian"
+                [ngModelOptions]="{standalone: true}" 
+                ngxDaterangepickerMd [(ngModel)]="dateRange" 
+                [ranges]="ranges"
+                [locale]="{applyLabel: 'Chọn',format: 'DD/MM/YYYY'}"
+                [showCustomRangeLabel]="true"
+                [alwaysShowCalendars]="true"
+                name="date_range"
+                class="form-control"/>
+              </div>
+            </div>
+            <!-- <div class="col-md-2">
+              <div class="form-group">
+                <select class="form-control" name="trans_type" [(ngModel)]="searchForm.trans_type">
+                  <option value="">Chọn loại giao dịch</option>
+                  <option *ngFor="let item of listTransType | keyvalue" [value]="item.key">{{ item.key }}</option>                  
+                </select>
+              </div>
+            </div> -->
+            <div class="col-md-2">
+              <div class="form-group">
+                <button type="submit" class="btn btn-block btn-info">Lọc kết quả <span [data-feather]="'search'"></span></button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="table-responsive" *blockUI="'section-block'">
+          <div class="mb-1">
+            <span>Tổng số:</span> <b>{{ total }}</b>
+          </div>
+          <table class="table table-striped text-nowrap" *ngIf="list">
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Mã giao dịch</th>                
+                <th>Số tiền</th>                
+                <th>Thời gian</th>   
+                <th>Ghi chú</th>                          
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of list;index as i">
+                <td>
+                  {{ (searchForm.page-1)*searchForm.take + i + 1 }}
+                </td>
+                <td>{{ item?.id }}</td>
+                <td>{{ item?.amount | currency:' ':'symbol':'0.0-1' }}</td>               
+                <td>{{ item?.created_at | date: 'dd/MM/yyyy H:mm':'UTC' }}</td>
+                <td>{{ item?.response_desc }}</td>
+              </tr>
+
+              <tr>
+                <td></td>
+                <td><b>Tổng: </b></td>                
+                <td><b>{{ sums | number }}</b></td>
+                <td></td>
+                <td></td>
+              </tr>
+
+            </tbody>
+          </table>
+                
+
+              <ngb-pagination class="d-flex justify-content-end pr-3 pt-2" [collectionSize]="total" [(page)]="searchForm.page"
+                [pageSize]="searchForm.take" [boundaryLinks]="true" (pageChange)="loadPage($event)">
+                <ng-template ngbPaginationPages let-page let-pages="pages">
+                  <li class="ngb-custom-pages-item" *ngIf="pages.length > 0">
+                    <div class="mb-3 d-flex flex-nowrap px-2">
+                      <label id="paginationInputLabel" for="paginationInput" class="col-form-label me-2 ms-1">Trang</label>
+                      <input #i type="text" inputmode="numeric" pattern="[0-9]*" class="form-control custom-pages-input"
+                        id="paginationInput" [value]="searchForm.page" (keyup.enter)="loadPage(i.value)" (blur)="loadPage(i.value)"
+                        (input)="formatInput($any($event).target)" aria-labelledby="paginationInputLabel paginationDescription"
+                        style="width: 2.7rem" />
+                      <span id="paginationDescription" class="col-form-label text-nowrap px-2">
+                        của {{ pages.length }}</span>
+                    </div>
+                  </li>
+                </ng-template>
+              </ngb-pagination>
+        </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+    </div>
+</div>

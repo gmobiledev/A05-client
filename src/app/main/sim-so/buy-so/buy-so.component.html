@@ -1,0 +1,172 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+    <section class="horizontal-wizard">
+      <div id="stepper1" class="bs-stepper horizontal-wizard-example">
+        <div class="bs-stepper-header">
+          <div class="step" data-target="#account-details">
+            <button class="step-trigger">
+              <span class="bs-stepper-box">1</span>
+              <span class="bs-stepper-label">
+                <span class="bs-stepper-title">Chọn số</span>
+                <span class="bs-stepper-subtitle"></span>
+              </span>
+            </button>
+          </div>
+          <div class="line"><i data-feather="chevron-right" class="font-medium-2"></i></div>
+          <div class="step" data-target="#personal-info">
+            <button type="button" class="step-trigger">
+              <span class="bs-stepper-box">2</span>
+              <span class="bs-stepper-label">
+                <span class="bs-stepper-title">Chọn gói cước</span>
+                <span class="bs-stepper-subtitle"></span>
+              </span>
+            </button>
+          </div>
+          <div class="line"><i data-feather="chevron-right" class="font-medium-2"></i></div>
+          <div class="step" data-target="#address">
+            <button class="step-trigger">
+              <span class="bs-stepper-box">3</span>
+              <span class="bs-stepper-label">
+                <span class="bs-stepper-title">Ký hợp đồng</span>
+                <span class="bs-stepper-subtitle"></span>
+              </span>
+            </button>
+          </div>
+          <div class="line"><i data-feather="chevron-right" class="font-medium-2"></i></div>
+          <div class="step" data-target="#social-links">
+            <button class="step-trigger">
+              <span class="bs-stepper-box">4</span>
+              <span class="bs-stepper-label">
+                <span class="bs-stepper-title">Xác nhận & Thanh toán</span>
+                <span class="bs-stepper-subtitle"></span>
+              </span>
+            </button>
+          </div>
+        </div>
+        <div class="bs-stepper-content">
+          <form (ngSubmit)="(HWForm.form.valid)" #HWForm="ngForm">
+            <div id="account-details" class="content">
+              <form #accountDetailsForm="ngForm">
+                <!-- <div class="content-header">
+                <h5 class="mb-0">Account Details</h5>
+                <small class="text-muted">Enter Your Account Details.</small>
+              </div> -->
+
+                <app-shared-list-so (listSelected)="onSelectedSim($event)"></app-shared-list-so>
+
+                <div class="d-flex justify-content-between">
+                  <button (click)="horizontalWizardStepperPrevious()" class="btn btn-outline-secondary btn-prev"
+                    disabled rippleEffect>
+                    <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
+                    <span class="align-middle d-sm-inline-block d-none">Quay lại</span>
+                  </button>
+                  <button (click)="horizontalWizardStepperNext(accountDetailsForm)" type="submit"
+                    class="btn btn-primary btn-next" rippleEffect>
+                    <span class="align-middle d-sm-inline-block d-none">Tiếp tục</span>
+                    <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div id="personal-info" class="content">
+              <form #personalInfoForm="ngForm">
+                <!-- <div class="content-header">
+                <h5 class="mb-0">Personal Info</h5>
+                <small>Enter Your Personal Info.</small>
+              </div> -->
+
+                <div class="row">
+                  <div class="col-12">
+                    <div class="inline-spacing mb-2">
+                      <div class="custom-control custom-radio">
+                        <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" checked />
+                        <label class="custom-control-label" for="customRadio1">Dịch vụ trả trước</label>
+                      </div>
+                      <div class="custom-control custom-radio">
+                        <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" />
+                        <label class="custom-control-label" for="customRadio2">Dịch vụ trả sau</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-5">
+                    <div class="form-group">
+                      <label for="">Sản lượng đăng ký</label>
+                      <input type="text" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <button type="button" (click)="horizontalWizardStepperPrevious()" class="btn btn-primary btn-prev"
+                    rippleEffect>
+                    <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
+                    <span class="align-middle d-sm-inline-block d-none">Quay lại</span>
+                  </button>
+                  <button (click)="horizontalWizardStepperNext(personalInfoForm)" class="btn btn-primary btn-next"
+                    rippleEffect>
+                    <span class="align-middle d-sm-inline-block d-none">Tiếp tục</span>
+                    <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div id="address" class="content">
+              <form #addressForm="ngForm">
+                <!-- <div class="content-header">
+                <h5 class="mb-0">Address</h5>
+                <small>Enter Your Address.</small>
+              </div> -->
+
+                <div class="row"></div>
+
+                <div class="d-flex justify-content-between">
+                  <button type="button" (click)="horizontalWizardStepperPrevious()" class="btn btn-primary btn-prev"
+                    rippleEffect>
+                    <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
+                    <span class="align-middle d-sm-inline-block d-none">Quay lại</span>
+                  </button>
+                  <button (click)="horizontalWizardStepperNext(addressForm)" class="btn btn-primary btn-next"
+                    rippleEffect>
+                    <span class="align-middle d-sm-inline-block d-none">Tiếp tục</span>
+                    <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div id="social-links" class="content">
+              <form #socialLinkForm="ngForm">
+                <!-- <div class="content-header">
+                <h5 class="mb-0">Social Links</h5>
+                <small>Enter Your Social Links.</small>
+              </div> -->
+                <div class="row">
+                  <div class="col-8">
+                    <div class="checkout-items">
+                      <app-sim-so-checkout-item-sip *ngFor="let item of selectedSim"
+                        [product]="item"></app-sim-so-checkout-item-sip>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <app-sim-so-checkout-total [totalPrice]="totalPrice" [totalCuoc]="totalCuoc"
+                      [totalPhihoamang]="totalPhihoamang"></app-sim-so-checkout-total>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <button type="button" (click)="horizontalWizardStepperPrevious()" class="btn btn-primary btn-prev"
+                    rippleEffect>
+                    <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
+                    <span class="align-middle d-sm-inline-block d-none">Quay lại</span>
+                  </button>
+                  <button class="btn btn-success btn-submit" rippleEffect (click)="onSubmit()">Submit</button>
+                </div>
+              </form>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>

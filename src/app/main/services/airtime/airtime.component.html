@@ -1,0 +1,164 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+    <div class="row">
+      <div class="col-lg-3 col-sm-6 col-12">
+        <div class="card">
+          <div class="card-header d-flex flex-column pb-0">
+            <div class="row">
+              <div class="col-12">
+                <div class="avatar bg-light-primary p-50 m-0">
+                  <div class="avatar-content">
+                    <i data-feather="cast" class="font-medium-5"></i>
+                  </div>
+                </div>
+
+                <div class="avatar bg-white p-50 m-0 pull-right">
+                  <div class="custom-control custom-switch">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="customSwitch3"
+                      checked
+                    />
+                    <label class="custom-control-label" for="customSwitch3">
+                      <span class="switch-icon-left"
+                        ><i data-feather="check"></i
+                      ></span>
+                      <span class="switch-icon-right"
+                        ><i data-feather="x"></i
+                      ></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <h2 class="font-weight-bolder mt-1">
+                  {{ "AirTime" }}
+                </h2>
+                <p class="mb-0">Người đăng ký đã đạt được</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Apexchart component-->
+          <div id="gainedChartoptions" #gainedChartRef>
+            <apx-chart
+              [series]="data.subscribers_gained.series"
+              [chart]="{
+                height: 100,
+                width:
+                  isMenuToggled === true
+                    ? gainedChartRef.offsetWidth
+                    : gainedChartoptions.chart.width,
+                type: 'area',
+                toolbar: {
+                  show: false
+                },
+                sparkline: {
+                  enabled: true
+                }
+              }"
+              [stroke]="gainedChartoptions.stroke"
+              [fill]="gainedChartoptions.fill"
+              [tooltip]="gainedChartoptions.tooltip"
+              [colors]="gainedChartoptions.colors"
+              [dataLabels]="gainedChartoptions.dataLabels"
+            ></apx-chart>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-12">
+        <div class="mb-2">
+          <button type="button" class="btn btn-primary" rippleEffect>
+            <span [data-feather]="'lock'" [class]="'mr-25'"></span>Khóa
+          </button>
+        </div>
+
+        <div class="mb-2">
+          <a [routerLink]="['/payment/list']" routerLinkActive="active">
+            <button type="button" class="btn btn-primary" rippleEffect>
+              <span [data-feather]="'credit-card'" [class]="'mr-25'"></span>Nạp
+              tiền
+            </button>
+          </a>
+        </div>
+
+        <div class="mb-2">
+          <h2>
+            <p>Tài khoản chính:</p>
+            <div>
+              <b>
+                <span *ngIf="showBalance == true">{{
+                  balance | currency : "VND" : true
+                }}</span>
+                <span *ngIf="showBalance == false">**********</span>
+              </b>
+              <span
+                ><i
+                  class="feather m-1"
+                  [ngClass]="{
+                    'icon-eye-off': showBalance,
+                    'icon-eye': !showBalance
+                  }"
+                  (click)="toggleBalanceTextType()"
+                ></i
+              ></span>
+            </div>
+          </h2>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-12">
+        <ul ngbNav #navWithIcons="ngbNav" class="nav-tabs">
+          <li ngbNavItem>
+            <a ngbNavLink><span [data-feather]="'cast'"></span> Tổng quan</a>
+            <ng-template ngbNavContent>
+              <p>
+                Là dịch vụ cho thuê bao di động Gmobile trả trước được ứng trước
+                một giá trị sử dụng tài khoản viễn thông nhất định vào tài khoản
+                Airtime với giá cước 0 đồng và có thời giạn sử dụng nhất định.
+              </p>
+            </ng-template>
+          </li>
+
+          <li ngbNavItem>
+            <a ngbNavLink><span [data-feather]="'lock'"></span> Tài liệu</a>
+            <ng-template ngbNavContent>
+              <p>
+                Là dịch vụ ứng cho thuê bao di động Gmobile trả trước khi thuê
+                bao có phát sinh các sự kiện số dư tài khoản chính thấp, thực
+                hiện cuộc gọi không thành công, gửi tin nhắn không thành công và
+                thỏa mãn các điều kiện sử dụng dịch vụ theo quy định của Gmobile
+                được ứng trước một giá trị sử dụng tài khoản viễn thông nhất
+                định vào tài khoản Airtime với giá cước 0 đồng và có thời giạn
+                sử dụng nhất định. Sau khi hết thời hạn sử dụng, nếu khách hàng
+                không sử dụng hết số tiền Airtime được ứng, số tiền dư sẽ bị thu
+                hồi. Thuê bao sẽ phải hoàn trả toàn bộ giá trị tài khoản Airtime
+                đã được ứng trước đó bằng cách nạp tiền vào Tài khoản chính.
+              </p>
+            </ng-template>
+          </li>
+
+          <li ngbNavItem>
+            <a ngbNavLink><span [data-feather]="'award'"></span> Chi phí</a>
+            <ng-template ngbNavContent>
+              <p>
+                Giá chỉ từ: x.000 đ/lần (đã bao gồm VAT). Mức ứng: Giá trị ứng
+                từ x.000 - x0.000 VNĐ/lần ứng. Phí ứng tiền: Từ 10 - 30% số tiền
+                khách hàng được ứng (Số tiền ứng và mức phí ứng tiền được thông
+                báo cụ thể cho thuê bao trong tin nhắn mời ứng tiền). Trong đó,
+                mức phí dịch vụ được quy định theo mức tiền ứng.
+              </p>
+            </ng-template>
+          </li>
+        </ul>
+      </div>
+
+      <div [ngbNavOutlet]="navWithIcons" class="mt-2"></div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,622 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <!-- <app-content-header [contentHeader]="contentHeader"></app-content-header> -->
+    <div class="row mb-1">
+      <div class="col-2"></div>
+      <div class="col-8">
+        <h4 class="text-center">Thay đổi sim</h4>
+      </div>
+      <div class="col-2"></div>
+    </div>
+    <section class="horizontal-wizard">
+      <div id="stepper1" class="bs-stepper horizontal-wizard-example">
+        <div class="bs-stepper-header">
+          <div class="step" data-target="#account-details">
+            <button disabled class="step-trigger">
+              <span class="bs-stepper-box">1</span>
+              <!-- <span class="bs-stepper-label">
+                                <span class="bs-stepper-title">Tìm kiếm</span>
+                                <span class="bs-stepper-subtitle"></span>
+                            </span> -->
+            </button>
+          </div>
+          <div class="line">
+            <i data-feather="chevron-right" class="font-medium-2"></i>
+          </div>
+          <div class="step" data-target="#upload-cccd">
+            <button type="button" disabled class="step-trigger">
+              <span class="bs-stepper-box">2</span>
+              <!-- <span class="bs-stepper-label">
+                                <span class="bs-stepper-title">Xác minh</span>
+                                <span class="bs-stepper-subtitle"></span>
+                            </span> -->
+            </button>
+          </div>
+          <div class="line">
+            <i data-feather="chevron-right" class="font-medium-2"></i>
+          </div>
+          <div class="step" data-target="#upload-phoi-sim">
+            <button disabled class="step-trigger">
+              <span class="bs-stepper-box">3</span>
+              <!-- <span class="bs-stepper-label">
+                                <span class="bs-stepper-title">Đổi sim</span>
+                                <span class="bs-stepper-subtitle"></span>
+                            </span> -->
+            </button>
+          </div>
+        </div>
+        <div class="bs-stepper-content">
+          <div id="account-details" class="content">
+            <section class="horizontal-wizard">
+              <div class="card">
+                <div class="card-body">
+                  <form
+                    [formGroup]="ReactiveChangeSimForm"
+                    (ngSubmit)="ReactiveUDFormOnSubmit()"
+                  >
+                    <div class="row">
+
+                      <div class="col-sm-12">
+                        <div class="form-group">
+                          <label for="">Loại hình</label>
+                          <select name="" id="" class="form-control" [(ngModel)]="currentSubAction" [ngModelOptions]="{standalone: true}">
+                            <option value="">Đổi sim Vật lý</option>
+                            <option value="{{ taskSubAction.SIM_TO_ESIM }}">Đổi ESIM</option>
+                            <!-- <option value="{{ taskSubAction.ESIM_REKIT_SIM }}">ESIM sang Sim Vật lý</option> -->
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-sm-12">
+                        <div class="form-group">
+                          <label for="msisdn">Số điện thoại</label>
+                          <input
+                            type="tel"
+                            id="mobile"
+                            formControlName="mobile"
+                            placeholder="(099) 612 00 00"
+                            mask="(099)0 000 000"
+                            class="form-control"
+                            [ngClass]="{
+                              'is-invalid':
+                                ReactiveUDFormSubmitted &&
+                                ReactiveUDForm.mobile.errors
+                            }"
+                          />
+                          <div
+                            *ngIf="
+                              ReactiveUDFormSubmitted &&
+                              ReactiveUDForm.mobile.errors
+                            "
+                            class="invalid-feedback"
+                          >
+                            <div *ngIf="ReactiveUDForm.mobile.errors.required">
+                              Trường thông tin không được để trống
+                            </div>
+                            <div *ngIf="ReactiveUDForm.mobile.errors.minlength">
+                              Số điện thoại không đúng định dạng
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-12">
+                        <div class="form-group">
+                          <label for="identification_no">Số CMND/CCCD</label>
+                          <input
+                            type="text"
+                            type="text"
+                            id="identification_no"
+                            maxlength="12"
+                            formControlName="identification_no"
+                            class="form-control"
+                            [ngClass]="{
+                              'is-invalid':
+                                ReactiveUDFormSubmitted &&
+                                ReactiveUDForm.identification_no.errors
+                            }"
+                          />
+                          <div
+                            *ngIf="
+                              ReactiveUDFormSubmitted &&
+                              ReactiveUDForm.identification_no.errors
+                            "
+                            class="invalid-feedback"
+                          >
+                            <div
+                              *ngIf="
+                                ReactiveUDForm.identification_no.errors.required
+                              "
+                            >
+                              Trường thông tin không được để trống
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" rippleEffect>
+                      Tìm kiếm
+                    </button>
+                  </form>
+                </div>
+                <div class="card" *ngIf="msisdnInfo">
+                  <div class="card-header">
+                    <h4 class="card-title">Kết quả tìm kiếm</h4>
+                  </div>
+                  <div class="card-body">
+                    <div
+                      class="d-flex justify-content-between align-items-center"
+                    >
+                      <div class="media">
+                        <div class="avatar mr-75">
+                          <img
+                            src="assets/images/mno/{{ msisdnInfo.mno}}.png"
+                            class="rounded"
+                            width="42"
+                            height="42"
+                            alt="Avatar"
+                          />
+                        </div>
+                        <div class="media-body my-auto">
+                          <h6 class="mb-0">{{ msisdnInfo.msisdn }}</h6>
+                          <small>{{ msisdnInfo.people.name }}</small>
+                        </div>
+                      </div>
+                      <div class="d-flex align-items-center">
+                        <button
+                          (click)="horizontalWizardStepper.next()"
+                          class="btn btn-info waves-effect waves-float waves-light"
+                        >
+                          Bắt đầu
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div id="upload-cccd" class="content" style="text-align: center">
+            <div class="row" *ngIf="!isVerifyCustomerInfo">
+              <div class="col-12">
+                <div style="padding-top: 10px">
+                  <label>Số điện thoại:</label> {{ msisdnInfo?.msisdn }}
+                </div>
+                <div>
+                  <label>Số CMND/CCCD:</label>
+                  {{ msisdnInfo?.people.identification_no }}
+                </div>
+              </div>              
+              <ng-container *ngIf="![taskSubAction.ESIM_REKIT_SIM,taskSubAction.SIM_TO_ESIM].includes(currentSubAction) || isvalidTask">
+              <div class="col-12 mt-2 mb-1">
+                <div class="image-upload" *ngIf="!identificationFrontBase64">
+                  <label for="file-front-input">
+                    <img
+                      style="width: 100%"
+                      src="/assets/images/icons/cccd_front.png"
+                      class="img-fluid"
+                      alt=""
+                    />
+                    <h6 style="padding: 10px 0" class="text-center">
+                      Ảnh CCCD/CMND mặt trước
+                    </h6>
+                  </label>
+                  <input
+                    id="file-front-input"
+                    type="file"
+                    (change)="onFileSelected($event)"
+                  />
+                </div>
+
+                <div class="image-preview" *ngIf="identificationFrontBase64">
+                  <img
+                    style="width: 100%"
+                    [src]="identificationFrontBase64"
+                    alt=""
+                    class="img-fluid"
+                  />
+
+                  <button
+                    (click)="onReUpload('front')"
+                    type="button"
+                    class="btn btn-outline-primary btn-next"
+                    rippleEffect
+                  >
+                    <span class="align-middle">Tải lại</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="col-12 mt-2 mb-1">
+                <div class="image-upload" *ngIf="!identificationBackBase64">
+                  <label for="file-front-input">
+                    <img
+                      style="width: 100%"
+                      src="/assets/images/icons/cccd_back.png"
+                      class="img-fluid"
+                      alt=""
+                    />
+                    <h6 style="padding: 10px 0" class="text-center">
+                      Ảnh CCCD/CMND mặt sau
+                    </h6>
+                  </label>
+                  <input
+                    id="file-front-input"
+                    type="file"
+                    (change)="onFileSelectedBack($event)"
+                  />
+                </div>
+
+                <div class="image-preview" *ngIf="identificationBackBase64">
+                  <img
+                    style="width: 100%"
+                    [src]="identificationBackBase64"
+                    alt=""
+                    class="img-fluid"
+                  />
+
+                  <button
+                    (click)="onReUpload('back')"
+                    type="button"
+                    class="btn btn-outline-primary btn-next"
+                    rippleEffect
+                  >
+                    <span class="align-middle">Tải lại</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="col-12 mt-2 mb-1">
+                <div class="image-upload" *ngIf="!selfieBase64">
+                  <label for="file-front-input">
+                    <img
+                      src="/assets/images/icons/selfie.png"
+                      class="img-fluid"
+                      alt=""
+                    />
+                    <h6 style="padding: 10px 0" class="text-center">
+                      Chụp ảnh chân dung
+                    </h6>
+                  </label>
+                  <input
+                    id="file-front-input"
+                    type="file"
+                    (change)="onFileSelectedSelfie($event)"
+                  />
+                </div>
+
+                <div class="image-preview" *ngIf="selfieBase64">
+                  <img
+                    [src]="selfieBase64"
+                    alt=""
+                    class="img-fluid"
+                  />
+
+                  <button
+                    (click)="onReUpload('selfie')"
+                    type="button"
+                    class="btn btn-outline-primary btn-next"
+                    rippleEffect
+                  >
+                    <span class="align-middle">Tải lại</span>
+                  </button>
+                </div>
+              </div>
+              </ng-container>
+              <div class="col-12 mt-2 mb-1" style="padding-bottom: 20px">
+                <button
+                 *ngIf="![taskSubAction.ESIM_REKIT_SIM,taskSubAction.SIM_TO_ESIM].includes(currentSubAction) || isvalidTask"
+                  [ngClass]="{ disabled: isLoading }"
+                  [disabled]="isLoading"
+                  class="btn btn-primary waves-effect waves-float waves-light"                  
+                  (click)="beforeSumitChangeSim()"
+                >
+                  <span *ngIf="isLoading">Đang xác minh</span>
+                  <span *ngIf="!isLoading">Xác minh</span>
+                </button>
+                <form [formGroup]="shipInforForm" (ngSubmit)="onSubmitTaskConvertEsim()"
+                *ngIf="[taskSubAction.ESIM_REKIT_SIM,taskSubAction.SIM_TO_ESIM].includes(currentSubAction)  && !isvalidTask && !isEsim24h">
+                <!-- Trường hợp sim sang esim nhập email, sđt. email để nhận mã QR esim -->
+                
+                  <div class="col-12 mt-2 mb-1">
+                    <div class="form-group">
+                      <label for="">Số điện thoại liên hệ</label>
+                      <input type="text" class="form-control" formControlName="mobile"
+                        placeholder="(098) 765 43 21"
+                            mask="(099)0 000 000"
+                      [ngClass]="{
+                        'is-invalid':
+                          submitShipInfo &&
+                          cShipInfoForm.mobile.errors
+                      }"
+                      >
+                      <div *ngIf="submitShipInfo && cShipInfoForm.mobile.errors.required">
+                        Trường thông tin không được để trống
+                      </div>
+                    </div>
+                
+                  </div>
+                  <div class="col-12 mt-2 mb-1">
+                    <div class="form-group">
+                      <label for="">Email</label>
+                      <input type="text" class="form-control" formControlName="address"     
+                      (keyup)="onTypeEmail($event)"                
+                      [ngClass]="{
+                        'is-invalid':
+                          submitShipInfo &&
+                          cShipInfoForm.address.errors
+                      }"
+                      >
+                      <div *ngIf="submitShipInfo && cShipInfoForm.address.errors.required">
+                        Trường thông tin không được để trống
+                      </div>
+                    </div>
+                
+                  </div>
+                  <div class="col-12 mt-2 mb-1">
+                    <button  [ngClass]="{ disabled: isLoading }"                  
+                    [disabled]="isLoading"
+                      class="btn btn-primary waves-effect waves-float waves-light" type="submit">
+                      <span>Tiếp tục</span>
+                    </button>
+                  </div>
+                </form>                
+              </div>
+            </div>
+
+            <ng-container *ngIf="isVerifyCustomerInfo && currentSubAction != taskSubAction.SIM_TO_ESIM">
+              <div class="row pt-2 pb-2" style="text-align: center">
+                <div class="col-12">                  
+                  <p>
+                    Sau khi bấm "Xác nhận đã thanh toán", hệ thống sẽ chuyển qua bước nhập serial cho KH để thực hiện chuyển đổi serial
+                  </p>
+            
+                  <button class="btn btn-primary" (click)="onConfirmPayment()"
+                    [ngClass]="{ disabled: isLoading }" [disabled]="isLoading">Xác nhận đã thanh toán</button>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+
+          <div id="upload-phoi-sim" class="content">
+            <div class="col-12" style="text-align: center">
+              <div><label>Số điện thoại:</label> {{ msisdnInfo?.msisdn }}</div>
+              <div>
+                <label>Số CMND/CCCD:</label>
+                {{ msisdnInfo?.people.identification_no }}
+              </div>
+            </div>
+            <form
+            *ngIf="!isSubmitSignature"
+              [formGroup]="ReactiveSerialForm"
+              (ngSubmit)="ReactiveSerialFormOnSubmit()"              
+            >
+              <div class="col-12 mt-2 mb-1" *ngIf="![taskSubAction.ESIM_REKIT_SIM,taskSubAction.SIM_TO_ESIM].includes(currentSubAction)">
+                <div class="form-group">
+                  <label for="serial">Serial</label>
+                  <input
+                    type="text"
+                    id="serial"
+                    formControlName="serial"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid':
+                        ReactiveSerialFormSubmit &&
+                        ReactiveUDSerialFrom.serial.errors
+                    }"
+                  />
+                  <div
+                    *ngIf="
+                      ReactiveSerialFormSubmit &&
+                      ReactiveUDSerialFrom.serial.errors
+                    "
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="ReactiveUDSerialFrom.serial.errors.required">
+                      Trường thông tin không được để trống
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 mt-2 mb-1" style="text-align: center" *ngIf="![taskSubAction.ESIM_REKIT_SIM,taskSubAction.SIM_TO_ESIM].includes(currentSubAction)">
+                <div class="image-upload" *ngIf="!simBase64">
+                  <label for="file-front-input">
+                    <img
+                      src="/assets/images/icons/sim-card.png"
+                      class="img-fluid"
+                      alt=""
+                    />
+                    <h6 class="text-center">Chụp ảnh phôi sim</h6>
+                  </label>
+                  <input
+                    id="file-front-input"
+                    type="file"
+                    (change)="onFileSelectedSim($event)"
+                  />
+                </div>
+
+                <div class="image-preview" *ngIf="simBase64">
+                  <img
+                    [src]="'data:image/png;base64,' + simBase64"
+                    alt=""
+                    class="img-fluid"
+                  />
+
+                  <button
+                    (click)="onReUpload('sim-card')"
+                    type="button"
+                    class="btn btn-outline-primary btn-next"
+                    rippleEffect
+                  >
+                    <span class="align-middle">Tải lại</span>
+                  </button>
+                </div>
+              </div>
+
+              <!--
+                        <div class="col-12 mt-2 mb-1" style="text-align:center">
+                            <div class="image-upload" *ngIf="!signatureBase64">
+                                <label for="file-front-input">
+                                    <img src="/assets/images/icons/signature.jpg" class="img-fluid" alt="">
+                                    <h6 class="text-center">Chụp ảnh chữ ký</h6>
+                                </label>
+                                <input id="file-front-input" type="file" (change)="onFileSelectedSignature($event)" />
+                            </div>
+                           
+                        </div>
+                        -->
+
+              <div class="col-12" style="text-align: center">
+                <div class="image-preview" *ngIf="signatureBase64">
+                  <img
+                    [src]="'data:image/png;base64,' + signatureBase64"
+                    alt=""
+                    class="img-fluid"
+                  />
+                </div>
+              </div>
+
+              <div class="col-12" style="text-align: center">
+                <button
+                  type="button"
+                  (click)="modalOpen(modalBasic)"
+                  class="btn btn-outline-primary"
+                  rippleEffect
+                >
+                  <span *ngIf="signatureBase64">Ký lại</span>
+                  <span *ngIf="!signatureBase64">Bắt đầu ký</span>
+                </button>
+              </div>
+
+              <!-- Modal -->
+              <ng-template #modalBasic let-modal>
+                <div class="modal-header">
+                  <h4 class="modal-title" id="myModalLabel1">
+                    Chữ ký của khách hàng
+                  </h4>
+                  <button
+                    type="button"
+                    class="close"
+                    (click)="modal.dismiss('Cross click')"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body" tabindex="0" ngbAutofocus>
+                  <app-signature-change
+                    (outSignatureBase64)="onSignature($event)"
+                  ></app-signature-change>
+                </div>
+                <div class="modal-footer"></div>
+              </ng-template>
+              <!-- / Modal -->
+             
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label for="dialed_numbers"
+                          >Số điện thoại liên hệ gần nhất</label
+                        >
+                        <!-- <input
+                          type="text"
+                          id="dialed_numbers"
+                          formControlName="dialed_numbers"
+                          class="form-control"
+                          [ngClass]="{
+                            'is-invalid':
+                              ReactiveSerialFormSubmit &&
+                              ReactiveUDSerialFrom.dialed_numbers.errors
+                          }"
+                        /> -->
+
+                        <!-- <ng-select
+                          formControlName="dialed_numbers"
+                          [items]="[]"                          
+                          [multiple]="true"
+                          [selectOnTab]="true"
+                          [isOpen]="false"
+                          [addTag]="addTagFn"
+                          [ngClass]="{
+                            'is-invalid':
+                              ReactiveSerialFormSubmit &&
+                              ReactiveUDSerialFrom.dialed_numbers.errors
+                          }"
+                        >
+                        </ng-select> -->
+
+                        <app-input-tag [input_mobile]="true" #inputRecentMobile></app-input-tag>
+                        <!-- <div
+                          *ngIf="
+                            ReactiveSerialFormSubmit &&
+                            ReactiveUDSerialFrom.dialed_numbers.errors
+                          "
+                          class="invalid-feedback"
+                        >
+                          <div
+                            *ngIf="
+                              ReactiveUDSerialFrom.dialed_numbers.errors
+                                .required
+                            "
+                          >
+                            Trường thông tin không được để trống
+                          </div>
+                        </div> -->
+                      </div>
+                    </div>
+                  
+                  <div style="text-align: center" class="pb-1">
+                    <button
+                      [ngClass]="{ disabled: isLoading }"                      
+                      [disabled]="isLoading"
+                      type="submit"
+                      class="btn btn-primary"
+                      rippleEffect
+                    >
+                      <span *ngIf="isLoading">Đang yêu cầu đổi sim</span>
+                      <span *ngIf="!isLoading">Yêu cầu đổi sim</span>
+                    </button>
+                  </div>
+                                          
+            </form>
+            
+            <ng-container *ngIf="isSubmitSignature && currentSubAction == taskSubAction.SIM_TO_ESIM">              
+                  <div class="row pt-2 pb-2" style="text-align: center">
+                    <div class="col-12">
+                      <p>
+                        Sau khi bấm "Xác nhận đã thanh toán", vui lòng quét mã QR hiển thị trên màn hình để cài đặt ESIM
+                      </p>
+                     
+                      <button class="btn btn-primary" (click)="onConfirmPayment()"
+                      *ngIf="!isCompleteTask"
+                    [ngClass]="{ disabled: isLoading }"                      
+                      [disabled]="isLoading"
+                    >Xác nhận đã thanh toán</button>
+                    </div>                    
+                  </div>                            
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<ng-template #modalQR let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="myModalLabel1">
+      Mã QR
+    </h4>
+    <button
+      type="button"
+      class="close"
+      (click)="modalQRClose()"
+      aria-label="Close"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" tabindex="0" ngbAutofocus>
+    <img class="img-fluid" [src]="imgQrEsim" />
+  </div>
+  <div class="modal-footer"></div>
+</ng-template>

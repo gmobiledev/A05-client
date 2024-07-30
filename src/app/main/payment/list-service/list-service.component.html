@@ -1,0 +1,356 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+    <div class="row" id="table-striped">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">{{ contentHeader.headerTitle }}</h4>
+            <!-- <button
+              type="button"
+              (click)="modalOpen(modalCreate)"
+              class="btn btn-warning"
+              rippleEffect
+            >
+              <span [data-feather]="'plus'" [class]="'mr-25'"></span>Tạo đơn
+              hàng
+            </button> -->
+
+            <div class="row">
+              <button
+                ngbTooltip="Tạo đơn
+            hàng"
+                type="button"
+                (click)="modalOpen(modalCreate)"
+                class="btn btn-warning mr-1"
+                rippleEffect
+              >
+                <span [data-feather]="'plus'" [class]="'mr-25'"></span>
+              </button>
+
+              <button
+                ngbTooltip="Xuất báo cáo excel"
+                type="button"
+                class="btn btn-success mr-1"
+                rippleEffect
+              >
+                <span [data-feather]="'file'" [class]="'mr-25'"></span>
+              </button>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <form (ngSubmit)="onSubmitSearch()">
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <select
+                      class="form-control"
+                      name="status"
+                      [(ngModel)]="searchForm.service_code"
+                    >
+                      <option value="">Chọn dịch vụ</option>
+                      <option value="AIRTIME_TOPUP">AIRTIME_TOPUP</option>
+                      <option value="VOICE OTP">VOICE OTP</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <select
+                      class="form-control"
+                      name="status"
+                      [(ngModel)]="searchForm.status"
+                    >
+                      <option value="">Chọn trạng thái đơn hàng</option>
+                      <option value="1">Thành công</option>
+                      <option value="-1">Hủy</option>
+                      <option value="20">Chờ thanh toán</option>
+                      <option value="30">Chờ KT duyệt</option>
+                      <option value="99">Từ chối</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <select
+                      class="form-control"
+                      name="topup"
+                      [(ngModel)]="searchForm.topup"
+                    >
+                      <option value="">Chọn luồng tiền</option>
+                      <option value="1">Top up</option>
+                      <option value="0">Nạp tiền</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-block btn-dark">
+                      Lọc kết quả
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Tên dịch vụ</th>
+                    <th>Merchant ID</th>
+                    <th>Ngày tạo</th>
+                    <th>Số tiền trước CK</th>
+                    <!-- <th>Chiết khấu</th> -->
+                    <th>Số tiền thực</th>
+                    <th>Ghi chú</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of list">
+                    <td>{{ item?.id }}</td>
+                    <td>
+                      {{ item?.service_code }}
+                    </td>
+
+                    <td>
+                      {{ item?.merchant_id }}
+                    </td>
+                    <td>
+                      {{ item?.created_at | formatDate }}
+                    </td>
+
+                    <td>
+                      {{
+                        getAmountBefore(item?.details, item?.amount)
+                          | currency : "VND" : true
+                      }}
+                    </td>
+
+                    <!-- <td>{{ getDiscount(item?.details) }} %</td> -->
+
+                    <td>
+                      {{ item?.amount | currency : "VND" : true }}
+                      <br />
+                      <b
+                        ><i>CK : {{ getDiscount(item?.details) }} %</i></b
+                      >
+                    </td>
+                    <td>
+                      {{ item?.response_note }}
+                    </td>
+
+                    <td>
+                      <div [innerHTML]="item?.status | showStatusTask"></div>
+                    </td>
+
+                    <td class="overflow-hidden">
+                      <a
+                        [routerLink]="['/payment', item.id]"
+                        routerLinkActive="active"
+                        placement="top"
+                        ngbTooltip="Xem"
+                      >
+                        <i
+                          data-feather="eye"
+                          class="text-primary cursor-pointer mr-2"
+                        ></i>
+                      </a>
+
+                      <a
+                        *ngIf="
+                          item?.status != 1 &&
+                          item?.status != -1 &&
+                          item?.status != 99 &&
+                          item?.status != 30
+                        "
+                        (click)="onCancelTask(item)"
+                        placement="top"
+                        ngbTooltip="Hủy"
+                      >
+                        <i
+                          data-feather="x"
+                          class="text-primary cursor-pointer mr-2"
+                        ></i>
+                      </a>
+
+                      <a
+                        *ngIf="item?.status == 99"
+                        (click)="modalOpen(modalCreate, item)"
+                        placement="top"
+                        ngbTooltip="Cập nhật"
+                      >
+                        <i
+                          data-feather="edit"
+                          class="text-primary cursor-pointer"
+                        ></i>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <ngb-pagination
+                class="d-flex justify-content-end pr-3 pt-2"
+                [collectionSize]="totalPage"
+                [(page)]="searchForm.page"
+                [pageSize]="searchForm.take"
+                [boundaryLinks]="true"
+                (pageChange)="loadPage($event)"
+              >
+                <ng-template ngbPaginationPages let-page let-pages="pages">
+                  <li class="ngb-custom-pages-item" *ngIf="pages.length > 0">
+                    <div class="mb-3 d-flex flex-nowrap px-2">
+                      <label
+                        id="paginationInputLabel"
+                        for="paginationInput"
+                        class="col-form-label me-2 ms-1"
+                        >Trang</label
+                      >
+                      <input
+                        #i
+                        type="text"
+                        inputmode="numeric"
+                        pattern="[0-9]*"
+                        class="form-control custom-pages-input"
+                        id="paginationInput"
+                        [value]="searchForm.page"
+                        (keyup.enter)="loadPage(i.value)"
+                        (blur)="loadPage(i.value)"
+                        (input)="formatInput($any($event).target)"
+                        aria-labelledby="paginationInputLabel paginationDescription"
+                        style="width: 2.7rem"
+                      />
+                      <span
+                        id="paginationDescription"
+                        class="col-form-label text-nowrap px-2"
+                      >
+                        của {{ pages.length }}</span
+                      >
+                    </div>
+                  </li>
+                </ng-template>
+              </ngb-pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #modalCreate let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title" id="myModalLabel160">{{ titleModal }}</h5>
+      <button
+        type="button"
+        class="close"
+        (click)="modalClose()"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form class="mt-2">
+      <div class="modal-body" tabindex="0">
+        <div class="form-group">
+          <label>Chọn dịch vụ</label>
+          <select
+            name="service"
+            id=""
+            placeholder="Chọn dịch vụ"
+            class="form-control"
+            [(ngModel)]="dataUpdate.service_code"
+          >
+            <option value="">Chọn dịch vụ</option>
+            <option
+              value="{{ item.service_code }}"
+              *ngFor="let item of listServices"
+            >
+              {{ item.service.code }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Nhập số tiền</label>
+          <input
+            class="form-control"
+            type="text"
+            name="amount"
+            placeholder="100,000"
+            mask="separator"
+            thousandSeparator=","
+            (blur)="onInputAmount($event)"
+            [(ngModel)]="dataUpdate.amount"
+            (focus)="onFocusAmount()"
+          />
+          <label>Chiết khấu : {{ discount }}%</label>
+          <br />
+          <span class="text-danger"> {{ erroMess }} </span>
+        </div>
+
+        <!-- <div class="form-group">
+          <label>Nội dụng đơn hàng</label>
+          <input
+            type="text"
+            name="desc"
+            disabled
+            class="form-control"
+            placeholder="Nhập nội dung đơn hàng"
+            [(ngModel)]="dataUpdate.desc"
+          />
+        </div> -->
+
+        <div class="image-upload mb-1">
+          <input
+            id="file-front-input"
+            type="file"
+            accept="image/png, image/gif, image/jpeg, image/jpg"
+            (change)="onSelectFileFront($event)"
+          />
+          <label>
+            <b>File đính kèm : Ảnh đơn hàng</b>
+          </label>
+        </div>
+
+        <div
+          class="image-upload mb-1"
+          *ngIf="selectedItem && selectedItem.status == 99"
+        >
+          <input
+            id="file-front-input"
+            type="file"
+            accept="image/png, image/gif, image/jpeg, image/jpg"
+            (change)="onSelectFileConfirm($event)"
+          />
+          <label>
+            <b>File đính kèm : Ảnh biên lai chuyển khoản</b>
+          </label>
+        </div>
+
+        <h3>
+          Tổng tiền :
+          {{ price | currency : "VND" }}
+        </h3>
+
+        <h5 class="text-warning">
+          <i>
+            {{ price | numberToText }}
+          </i>
+        </h5>
+      </div>
+      <div class="modal-footer">
+        <a (click)="onCreateTask()">
+          <button type="submit" class="btn btn-primary" rippleEffect>
+            {{ btnFormPayment }}
+          </button>
+        </a>
+      </div>
+    </form>
+  </ng-template>
+</div>

@@ -1,0 +1,129 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+    <div class="row" id="table-striped">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">{{ contentHeader.headerTitle }}</h4>
+          </div>
+
+          <div class="card-body">
+            <form (ngSubmit)="onSubmitSearch()">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      name="msisdn"
+                      [(ngModel)]="searchForm.msisdn"
+                      class="form-control"
+                      placeholder="Nhập số điện thoại"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <div class="form-group">
+                      <input
+                        type="text"
+                        placeholder="Khoảng thời gian"
+                        [ngModelOptions]="{ standalone: true }"
+                        ngxDaterangepickerMd
+                        [(ngModel)]="dateRange"
+                        [ranges]="ranges"
+                        [locale]="{ applyLabel: 'Chọn', format: 'DD/MM/YYYY' }"
+                        [showCustomRangeLabel]="true"
+                        [alwaysShowCalendars]="true"
+                        name="date_range"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-block btn-dark">
+                      Lọc kết quả
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Số đt gọi đến</th>
+                    <th>Tổng thời gian gọi</th>
+                    <th>Số tiền cước</th>
+                    <th>Thời gian cuộc gọi đến</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of list">
+                    <td>
+                      {{ item?.Account }}
+                    </td>
+                    <td>{{ item?.Usage }} s</td>
+                    <td>
+                      {{ item?.Cost | currency : "VND" : true }}
+                    </td>
+
+                    <td>
+                      {{ item?.AnswerTime | formatDate }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <ngb-pagination
+                class="d-flex justify-content-end pr-3 pt-2"
+                [collectionSize]="totalPage"
+                [(page)]="searchForm.page"
+                [pageSize]="searchForm.page_size"
+                [boundaryLinks]="true"
+                (pageChange)="loadPage($event)"
+              >
+                <ng-template ngbPaginationPages let-page let-pages="pages">
+                  <li class="ngb-custom-pages-item" *ngIf="pages.length > 0">
+                    <div class="mb-3 d-flex flex-nowrap px-2">
+                      <label
+                        id="paginationInputLabel"
+                        for="paginationInput"
+                        class="col-form-label me-2 ms-1"
+                        >Trang</label
+                      >
+                      <input
+                        #i
+                        type="text"
+                        inputmode="numeric"
+                        pattern="[0-9]*"
+                        class="form-control custom-pages-input"
+                        id="paginationInput"
+                        [value]="searchForm.page"
+                        (keyup.enter)="loadPage(i.value)"
+                        (blur)="loadPage(i.value)"
+                        (input)="formatInput($any($event).target)"
+                        aria-labelledby="paginationInputLabel paginationDescription"
+                        style="width: 2.7rem"
+                      />
+                      <span
+                        id="paginationDescription"
+                        class="col-form-label text-nowrap px-2"
+                      >
+                        của {{ pages.length }}</span
+                      >
+                    </div>
+                  </li>
+                </ng-template>
+              </ngb-pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

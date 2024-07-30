@@ -1,0 +1,153 @@
+<div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <div class="row mb-1">
+        <div class="col-2">
+          <a (click)="horizontalWizardStepperPrevious()" *ngIf="currentStep != 4">
+            <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
+          </a>          
+        </div>
+        <div class="col-8">
+          <h4 class="text-center">{{ currentTitle }}</h4>
+        </div>
+        <div class="col-2">
+          <a (click)="onToStep({step: 4})" class="shopping-ic">
+            <i data-feather="shopping-cart" class="align-middle mr-sm-25 mr-0"></i>
+          </a> 
+        </div>
+      </div>
+<section class="horizontal-wizard">
+    <div id="stepper1" class="bs-stepper horizontal-wizard-example pb-3">
+      <div class="bs-stepper-header">
+        <div class="step" data-target="#list-number">
+          <button disabled class="step-trigger">
+            <span class="bs-stepper-box">1</span>
+            <!-- <span class="bs-stepper-label">
+              <span class="bs-stepper-title">Chọn số</span>
+              <span class="bs-stepper-subtitle"></span>
+            </span> -->
+          </button>
+        </div>
+        <div class="line"><i data-feather="chevron-right" class="font-medium-2"></i></div>
+        <div class="step" data-target="#packages">
+          <button disabled type="button" class="step-trigger">
+            <span class="bs-stepper-box">2</span>
+          </button>
+        </div>
+        <!-- <div class="line"><i data-feather="chevron-right" class="font-medium-2"></i></div> -->
+        <div class="step d-none" data-target="#serial-sim">
+          <button disabled class="step-trigger">
+            <span class="bs-stepper-box">3</span>
+          </button>
+        </div>
+        <div class="line"><i data-feather="chevron-right" class="font-medium-2"></i></div>
+        <div class="step" data-target="#cart">
+          <button disabled class="step-trigger">
+            <span class="bs-stepper-box">3</span>
+          </button>
+        </div>
+        <div class="line"><i data-feather="chevron-right" class="font-medium-2"></i></div>
+        <div class="step" data-target="#identity-doc">
+          <button disabled class="step-trigger">
+            <span class="bs-stepper-box">4</span>
+          </button>
+        </div>
+        <div class="line"><i data-feather="chevron-right" class="font-medium-2"></i></div>
+        <div class="step" data-target="#identity-info">
+          <button disabled class="step-trigger">
+            <span class="bs-stepper-box">5</span>
+          </button>
+        </div>
+        <div class="line"><i data-feather="chevron-right" class="font-medium-2"></i></div>
+        <div class="step" data-target="#selfie">
+          <button disabled class="step-trigger">
+            <span class="bs-stepper-box">6</span>
+          </button>
+        </div>
+        <div class="line"><i data-feather="chevron-right" class="font-medium-2"></i></div>
+        <div class="step" data-target="#pyc-contract">
+          <button disabled class="step-trigger">
+            <span class="bs-stepper-box">7</span>
+          </button>
+        </div>
+        <div class="line"><i data-feather="chevron-right" class="font-medium-2"></i></div>
+        <div class="step" data-target="#signature">
+          <button disabled class="step-trigger">
+            <span class="bs-stepper-box">8</span>
+          </button>
+        </div>
+      </div>
+      <div class="bs-stepper-content">
+          <div id="list-number" class="content">
+           
+              <!-- <div class="content-header">
+                <h5 class="mb-0">Account Details</h5>
+                <small class="text-muted">Enter Your Account Details.</small>
+              </div> -->
+
+              <app-list-number 
+              (loadDone)="onChildLoadDone($event)"
+              (lockMobile)="onLockMobile($event)"
+              [currentStep]="currentStep"
+              [isLoadData] = "isLoadData"
+              [currentTaskId]="currentTask ? currentTask.id : '' "  (nextStep)="horizontalWizardStepperNext($event)" ></app-list-number>
+            
+          </div>
+          <div id="packages" class="content">
+            <app-packages (nextStep)="horizontalWizardStepperNext($event)" (selectPackage)="onSelectPackage($event)" [telco]="selectedTelco" ></app-packages>
+          </div>
+
+          <div id="serial-sim" class="content">
+            <app-serial-sim [selectedPackage]="selectedPackage"
+            [selectedMobile]="selectedMobile"
+             (nextStep)="horizontalWizardStepperNext($event)" 
+             [currentTaskId]="currentTask ? currentTask.id : '' "></app-serial-sim>
+          </div>
+
+          <div id="cart" class="content">
+            <app-cart (nextStep)="horizontalWizardStepperNext($event)"
+            (toNStep)="onToStep($event)"
+            [state]="stateCart"
+            [currentTaskId]="currentTask ? currentTask.id : '' "></app-cart>
+          </div>
+
+          <div id="identity-doc" class="content">
+            <app-identity-doc (nextStep)="horizontalWizardStepperNext($event)" [currentTaskId]="currentTask ? currentTask.id : '' "></app-identity-doc>
+          </div>
+
+          <div id="identity-info" class="content">
+            <app-identity-info 
+            [identification_front_file]="identification_front_file"
+            [identification_back_file]="identification_back_file"
+            [getDataPeople]="getDataPeople" [personal] = "personal" [currentTask] = "currentTask"
+            (nextStep)="horizontalWizardStepperNext($event)" [currentTaskId]="currentTask ? currentTask.id : '' "></app-identity-info>
+          </div>
+
+          <div id="selfie" class="content">
+            <app-organization-assign *ngIf="!personal" (nextStep)="horizontalWizardStepperNext($event)" [currentTaskId]="currentTask ? currentTask.id : '' "></app-organization-assign>
+            <app-selfie *ngIf="personal" (nextStep)="horizontalWizardStepperNext($event)" [currentTaskId]="currentTask ? currentTask.id : '' "></app-selfie>
+          </div>
+
+          <div id="pyc-contract" class="content">
+            <app-pyc-contract 
+            [personal] = "personal"
+            [currentContract]="currentContract"
+            [currentFileId]="currentFileId"
+            (toNStep)="onToStep($event)"
+            (nextStep)="horizontalWizardStepperNext($event)" [currentTaskId]="currentTask ? currentTask.id : '' "></app-pyc-contract>
+          </div>
+
+          <div id="signature" class="content">
+            <ng-template #myModal let-modal>
+              <app-signature
+              [showPopupSignature]="showPopupSignature"
+              (toNStep)="onToStep($event)"            
+              (nextStep)="horizontalWizardStepperNext($event)" [currentTaskId]="currentTask ? currentTask.id : '' "></app-signature>
+            </ng-template>
+          </div>
+          
+      </div>
+    </div>
+  </section>
+
+  </div>
+  </div>

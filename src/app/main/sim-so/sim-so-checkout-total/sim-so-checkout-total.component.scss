@@ -1,0 +1,47 @@
+
+@import '@core/scss/base/bootstrap-extended/include'; // Bootstrap includes
+@import '@core/scss/base/components/include'; // Components includes
+
+.checkout-options {
+    .coupons {
+      &:focus-within {
+        box-shadow: none;
+      }
+      input {
+        border: none;
+        padding-left: 0;
+        color: $body-color;
+        font-weight: $font-weight-bolder;
+        &::placeholder {
+          color: $body-color;
+          font-weight: $font-weight-bolder;
+        }
+      }
+      .input-group-append {
+        margin: 0;
+      }
+      .input-group-text {
+        height: auto;
+        font-weight: $font-weight-bolder;
+        padding: inherit;
+      }
+    }
+    .price-details {
+      .price-title {
+        font-weight: $font-weight-bolder;
+        margin-bottom: 0.75rem;
+        margin-top: 1.5rem;
+      }
+      .price-detail {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+
+        .detail-title {
+          &.detail-total {
+            font-weight: $font-weight-bolder;
+          }
+        }
+      }
+    }
+  }

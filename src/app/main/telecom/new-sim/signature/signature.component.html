@@ -1,0 +1,20 @@
+
+<div id="table-striped">
+    <div class="col-12 text-center pt-2">
+        <canvas #myCanvas  style="border:1px solid #c3c3c3;">
+            Your browser does not support the canvas element.
+        </canvas>
+        <button type="button" class="btn btn-outline-primary " (click)="onClearDraw()">Xóa</button>
+    </div>
+    
+    <!-- <div class="fixed-bottom mb-1"> -->
+    <div class="col-12 mt-2 pb-2">
+        <button (click)="onNextStep()" type="button" class="btn btn-block btn-primary btn-next"
+            rippleEffect>
+            <span class="align-middle">Hoàn thành</span>
+            <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+        </button>
+    </div>
+    <!-- </div> -->
+</div>
+

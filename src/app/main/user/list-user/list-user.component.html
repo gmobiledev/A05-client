@@ -1,0 +1,90 @@
+<div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+<div class="row" id="table-striped">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header"><h4 class="card-title">{{ contentHeader.headerTitle }}</h4></div>
+        <div class="card-body">
+          <form (ngSubmit)="onSubmitSearch()">
+          <div class="row">
+            <div class="col-md-5">
+              <div class="form-group">
+                <input type="text" name="keyword" [(ngModel)]="searchForm.keyword" class="form-control" placeholder="Nhập từ khóa tìm theo tên, sđt, email...">
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div class="form-group">
+                <select class="form-control" name="status" [(ngModel)]="searchForm.status">
+                  <option value="">Chọn trạng thái</option>
+                  <option value="1">Đang hoạt động</option>
+                  <option value="0">Đang khóa</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <button type="submit" class="btn btn-block btn-info">Lọc kết quả <span [data-feather]="'search'"></span></button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="table-responsive" *blockUI="'section-block'">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>SĐT</th>
+                <th>Email</th>
+                <th>Tên</th>
+                <th>Ngày tạo</th>
+                <th>Trạng thái</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of list">
+                <td>
+                  {{ item?.mobile }}
+                </td>
+                <td>{{ item?.email }}</td>
+                <td>
+                    {{ item?.full_name }}
+                </td>
+                <td>
+                  {{ item?.create_date | date: 'dd/MM/yyyy H:mm' }}
+              </td>
+                <td>
+                  <div [innerHTML]="item.status | showStatus"></div>                  
+                </td>                
+                
+                <td>
+                    <a [routerLink]="['/user', item.id]">
+                        <i data-feather="eye" class="text-primary cursor-pointer"></i>
+                    </a>
+                    <a class="ml-2" (click)="onSubmitLock(item.id, 0)" *ngIf="item.status">
+                      <i data-feather="lock" class="text-primary cursor-pointer"></i>
+                    </a>
+                    <a class="ml-2" (click)="onSubmitLock(item.id, 1)" *ngIf="!item.status">
+                      <i data-feather="unlock" class="text-primary cursor-pointer"></i>
+                    </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <ngb-pagination
+          class="d-flex justify-content-end pr-3 pt-2"
+                [collectionSize]="totalPage"
+                [(page)]="page"
+                [pageSize]="pageSize"
+                [directionLinks]="false"
+              ></ngb-pagination>
+        </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+    </div>
+</div>

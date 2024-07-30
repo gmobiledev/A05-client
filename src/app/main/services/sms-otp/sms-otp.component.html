@@ -1,0 +1,175 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+    <div class="row">
+      <div class="col-lg-3 col-sm-6 col-12">
+        <div class="card">
+          <div class="card-header d-flex flex-column pb-0">
+            <div class="row">
+              <div class="col-12">
+                <div class="avatar bg-light-primary p-50 m-0">
+                  <div class="avatar-content">
+                    <i data-feather="mail" class="font-medium-5"></i>
+                  </div>
+                </div>
+
+                <div class="avatar bg-white p-50 m-0 pull-right">
+                  <div class="custom-control custom-switch">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="customSwitch3"
+                      checked
+                    />
+                    <label class="custom-control-label" for="customSwitch3">
+                      <span class="switch-icon-left"
+                        ><i data-feather="check"></i
+                      ></span>
+                      <span class="switch-icon-right"
+                        ><i data-feather="x"></i
+                      ></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <h2 class="font-weight-bolder mt-1">
+                  {{ "SMS OTP" }}
+                </h2>
+                <p class="mb-0">Người đăng ký đã đạt được</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Apexchart component-->
+          <div id="gainedChartoptions" #gainedChartRef>
+            <apx-chart
+              [series]="data.subscribers_gained.series"
+              [chart]="{
+                height: 100,
+                width:
+                  isMenuToggled === true
+                    ? gainedChartRef.offsetWidth
+                    : gainedChartoptions.chart.width,
+                type: 'area',
+                toolbar: {
+                  show: false
+                },
+                sparkline: {
+                  enabled: true
+                }
+              }"
+              [stroke]="gainedChartoptions.stroke"
+              [fill]="gainedChartoptions.fill"
+              [tooltip]="gainedChartoptions.tooltip"
+              [colors]="gainedChartoptions.colors"
+              [dataLabels]="gainedChartoptions.dataLabels"
+            ></apx-chart>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-sm-6 col-12">
+        <div class="mb-2">
+          <button type="button" class="btn btn-primary" rippleEffect>
+            <span [data-feather]="'lock'" [class]="'mr-25'"></span>Khóa
+          </button>
+        </div>
+
+        <div class="mb-2">
+          <a [routerLink]="['/services/payment']" routerLinkActive="active">
+            <button
+              type="button"
+              (click)="modalOpen(modalCreate)"
+              class="btn btn-primary"
+              rippleEffect
+            >
+              <span [data-feather]="'credit-card'" [class]="'mr-25'"></span>Nạp
+              tiền
+            </button>
+          </a>
+        </div>
+
+        <div class="mb-2">
+          <h3><b>Tài khoản chính: X.000.000 đ.</b></h3>
+        </div>
+
+        <div>
+          <h3><b>Tài khoản khuyến mại: X.000.000 đ</b></h3>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-12">
+        <ul ngbNav #navWithIcons="ngbNav" class="nav-tabs">
+          <li ngbNavItem>
+            <a ngbNavLink><span [data-feather]="'cast'"></span>Tổng quan</a>
+            <ng-template ngbNavContent>
+              <p>
+                SMS OTP (Short Message Service One Time Password) - OTP mã xác
+                thực bao gồm chữ số và ký tự kết hợp, được gửi trực tiếp về điện
+                thoại người dùng thông qua tiện ích tin nhắn SMS. SMS OTP sẽ quy
+                định thời gian mã gửi cho hiệu lực cho lần xác thực của người
+                dùng. Mã sẽ được gửi ngẫu nhiên từ hệ thống, không có sự can
+                thiệp từ bất cứ người dùng nào.
+              </p>
+            </ng-template>
+          </li>
+
+          <li ngbNavItem>
+            <a ngbNavLink><span [data-feather]="'lock'"></span> Tài liệu</a>
+            <ng-template ngbNavContent>
+              <p>
+                SMS OTP là từ viết tắt của One Time Password, có nhĩa là mật
+                khẩu chỉ sử dụng một lần. Nó là một dãy gồm các ký tự hoặc chữ
+                số được ngân hàng tạo ra gửi đến số điện thoại của bạn. Nhằm xác
+                nhận giao dịch để tăng tính bảo mật cũng như đảm bảo an toàn khi
+                sử dụng dịch vụ ngân hàng điện tử hoặc thanh toán online. Đúng
+                như tên gọi, mã OTP được dùng xác nhận giao dịch một lần duy
+                nhất. Thậm chí khi bạn chưa sử dụng thì sau khoảng 30 giây đến 2
+                phút, mã xác nhận này cũng không còn hiệu lực. Và bạn cũng không
+                thể sử dụng nó cho bất kì giao dịch nào khác. SMS OTP thường
+                được dùng để làm bảo mật 2 lớp trong các giao dịch xác minh đăng
+                nhập, đặc biệt là giao dịch với tài khoản ngân hàng. OTP giúp
+                ngăn chặn, giảm thiểu những rủi ro bị tấn công khi mật khẩu bị
+                lộ hoặc hacker xâm nhập.
+              </p>
+            </ng-template>
+          </li>
+
+          <li ngbNavItem>
+            <a ngbNavLink><span [data-feather]="'award'"></span>Chi phí</a>
+            <ng-template ngbNavContent>
+              <p>
+                1. Hỗ trợ doanh nghiệp tích hợp dịch vụ với mức giá tốt nhất 2.
+                Thời gian tích hợp SMS OTP nhanh chóng, chỉ từ 30 - 60 phút 3.
+                Hỗ trợ đăng ký nhanh thương hiệu riêng 4. Tốc độ gửi tin nhanh
+                (từ 5-10s/SMS) 5. Hệ thống ổn định trên nền tảng Cloud Hỗ trợ cả
+                HTTP và SMPP và App
+              </p>
+            </ng-template>
+          </li>
+        </ul>
+      </div>
+
+      <div [ngbNavOutlet]="navWithIcons" class="mt-2"></div>
+    </div>
+  </div>
+</div>
+<ng-template #modalCreate let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="myModalLabel160">{{ titleModal }}</h5>
+    <button
+      type="button"
+      class="close"
+      (click)="modalClose()"
+      aria-label="Close"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!-- <div>Xem ở main/agent</div> -->
+  <div class="m-1">Tính năng đang phát triển</div>
+</ng-template>

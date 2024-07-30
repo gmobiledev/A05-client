@@ -1,0 +1,240 @@
+<form [formGroup]="form">
+    <div class="row" style="margin-top: 30px">
+      <div class="col-md-12">
+        <div class="form-group row">
+          <label for="license_no" class="col-md-3 col-form-label"
+            >Số GPKD/MST</label
+          >
+          <div class="col-md-9">
+            <input
+              type="text"
+              maxlength="20"
+              formControlName="license_no"
+              class="form-control"
+              placeholder="Số GPKD/Mã số thuế"
+            />
+            <div
+              *ngIf="submitted && f.license_no.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f.license_no.errors.required">
+                Vui lòng nhập trường này
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="license_file" class="col-md-3 col-form-label"
+            >Giấy phép KD</label
+          >
+          <div class="col-md-9">
+            <div class="col-md-12">
+              <input
+                type="file"
+                class="form-control"
+                id="license_file"
+                formControlName="license_file"
+                (change)="onSelectFileLicense($event)"
+              />
+              <label class="custom-file-label" for="license_file">{{
+                license_file ? license_file.name : "Chọn tệp đính kèm"
+              }}</label>
+              <div
+                *ngIf="submitted && f.license_file.errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f.license_file.errors.required">
+                  Vui lòng nhập trường này
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <hr />
+    <div class="row" style="margin-top: 30px">
+      <div class="col-12">
+        <h4>Thông tin người đại diện</h4>
+        <br />
+      </div>
+  
+      <br />
+      <div class="col-md-12">
+        <div class="form-group row">
+          <label for="license_no" class="col-md-3 col-form-label"
+            >Số CCCD/CMND/Hộ chiếu</label
+          >
+          <div class="col-md-9">
+            <input
+              type="text"
+              maxlength="20"
+              class="form-control"
+              formControlName="identification_no"
+              placeholder="Số CCCD/CMND/Hộ chiếu"
+            />
+            <div
+              *ngIf="submitted && f.identification_no.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f.identification_no.errors.required">
+                Vui lòng nhập trường này
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="form-group row">
+          <label for="license_no" class="col-md-3 col-form-label"
+            >Loại giấy tờ</label
+          >
+          <div class="col-md-9">
+            <select
+              formControlName="identification_type"
+              id="identification_type"
+              class="form-control"
+            >
+              <option value="">--Chọn loại giấy tờ --</option>
+              <option value="CCCD">CCCD</option>
+              <option value="CCCD_CHIP">CCCD CHIP</option>
+              <option value="CMND">CMND</option>
+              <option value="PASSPOST">Hộ Chiếu</option>
+            </select>
+            <div
+              *ngIf="submitted && f.identification_type.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f.identification_type.errors.required">
+                Vui lòng nhập trường này
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-md-4">
+        <div class="image-upload" *ngIf="!imageFront" style="text-align: center">
+          <label for="identification_front_file">
+            <img
+              src="/assets/images/icons/cccd_front.png"
+              class="img-fluid"
+              alt=""
+            />
+            <h6 class="text-center">Ảnh CCCD/CMND mặt trước</h6>
+          </label>
+          <input
+            id="identification_front_file"
+            type="file"
+            (change)="onSelectFileFront($event)"
+            fromControlName="identification_front_file"
+          />
+          <div
+            *ngIf="submitted && f.identification_front_file.errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f.identification_front_file.errors.required">
+              Vui lòng nhập trường này
+            </div>
+          </div>
+        </div>
+  
+        <div class="image-preview" *ngIf="imageFront">
+          <img [src]="imageFront" alt="" class="img-fluid" />
+  
+          <button
+            (click)="onReUpload('front')"
+            type="button"
+            class="btn btn-outline-primary btn-next"
+            rippleEffect
+          >
+            <span class="align-middle">Tải lại</span>
+          </button>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="image-upload" *ngIf="!imageBack" style="text-align: center">
+          <label for="identification_back_file">
+            <img
+              src="/assets/images/icons/cccd_back.png"
+              class="img-fluid"
+              alt=""
+            />
+            <h6 class="text-center">Ảnh CCCD/CMND mặt sau</h6>
+          </label>
+          <input
+            id="identification_back_file"
+            type="file"
+            (change)="onSelectFileBack($event)"
+            fromControlName="identification_back_file"
+          />
+          <div
+            *ngIf="submitted && f.identification_back_file.errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f.identification_back_file.errors.required">
+              Vui lòng nhập trường này
+            </div>
+          </div>
+        </div>
+  
+        <div class="image-preview" *ngIf="imageBack">
+          <img [src]="imageBack" alt="" class="img-fluid" />
+          <button
+            (click)="onReUpload('back')"
+            type="button"
+            class="btn btn-outline-primary btn-next"
+            rippleEffect
+          >
+            <span class="align-middle">Tải lại</span>
+          </button>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="image-upload" style="text-align: center">
+          <label for="identification_selfie_file">
+            <img
+              *ngIf="!imageSelfie"
+              src="/assets/images/icons/selfie.png"
+              class="img-fluid"
+              style="width: 200px"
+              alt=""
+            />
+            <img
+              *ngIf="imageSelfie"
+              [src]="imageSelfie"
+              alt=""
+              class="img-fluid"
+            />
+            <h6 class="text-center">Tải ảnh chân dung</h6>
+          </label>
+          <input
+            type="file"
+            class="form-group"
+            id="identification_selfie_file"
+            (change)="onSelectFileSelfie($event)"
+            fromControlName="identification_selife_file"
+          />
+          <div
+            *ngIf="submitted && f.identification_selfie_file.errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f.identification_selfie_file.errors.required">
+              Vui lòng nhập trường này
+            </div>
+          </div>
+        </div>
+  
+        <!-- <div class="image-preview" *ngIf="imageSelfie">
+                  <img [src]="imageSelfie" alt="" class="img-fluid">
+                  <button (click)="onReUpload('selfie')" type="button" class="btn btn-outline-primary btn-next"
+                      rippleEffect>
+                      <span class="align-middle ">Tải lại</span>
+  
+                  </button>
+              </div> -->
+      </div>
+    </div>
+  </form>
+  

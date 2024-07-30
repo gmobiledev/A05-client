@@ -1,0 +1,72 @@
+<div class="container-fluid">
+    <div class="row">
+        <!-- <div class="top"></div> -->
+        <h3 style="margin-top: 20px;margin-left: 10px;">Ký xác nhận</h3>
+    </div>
+    <div class="row" style="margin-top: 30px;">
+        <div class="col-12 ">
+        <label style="font-size: 15px;">Hợp đồng chi tiết <a (click)="onViewDocument(modalViewDoc, 'pyc')"><u> Xem</u></a> </label>
+    </div>
+    </div>
+    <div class="row" style="margin-top: 30px;">
+        <div class="col-12 ">
+            <label style="font-size: 16px;">Bản cam kết <a (click)="onViewDocument(modalViewDoc, 'ban_cam_ket')"><u> Xem</u></a> </label>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 30px;">
+        <div class="col-12">
+            
+           <div class="text-center">
+            <div class="col-12" style="text-align:center">
+                <div class="image-preview" *ngIf="signatureBase64">
+                    <img [src]="'data:image/png;base64,'+signatureBase64" alt="" class="img-fluid">
+                </div>
+            </div>
+            <div class="col-12" style="text-align:center">
+                <button type="button" (click)="modalOpen(modalBasic)" class="btn btn-outline-primary"
+                    rippleEffect>
+                    <span *ngIf="signatureBase64">Ký lại</span>
+                    <span *ngIf="!signatureBase64">Bắt đầu ký</span>
+                </button>
+            </div>
+            <ng-template #modalBasic let-modal>
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel1">Chữ ký của khách hàng</h4>
+                    <button type="button" class="close" (click)="modal.dismiss('Cross click')"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" tabindex="0" ngbAutofocus>
+                    <app-signature-shared (outSignatureBase64)="onSignature($event)"></app-signature-shared>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </ng-template>
+           </div>
+        </div>
+    </div>
+    <div class="text-center">
+        <button type="button" class="btn btn btn-primary" (click)="onSubmit()"
+            style="width:150px;height: 50px;margin-top: 40px;font-weight: bold;">Hoàn thành</button>
+    </div>
+</div>
+
+<ng-template #modalViewDoc let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel1">Xem nội dung</h4>
+        <button type="button" class="close" (click)="modalDoc.dismiss('Cross click')"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0">
+        <pdf-viewer [src]="urlFile"
+              [render-text]="true"
+              [original-size]="false"
+              style="height: 450px"
+            ></pdf-viewer>
+    </div>
+    <div class="modal-footer">
+    </div>
+</ng-template>

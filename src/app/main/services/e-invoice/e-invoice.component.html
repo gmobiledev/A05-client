@@ -1,0 +1,177 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+    <div class="row">
+      <div class="col-lg-3 col-sm-6 col-12">
+        <div class="card">
+          <div class="card-header d-flex flex-column pb-0">
+            <div class="row">
+              <div class="col-12">
+                <div class="avatar bg-light-primary p-50 m-0">
+                  <div class="avatar-content">
+                    <i data-feather="slack" class="font-medium-5"></i>
+                  </div>
+                </div>
+
+                <div class="avatar bg-white p-50 m-0 pull-right">
+                  <div class="custom-control custom-switch">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="customSwitch3"
+                      checked
+                    />
+                    <label class="custom-control-label" for="customSwitch3">
+                      <span class="switch-icon-left"
+                        ><i data-feather="check"></i
+                      ></span>
+                      <span class="switch-icon-right"
+                        ><i data-feather="x"></i
+                      ></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <h2 class="font-weight-bolder mt-1">
+                  {{ "E-invoice" }}
+                </h2>
+                <p class="mb-0">Người đăng ký đã đạt được</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Apexchart component-->
+          <div id="gainedChartoptions" #gainedChartRef>
+            <apx-chart
+              [series]="data.subscribers_gained.series"
+              [chart]="{
+                height: 100,
+                width:
+                  isMenuToggled === true
+                    ? gainedChartRef.offsetWidth
+                    : gainedChartoptions.chart.width,
+                type: 'area',
+                toolbar: {
+                  show: false
+                },
+                sparkline: {
+                  enabled: true
+                }
+              }"
+              [stroke]="gainedChartoptions.stroke"
+              [fill]="gainedChartoptions.fill"
+              [tooltip]="gainedChartoptions.tooltip"
+              [colors]="gainedChartoptions.colors"
+              [dataLabels]="gainedChartoptions.dataLabels"
+            ></apx-chart>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-12">
+        <div class="mb-2">
+          <button type="button" class="btn btn-primary" rippleEffect>
+            <span [data-feather]="'lock'" [class]="'mr-25'"></span>Khóa
+          </button>
+        </div>
+
+        <div class="mb-2">
+          <a [routerLink]="['/services/payment']" routerLinkActive="active">
+            <button
+              type="button"
+              (click)="modalOpen(modalCreate)"
+              class="btn btn-primary"
+              rippleEffect
+            >
+              <span [data-feather]="'credit-card'" [class]="'mr-25'"></span>Nạp
+              tiền
+            </button>
+          </a>
+        </div>
+
+        <div class="mb-2">
+          <h3><b>Tài khoản chính: X.000.000 đ.</b></h3>
+        </div>
+
+        <div>
+          <h3><b>Tài khoản khuyến mại: X.000.000 đ</b></h3>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-12">
+        <ul ngbNav #navWithIcons="ngbNav" class="nav-tabs">
+          <li ngbNavItem>
+            <a ngbNavLink><span [data-feather]="'cast'"></span> Tổng quan</a>
+            <ng-template ngbNavContent>
+              <p>
+                E-invoice là một hóa đơn được phát hành, nhận và xử lý bằng
+                phương tiện điện tử. Nó không phải là dạng hóa đơn được in lên
+                giấy như những hóa đơn trong nhiều năm về trước chúng ta vẫn
+                thấy. Trên mỗi hóa đơn điện tử sẽ được cấp mã số thuế khác nhau,
+                mỗi mã số thuế khi bán hàng hóa, dịch vụ… đều được lưu trữ hoàn
+                toàn trên máy tính của các doanh nghiệp theo đúng quy định của
+                pháp luật về giao dịch điện tử.
+              </p>
+            </ng-template>
+          </li>
+
+          <li ngbNavItem>
+            <a ngbNavLink><span [data-feather]="'lock'"></span> Tài liệu</a>
+            <ng-template ngbNavContent>
+              <p>
+                Muốn sử dụng E-invoice, doanh nghiệp cần có đủ điều kiện về kinh
+                tế, doanh nghiệp đang phải thực hiện khai thuế với chi cục thuế.
+                Ngoài ra, để sử dung hóa đơn điện tử doanh nghiệp cần có hệ
+                thống kết nối mạng Internet, có đường truyền mạnh và ổn định ,
+                có thể đáp ứng được nhiều máy. Đội ngũ nhân viên quản lý hóa đơn
+                điện tử cần có đủ trình độ và khả năng tiếp cận đến hóa đơn điện
+                tử và sử dụng một cách thành thạo và biết cách khởi tạo và dần
+                dần làm quen với hóa đơn điện tử một cách nhanh nhất. Bên cạnh
+                đó, doanh nghiệp cần phải có chữ ký số, đây là điều kiện cần
+                thiết và bắt buộc để sử dụng hóa đơn điện tử E-invoice. Doanh
+                nghiệp có thể sử dụng chữ ký số của chính doanh nghiệp mình đang
+                có trước đó hay có thể sử dụng chữ ký của các cơ quan chức năng
+                cung cấp.
+              </p>
+            </ng-template>
+          </li>
+
+          <li ngbNavItem>
+            <a ngbNavLink><span [data-feather]="'award'"></span> Chi phí</a>
+            <ng-template ngbNavContent>
+              <p>
+                Điều tốt nhất khi doanh nghiệp muốn sử dụng hóa đơn điện tử
+                E-invoice là đăng ký sử dụng một phần mềm hóa đơn điện tử
+                E-invoice hoặc các phần mềm có kết nối với phần mềm kế toán. Tuy
+                nhiên, nếu doanh nghiệp sử dụng phần mềm hóa đơn điện tử của
+                công ty Thái Sơn sẽ hoàn toàn yên tâm và không cần phải sử dụng
+                phần mềm kết nối nào khác.
+              </p>
+            </ng-template>
+          </li>
+        </ul>
+      </div>
+
+      <div [ngbNavOutlet]="navWithIcons" class="mt-2"></div>
+    </div>
+  </div>
+</div>
+
+<ng-template #modalCreate let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="myModalLabel160">{{ titleModal }}</h5>
+    <button
+      type="button"
+      class="close"
+      (click)="modalClose()"
+      aria-label="Close"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!-- <div>Xem ở main/agent</div> -->
+  <div class="m-1">Tính năng đang phát triển</div>
+</ng-template>

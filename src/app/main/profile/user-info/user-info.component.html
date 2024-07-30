@@ -1,0 +1,152 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+    <!-- users edit start -->
+    <section class="app-user-edit">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">{{ contentHeader.headerTitle }}</h4>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="formConfirm" (ngSubmit)="onSubmit()">
+            <div class="row">
+              <div class="col-md-6 col-sm-12 col-xs-12 mb-1">
+                <div class="form-group">
+                  <label>Họ tên</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Họ tên"
+                    formControlName="name"
+                  />
+                  <div
+                    *ngIf="submitted && f.name.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.name.errors.required">
+                      Vui lòng nhập trường này
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 mb-1">
+                <div class="form-group">
+                  <label>Giới tính</label>
+
+                  <select
+                    name=""
+                    id=""
+                    class="form-control"
+                    formControlName="gender"
+                  >
+                    <option value="MALE">Nam</option>
+                    <option value="FEMALE">Nữ</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-xs-12 mb-1">
+                <div class="form-group">
+                  <label>Ngày sinh</label>
+                  <div class="input-group">
+                    <input
+                      class="form-control"
+                      placeholder="dd/mm/yyyy"
+                      formControlName="birth"
+                      (click)="basicDP.toggle()"
+                      ngbDatepicker
+                      #basicDP="ngbDatepicker"
+                    />
+                    <div class="input-group-append">
+                      <button
+                        class="btn rounded-0 btn-outline-secondary feather icon-calendar"
+                        (click)="basicDP.toggle()"
+                        type="button"
+                        rippleEffect
+                      ></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-xs-12 mb-1">
+                <div class="form-group">
+                  <label>Email</label>
+
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Email"
+                    formControlName="email"
+                  />
+                  <div
+                    *ngIf="submitted && f.email.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.email.errors.required">
+                      Vui lòng nhập trường này
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-xs-12 mb-1">
+                <div class="form-group">
+                  <label>Số CCCD/CMND</label>
+
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Số CCCD/CMND"
+                    mask="0*"
+                    formControlName="identification_no"
+                  />
+                  <div
+                    *ngIf="submitted && f.identification_no.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.identification_no.errors.required">
+                      Vui lòng nhập trường này
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12 col-xs-12 mb-1">
+                <div class="form-group">
+                  <label for="">Ngày cấp CCCD/CMND</label>
+                  <div class="input-group">
+                    <input
+                      class="form-control"
+                      placeholder="dd/mm/yyyy"
+                      formControlName="identification_date"
+                      (click)="basicDP2.toggle()"
+                      ngbDatepicker
+                      #basicDP2="ngbDatepicker"
+                    />
+                    <div class="input-group-append">
+                      <button
+                        class="btn rounded-0 btn-outline-secondary feather icon-calendar"
+                        (click)="basicDP2.toggle()"
+                        type="button"
+                        rippleEffect
+                      ></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <button
+                  type="submit"
+                  class="btn btn-primary mr-1 mt-1"
+                  rippleEffect
+                >
+                  Lưu
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <!-- users edit ends -->
+  </div>
+</div>

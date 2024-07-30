@@ -1,0 +1,142 @@
+<!-- Statistics Card -->
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+    <div class="row">
+      <div class="col-12" id="table-striped">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Báo cáo tiêu dùng theo thời gian</h4>
+          </div>
+
+          <div class="card-body">
+
+            <form (ngSubmit)="onSubmitSearch()">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      placeholder="Khoảng thời gian"
+                      autocomplete="off"
+                      [ngModelOptions]="{ standalone: true }"
+                      ngxDaterangepickerMd
+                      [(ngModel)]="dateRange"
+                      [ranges]="ranges"
+                      [locale]="{ applyLabel: 'Chọn', format: 'DD/MM/YYYY' }"
+                      [showCustomRangeLabel]="true"
+                      [alwaysShowCalendars]="true"
+                      name="date_range"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <select class="form-control" name="money_out">
+                      <option value="">Chọn trạng thái</option>
+                      <option value="0">Nạp tiền</option>
+                      <option value="1">Trừ tiền</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-block btn-dark">
+                      Lọc kết quả
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Thời gian</th>
+                  <th>Tài khoản</th>
+                  <th>Thao tác</th>
+                  <th>Số tiền thay đổi</th>
+                  <th>Số dư thay dổi</th>
+                  <th>Ghi chú</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of listIn">
+                  <td>
+                    {{ item?.Time | date : "dd/MM/yyyy H:mm" : "+0000" }}
+                  </td>
+                  <td>
+                    {{ item?.Account }}
+                  </td>
+                  <td>{{ item?.Action }}</td>
+
+                  <td>{{ item?.BalanceChange }}</td>
+
+                  <td>{{ item?.BalanceAfter }}</td>
+
+                  <td>{{ item?.Note }}</td>
+
+                  <!-- <td *ngIf="item?.amount > 0">
+                      <span class="text-dark">
+                        + {{ item?.amount | formatPrice }}
+                      </span>
+                    </td> -->
+                  <!-- <td *ngIf="item?.amount < 0">
+                      <span class="text-danger">
+                        {{ item?.amount | formatPrice }}
+                      </span>
+                    </td> -->
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <ngb-pagination
+            class="d-flex justify-content-end pr-3 pt-2"
+            [collectionSize]="total"
+            [(page)]="searchForm.page"
+            [pageSize]="searchForm.page_size"
+            [boundaryLinks]="true"
+            (pageChange)="loadPage($event)"
+          >
+            <ng-template ngbPaginationPages let-page let-pages="pages">
+              <li class="ngb-custom-pages-item" *ngIf="pages.length > 0">
+                <div class="mb-3 d-flex flex-nowrap px-2">
+                  <label
+                    id="paginationInputLabel"
+                    for="paginationInput"
+                    class="col-form-label me-2 ms-1"
+                    >Trang</label
+                  >
+                  <input
+                    #i
+                    type="text"
+                    inputmode="numeric"
+                    pattern="[0-9]*"
+                    class="form-control custom-pages-input"
+                    id="paginationInput"
+                    [value]="searchForm.page"
+                    (keyup.enter)="loadPage(i.value)"
+                    (blur)="loadPage(i.value)"
+                    (input)="formatInput($any($event).target)"
+                    aria-labelledby="paginationInputLabel paginationDescription"
+                    style="width: 4.5rem"
+                  />
+                  <span
+                    id="paginationDescription"
+                    class="col-form-label text-nowrap px-2"
+                  >
+                    của {{ pages.length }}</span
+                  >
+                </div>
+              </li>
+            </ng-template>
+          </ngb-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,106 @@
+<div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+<div class="row" id="table-striped">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header"><h4 class="card-title">{{ contentHeader.headerTitle }}</h4></div>
+        <div class="card-body">
+          <form (ngSubmit)="onSubmitSearch()">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <input type="text" name="order_id" [(ngModel)]="searchForm.order_id" class="form-control" placeholder="Nhập mã giao dịch G99">
+              </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                  <input type="text" name="order_id_merchant" [(ngModel)]="searchForm.order_id_merchant" class="form-control" placeholder="Nhập mã giao dịch merchant">
+                </div>
+              </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <input type="text" 
+                placeholder="Khoảng thời gian"
+                [ngModelOptions]="{standalone: true}" 
+                ngxDaterangepickerMd [(ngModel)]="dateRange" 
+                [ranges]="ranges"
+                [locale]="{applyLabel: 'Chọn',format: 'DD/MM/YYYY'}"
+                [showCustomRangeLabel]="true"
+                [alwaysShowCalendars]="true"
+                name="date_range"
+                class="form-control"/>
+              </div>
+            </div>
+            
+            <div class="col-md-2">
+              <div class="form-group">
+                <button type="submit" class="btn btn-block btn-info">Lọc kết quả <span [data-feather]="'search'"></span></button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="table-responsive" *blockUI="'section-block'">
+          <table class="table table-striped text-nowrap">
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Loại tài khoản</th>
+                <th>Loại giao dịch</th>
+                <th>Mã giao dịch G99</th>
+                <th>Luồng giao dịch</th>
+                <th>Thời gian</th>
+                <th>Số tiền</th>
+                <th>Số dư trước giao dịch</th>
+                <th>Số dư sau giao dịch</th>                
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of list; index as i">
+                <td>
+                  {{ (page-1)*pageSize + i + 1 }}
+                </td>
+                <td>
+                  
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    {{ item.trans_id }}
+                </td>
+                <td>
+                  
+                </td>
+                <td>
+                  {{ item.created_at | date: 'dd/MM/yyyy H:mm' }}
+              </td>
+                <td>
+                    {{ item.amount | currency:' ':'symbol':'0.0-1' }}     
+                </td>                
+                <td>
+                  {{ item.balance_after | currency:' ':'symbol':'0.0-1' }} 
+                </td>
+                <td>
+                  {{ item.balance_before | currency:' ':'symbol':'0.0-1' }} 
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- <ngb-pagination
+          class="d-flex justify-content-end pr-3 pt-2"
+                [collectionSize]="totalPage"
+                [(page)]="page"
+                [pageSize]="pageSize"
+                [directionLinks]="false"
+              ></ngb-pagination> -->
+        </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+    </div>
+</div>

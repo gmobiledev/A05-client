@@ -1,0 +1,95 @@
+<!-- Statistics Card -->
+<div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <app-content-header [contentHeader]="contentHeader"></app-content-header>
+      <div class="row">
+        
+<div class="col-12">
+      <div class="row">
+        <div class="col-4">
+          <img class="img-fluid img-icon-item" src="/assets/images/icons/dang-ky-thong-tin.png" alt="">
+          <br>
+          <a [routerLink]="['/telecom/new-sim']" >Đăng ký thông tin thuê bao</a>
+        </div>
+        <div class="col-4">
+          <img class="img-fluid img-icon-item" src="/assets/images/icons/doi-sim.png" alt="">
+          <br>
+          <a >Thay đổi sim</a>
+        </div>
+        <div class="col-4">
+          <img class="img-fluid img-icon-item" src="/assets/images/icons/lich-su-dau-noi.png" alt="">
+          <br>
+          <a [routerLink]="['/telecom/change-sim']" >Lịch sử đấu nối</a>
+        </div>
+      </div>
+        <div class="row">
+
+            <div class="col-sm-6 col-xl-4 mb-2 mb-xl-0" *ngFor="let item of list">
+                <div class="card card-statistics pb-3">
+                    <div class="card-header">
+              
+                    </div>
+                    <div class="card-body statistics-body">
+                <div class="media">
+                  <div class="avatar bg-light-primary mr-2">
+                    <div class="avatar-content">
+                      <i [data-feather]="item.show_icon" class="avatar-icon"></i>
+                    </div>
+                  </div>
+                  <div class="media-body my-auto">
+                    <h4 class="font-weight-bolder mb-0">{{ item.value | currency:' ':'symbol':'0.0-1' }}</h4>
+                    <p class="card-text font-small-3 mb-0">{{ item.show_label }}</p>
+                  </div>
+                </div>
+              </div>    
+
+
+          <!-- <div class="col-sm-6 col-xl-4 mb-2 mb-xl-0">
+            <div class="media">
+              <div class="avatar bg-light-primary mr-2">
+                <div class="avatar-content">
+                  <i data-feather="credit-card" class="avatar-icon"></i>
+                </div>
+              </div>
+              <div class="media-body my-auto">
+                <h4 class="font-weight-bolder mb-0">0</h4>
+                <p class="card-text font-small-3 mb-0">Số dư khả dụng</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-sm-6 col-xl-4">
+            <div class="media">
+              <div class="avatar bg-light-success mr-2">
+                <div class="avatar-content">
+                  <i data-feather="dollar-sign" class="avatar-icon"></i>
+                </div>
+              </div>
+              <div class="media-body my-auto">
+                <h4 class="font-weight-bolder mb-0">0</h4>
+                <p class="card-text font-small-3 mb-0">Tổng doanh thu</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-xl-4 mb-2 mb-sm-0">
+            <div class="media">
+              <div class="avatar bg-light-danger mr-2">
+                <div class="avatar-content">
+                  <i data-feather="box" class="avatar-icon"></i>
+                </div>
+              </div>
+              <div class="media-body my-auto">
+                <h4 class="font-weight-bolder mb-0">0</h4>
+                <p class="card-text font-small-3 mb-0">Tổng số giao dịch</p>
+              </div>
+            </div>
+          </div> -->
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--/ Statistics Card -->
+  </div>
+    </div>
+</div>

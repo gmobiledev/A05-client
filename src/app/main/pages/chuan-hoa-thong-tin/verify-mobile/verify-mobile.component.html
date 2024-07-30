@@ -1,0 +1,82 @@
+<div class="container-fluid">
+    <div class="row">
+        <!-- <div class="top"></div> -->
+        <h3 style="margin-top: 20px;margin-left: 10px;">Xác nhận Số điện thoại</h3>
+    </div>
+    <form class="mt-2" [formGroup]="formGroup" >
+    <div class="row" style="margin-top: 30px;" *ngIf="!isReceiveOtp && !isConfirmOtp">
+        <div class="col-md-12 ">
+            <p>Nhập số điện thoại</p>
+            <input type="tel" class="form-control" 
+            (focus)="onFoucsInputMsisdn()"
+            (focusout)="checkMobileGmobile()"
+            placeholder="Nhập số điện thoại..." mask="0000000000" formControlName="msisdn">
+            <div *ngIf="errorInputMsisdn" class="invalid-feedback">
+                <div *ngIf="errorInputMsisdn">{{ errorInputMsisdn }}</div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="isReceiveOtp && !isConfirmOtp">
+        <div class="row" style="margin-top: 7px;margin-left: 2px;">
+            <div class="col-6">
+                <p>Nhập OTP</p>
+            </div>
+            <div class="col-6">
+                <p *ngIf="timeLeftOtp > 0">
+                    <i>Mã OTP còn hiệu lực {{ timeLeftOtp }} giây</i>
+                </p>
+                <p *ngIf="timeLeftOtp <= 0">
+                    <a (click)="onResendOTP()"><u>Gửi lại OTP</u></a>
+                </p> 
+            </div>
+            
+        </div>
+                <code-input [isCodeHidden]="false"
+                [isCharsCode]="false"
+                  [codeLength]="6"
+                  (codeCompleted)="onCompletedInputOtp($event)">
+                </code-input>
+                </div>
+                <div  *ngIf="isConfirmOtp">
+        <div class="row" style="margin-top: 30px;">
+            <div class="col-md-12 ">
+                <p>Nhập 5 số liên hệ gần đây</p>
+                <input (focusout)="checkMobile('dialed_numbers_1')" type="tel" class="form-control" placeholder="Nhập số điện thoại..." mask="0000000000" formControlName="dialed_numbers_1">
+                <div *ngIf="checkValidMobile && checkValidMobile['dialed_numbers_1'] && checkValidMobile['dialed_numbers_1'] && f.dialed_numbers_1.errors" class="invalid-feedback">
+                    <div *ngIf="f.dialed_numbers_1?.errors?.isMobile">Vui lòng nhập đúng định dạng SĐT</div>
+                </div>
+                <input type="tel" (focusout)="checkMobile('dialed_numbers_2')" class="form-control" placeholder="Nhập số điện thoại..." mask="0000000000" formControlName="dialed_numbers_2">
+                <div *ngIf="checkValidMobile && checkValidMobile['dialed_numbers_2'] && f.dialed_numbers_2.errors" class="invalid-feedback">
+                    <div *ngIf="f.dialed_numbers_2?.errors?.isMobile">Vui lòng nhập đúng định dạng SĐT</div>
+                </div>
+                <input type="tel" (focusout)="checkMobile('dialed_numbers_3')" class="form-control" placeholder="Nhập số điện thoại..." mask="0000000000" formControlName="dialed_numbers_3">
+                <div *ngIf="checkValidMobile && checkValidMobile['dialed_numbers_3'] && f.dialed_numbers_3.errors" class="invalid-feedback">
+                    <div *ngIf="f.dialed_numbers_3?.errors?.isMobile">Vui lòng nhập đúng định dạng SĐT</div>
+                </div>
+                <input type="tel" (focusout)="checkMobile('dialed_numbers_4')" class="form-control" placeholder="Nhập số điện thoại..." mask="0000000000" formControlName="dialed_numbers_4">
+                <div *ngIf="checkValidMobile && checkValidMobile['dialed_numbers_4'] && f.dialed_numbers_4.errors" class="invalid-feedback">
+                    <div *ngIf="f.dialed_numbers_4?.errors?.isMobile">Vui lòng nhập đúng định dạng SĐT</div>
+                </div>
+                <input type="tel" (focusout)="checkMobile('dialed_numbers_5')" class="form-control" placeholder="Nhập số điện thoại..." mask="0000000000" formControlName="dialed_numbers_5">
+                <div *ngIf="checkValidMobile && checkValidMobile['dialed_numbers_5'] && f.dialed_numbers_5.errors" class="invalid-feedback">
+                    <div *ngIf="f.dialed_numbers_5?.errors?.isMobile">Vui lòng nhập đúng định dạng SĐT</div>
+                </div>
+                <!-- <tag-input formControlName="dialed_numbers"
+                mask="0000000000"
+                       [inputClass]="'form-control'"
+                       [inputId]="'input-t'"
+                       [maxItems]="5"
+                       [separatorKeyCodes]="[32, 188]"
+                       [placeholder]="'Nhập 5 số liên hệ gần đây'"
+                     ></tag-input> -->
+                <!-- <input type="text" class="form-control" placeholder="Nhập 5 số liên tiếp gần đây..."> -->
+            </div>
+        </div>
+    </div>
+    
+    <div class="text-center">
+        <button (click)="onNextStep()" type="button" class="btn btn btn-primary"
+            style="width:150px;height: 50px;margin-top: 40px;font-weight: bold;">Tiếp tục</button>
+    </div>
+    </form>
+</div>

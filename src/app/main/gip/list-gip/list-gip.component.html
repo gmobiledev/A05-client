@@ -1,0 +1,341 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+    <div class="row" id="table-striped">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">{{ contentHeader.headerTitle }}</h4>
+            <div class="row">
+              <button
+                ngbTooltip="Xuất báo cáo excel"
+                type="button"
+                (click)="onSubmitExportExcelReport()"
+                class="btn btn-success mr-1"
+                rippleEffect
+              >
+                <span [data-feather]="'file'" [class]="'mr-25'"></span>
+              </button>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <form (ngSubmit)="onSubmitSearch()">
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      name="msisdn"
+                      [(ngModel)]="searchForm.msisdn"
+                      class="form-control"
+                      placeholder="Nhập số thuê bao"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <div class="form-group">
+                      <input
+                        type="text"
+                        placeholder="Khoảng thời gian"
+                        [ngModelOptions]="{ standalone: true }"
+                        ngxDaterangepickerMd
+                        [(ngModel)]="dateRange"
+                        [ranges]="ranges"
+                        [locale]="{ applyLabel: 'Chọn', format: 'YYYY/MM/DD' }"
+                        [showCustomRangeLabel]="true"
+                        [alwaysShowCalendars]="true"
+                        name="date_range"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <select
+                      class="form-control"
+                      name="state"
+                      [(ngModel)]="searchForm.state"
+                    >
+                      <option value="">Chọn trạng thái</option>
+                      <option value="1">Thành công</option>
+                      <option value="-1">Hủy</option>
+                      <option value="20">Chờ thanh toán</option>
+                      <option value="30">Chờ KT duyệt</option>
+                      <option value="99">Từ chối</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-block btn-dark">
+                      Lọc kết quả
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Số thuê bao</th>
+                    <th>Gói cước</th>
+                    <th>Trạng thái</th>
+                    <th>Ngày tạo</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of list">
+                    <td>{{ item?.id }}</td>
+                    <td>
+                      {{ item?.msisdn }}
+                    </td>
+
+                    <td>{{ item?.cuoc }} GM69</td>
+
+                    <td>
+                      <div [innerHTML]="item?.state | showStatusTask"></div>
+                    </td>
+
+                    <td>
+                      {{ item?.created_at | formatDate }}
+                    </td>
+
+                    <td>
+                      <!-- <a
+                        ngbTooltip="Xem chi tiết"
+                        (click)="modalOpen(modalTransWh, item)"
+                      >
+                        <i
+                          data-feather="eye"
+                          class="text-primary cursor-pointer"
+                        ></i>
+                      </a> -->
+                      <a
+                        ngbTooltip="Đóng thuê bao"
+                        class="ml-2"
+                        (click)="onSubmitLock(item.id, 0)"
+                        *ngIf="item.status"
+                      >
+                        <i
+                          data-feather="unlock"
+                          class="text-primary cursor-pointer"
+                        ></i>
+                      </a>
+                      <a
+                        ngbTooltip="Mở thuê bao"
+                        class="ml-2"
+                        (click)="onSubmitLock(item.id, 1)"
+                        *ngIf="!item.status"
+                      >
+                        <i
+                          data-feather="lock"
+                          class="text-primary cursor-pointer"
+                        ></i>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <ngb-pagination
+                class="d-flex justify-content-end pr-3 pt-2"
+                [collectionSize]="totalPage"
+                [(page)]="searchForm.page"
+                [pageSize]="searchForm.page_size"
+                [boundaryLinks]="true"
+                (pageChange)="loadPage($event)"
+              >
+                <ng-template ngbPaginationPages let-page let-pages="pages">
+                  <li class="ngb-custom-pages-item" *ngIf="pages.length > 0">
+                    <div class="mb-3 d-flex flex-nowrap px-2">
+                      <label
+                        id="paginationInputLabel"
+                        for="paginationInput"
+                        class="col-form-label me-2 ms-1"
+                        >Trang</label
+                      >
+                      <input
+                        #i
+                        type="text"
+                        inputmode="numeric"
+                        pattern="[0-9]*"
+                        class="form-control custom-pages-input"
+                        id="paginationInput"
+                        [value]="searchForm.page"
+                        (keyup.enter)="loadPage(i.value)"
+                        (blur)="loadPage(i.value)"
+                        (input)="formatInput($any($event).target)"
+                        aria-labelledby="paginationInputLabel paginationDescription"
+                        style="width: 2.7rem"
+                      />
+                      <span
+                        id="paginationDescription"
+                        class="col-form-label text-nowrap px-2"
+                      >
+                        của {{ pages.length }}</span
+                      >
+                    </div>
+                  </li>
+                </ng-template>
+              </ngb-pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #modalCreate let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title" id="myModalLabel160">{{ titleModal }}</h5>
+      <button
+        type="button"
+        class="close"
+        (click)="modalClose()"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form class="mt-2">
+      <div class="modal-body" tabindex="0">
+        <div class="form-group">
+          <label>Chọn dịch vụ</label>
+          <select
+            name="service"
+            id=""
+            placeholder="Chọn dịch vụ"
+            class="form-control"
+            [(ngModel)]="dataUpdate.service_code"
+          >
+            <option value="">Chọn dịch vụ</option>
+            <option
+              value="{{ item.service_code }}"
+              *ngFor="let item of listServices"
+            >
+              {{ item.service.code }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Nhập số tiền</label>
+          <input
+            class="form-control"
+            type="text"
+            name="amount"
+            placeholder="100,000"
+            mask="separator"
+            thousandSeparator=","
+            (blur)="onInputAmount($event)"
+            [(ngModel)]="dataUpdate.amount"
+            (focus)="onFocusAmount()"
+          />
+          <label>Chiết khấu : {{ discount }}%</label>
+          <br />
+          <span class="text-danger"> {{ erroMess }} </span>
+        </div>
+
+        <div class="image-upload mb-1">
+          <input
+            id="file-front-input"
+            type="file"
+            accept="image/png, image/gif, image/jpeg, image/jpg"
+            (change)="onSelectFileFront($event)"
+          />
+          <label>
+            <b>File đính kèm : Ảnh đơn hàng</b>
+          </label>
+        </div>
+
+        <div
+          class="image-upload mb-1"
+          *ngIf="selectedItem && selectedItem.status == 99"
+        >
+          <input
+            id="file-front-input"
+            type="file"
+            accept="image/png, image/gif, image/jpeg, image/jpg"
+            (change)="onSelectFileConfirm($event)"
+          />
+          <label>
+            <b>File đính kèm : Ảnh biên lai chuyển khoản</b>
+          </label>
+        </div>
+
+        <h3>
+          Tổng tiền :
+          {{ price | currency : "VND" }}
+        </h3>
+
+        <h5 class="text-warning">
+          <i>
+            {{ price | numberToText }}
+          </i>
+        </h5>
+      </div>
+      <div class="modal-footer">
+        <a (click)="onCreateTask()">
+          <button type="submit" class="btn btn-primary" rippleEffect>
+            {{ btnFormPayment }}
+          </button>
+        </a>
+      </div>
+    </form>
+  </ng-template>
+</div>
+
+<ng-template #modalTransWh let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="myModalLabel160">Chi tiết thuê bao</h5>
+    <button
+      type="button"
+      class="close"
+      (click)="modalClose()"
+      aria-label="Close"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" tabindex="0" ngbAutofocus>
+    <div>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Số thuê bao</th>
+            <th>Gói cước</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of listDiscount">
+            <td>
+              {{ item?.start_money | formatPrice }} -
+              {{ item?.end_money | formatPrice }}
+            </td>
+            <td>
+              {{ item?.value }} <span *ngIf="item?.unit == 'RATIO'">%</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      (click)="modalClose()"
+      type="submit"
+      class="btn btn-primary"
+      rippleEffect
+    >
+      Đóng
+    </button>
+  </div>
+</ng-template>

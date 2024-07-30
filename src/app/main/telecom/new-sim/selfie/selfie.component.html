@@ -1,0 +1,28 @@
+<div id="table-striped" *blockUI="'section-block'">
+    <div class="col-12 mt-2 mb-1">
+        <div class="image-upload" *ngIf="!imageSelfie">
+            <label for="file-input">
+            <img src="/assets/images/icons/selfie.png" class="img-fluid" alt="">
+            <h6 class="text-center">Tải ảnh chân dung</h6>
+            </label>
+            <input id="file-input" type="file" (change)="onSelectFile($event)" />
+        </div>
+        
+        <div class="image-preview" *ngIf="imageSelfie">
+            <img style="max-width: 300px;" [src]="'data:image/png;base64,'+imageSelfie" alt="" class="img-fluid" >
+
+            <button (click)="onReUpload()" type="button" class="btn btn-outline-primary btn-next"
+                rippleEffect>
+                <span class="align-middle ">Tải lại</span>
+                
+            </button>
+        </div>
+    </div>
+    <div class="col-12">
+        <button (click)="onNextStep()" type="button" class="btn btn-block btn-primary btn-next"
+            rippleEffect>
+            <span class="align-middle ">Tiếp tục</span>
+            <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+        </button>
+    </div>
+</div>

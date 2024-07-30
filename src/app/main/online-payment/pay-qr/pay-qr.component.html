@@ -1,0 +1,282 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+    <div class="card">
+      <div class="row">
+        <div class="col-8">
+          <div class="p-2">
+            <h4>DỊCH VỤ THANH TOÁN ONLINE</h4>
+
+            <div class="row mb-1">
+              <div class="col-3"></div>
+              <div class="col-9">
+                <div class="grid-wrapper grid-col-auto">
+                  <label for="radio-card-1" class="radio-card">
+                    <input
+                      type="radio"
+                      name="radio-card"
+                      id="radio-card-1"
+                      checked
+                    />
+                    <div class="card-content-wrapper">
+                      <span class="check-icon"></span>
+                      <div class="card-content">
+                        <img src="assets/images/elements/bank.png" alt="" />
+                        <label>
+                          Nạp tiền hoặc <br />
+                          thanh toán cước
+                        </label>
+                      </div>
+                    </div>
+                  </label>
+
+                  <label for="radio-card-2" class="radio-card">
+                    <input type="radio" name="radio-card" id="radio-card-2" />
+                    <div class="card-content-wrapper">
+                      <span class="check-icon"></span>
+                      <div class="card-content">
+                        <img
+                          src="assets/images/elements/credit-card.png"
+                          alt=""
+                        />
+                        <label>Mua thẻ cào</label>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-3">
+                <span><b>Dịch vụ: </b></span>
+              </div>
+              <div class="col-9">
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="service"
+                    id="gip"
+                    value="optionGip"
+                    checked
+                  />
+                  <label class="form-check-label" for="gip">GIP</label>
+                </div>
+
+                <div class="form-check form-check-inline ml-2">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="service"
+                    id="gsim"
+                    value="optionGSim"
+                  />
+                  <label class="form-check-label" for="gip">GSIM</label>
+                </div>
+
+                <div class="form-check form-check-inline ml-2">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="service"
+                    id="mobifone"
+                    value="optionMobi"
+                  />
+                  <label class="form-check-label" for="mobifone"
+                    >Sim 4G hợp tác với Mobifone</label
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <div class="col-3"></div>
+              <div class="col-9">
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="service"
+                    id="vina"
+                    value="optionVina"
+                  />
+                  <label class="form-check-label" for="vina"
+                    >Sim 4G hợp tác với Vietnamobile</label
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <div class="col-3">
+                <span
+                  ><b
+                    >Thông tin <br />
+                    thanh toán theo*:
+                  </b></span
+                >
+              </div>
+              <div class="col-9">
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="info"
+                    id="number"
+                    value="optionNumber"
+                    checked
+                  />
+                  <label class="form-check-label" for="number"
+                    >Số đại diện</label
+                  >
+                </div>
+                <div class="form-check form-check-inline ml-2">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="info"
+                    id="code"
+                    value="optionCode"
+                  />
+                  <label class="form-check-label" for="code"
+                    >Mã khách hàng</label
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <div class="col-3">
+                <span><b>Số tiền: </b></span>
+              </div>
+              <div class="col-9">
+                <div class="col-8 pl-0">
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Nhập số đại diện/mã KH"
+                      formControlName="number_info"
+                    />
+                  </div>
+                </div>
+
+                <div class="col-8 pl-0">
+                  <div class="form-group">
+                    <input
+                      class="form-control"
+                      type="text"
+                      placeholder="Nhập số tiền"
+                      mask="separator"
+                      thousandSeparator=","
+                      formControlName="topup"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-3">
+                <span><b>Phương thức thanh toán: </b></span>
+              </div>
+              <div class="col-9">
+                <label for="radio-card-3" class="radio-card">
+                  <input type="radio" name="radio-vietQr" id="radio-card-3" />
+                  <div class="card-content-wrapper">
+                    <span class="check-icon"></span>
+                    <div class="card-content">
+                      <img src="assets/images/elements/vietqr.png" alt="" />
+                      <label>Quét mã VietQR</label>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-3">
+                <span><b>Kênh hộ trợ khách hàng: </b></span>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <div class="d-flex">
+                  <div class="row">
+                    <button type="button" class="btn btn-icon btn-flat-primary">
+                      <span [data-feather]="'headphones'"></span>
+                    </button>
+
+                    <div class="col">
+                      <div class="col">CSKH</div>
+                      <div class="col">
+                        <b>0598247247</b>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row ml-2">
+                    <button type="button" class="btn btn-icon btn-flat-primary">
+                      <span [data-feather]="'credit-card'"></span>
+                    </button>
+
+                    <div class="col">
+                      <div class="col">Gmail</div>
+                      <div class="col">
+                        <b>dvkh@gmobile.com</b>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-4">
+          <div class="col-3"></div>
+          <div class="col-9 mt-5">
+            <div class="border rounded-lg p-1 custom-card">
+              <div>
+                Số tiền:
+                <span class="pull-right"> <b>5.000.000</b></span>
+              </div>
+              <div>
+                Phí:
+                <span class="pull-right"> <b>5.000</b></span>
+              </div>
+              <div>
+                Thuế VAT:
+                <span class="pull-right"> <b>2.000</b></span>
+              </div>
+              <div class="mt-2">
+                <h5>
+                  Tổng tiền :
+                  <span class="pull-right"> <b>5.000.000 VND</b></span>
+                </h5>
+                <span class="pull-right"> <b>Năm triệu </b></span>
+              </div>
+              <div class="text-center">
+                <button
+                  type="button"
+                  class="btn btn-primary m-2"
+                  [routerLink]="['/online-payment/info-qr']"
+                >
+                  ĐỒNG Ý THANH TOÁN
+                </button>
+              </div>
+
+              <h6 class="text-center">
+                Nhấn vào "Đồng ý Thanh toán" đồng nghĩa với việc Quý khách đồng
+                ý với điều khoản mua hàng và thanh toán của Gmobile.
+              </h6>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

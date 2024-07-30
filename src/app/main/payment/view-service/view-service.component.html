@@ -1,0 +1,136 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+  </div>
+
+  <div class="row">
+    <div class="col-sm">
+      <div class="col-sm">
+        <div class="border rounded-lg card p-1">
+          <h4 class="card-title text-lg-center">Thông tin thanh toán</h4>
+          <div>
+            Mã giao dịch:
+            <span class="pull-right">
+              <b>{{ data?.id }}</b></span
+            >
+          </div>
+          <div>
+            Số tiền:
+            <span class="pull-right">
+              <b>{{ data?.amount | number }}</b></span
+            >
+          </div>
+          <div>
+            Phí:
+            <span class="pull-right">
+              <b>{{ data?.fee }}</b></span
+            >
+          </div>
+          <div>
+            Nội dung chuyển khoản:
+            <span class="pull-right">
+              <b>{{ data?.desc }}</b></span
+            >
+          </div>
+          <div>
+            Thuế VAT:
+            <span class="pull-right">
+              <b>{{ data?.vat | number }}</b></span
+            >
+          </div>
+          <div>
+            Nhà cung cấp:
+            <span class="pull-right">
+              <b>{{ data?.receiver_name }} </b></span
+            >
+          </div>
+          <div class="mt-2">
+            <h5>
+              Tổng tiền :
+              <span class="pull-right">
+                <b>{{ data?.amount | number }}</b></span
+              >
+            </h5>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="col-sm"
+        *ngIf="data?.status != 1 && data?.status != -1 && data?.status != 30"
+      >
+        <div class="border rounded-lg card p-1">
+          <div class="form-group">
+            <div class="col-md-6">
+              <div class="image-upload" *ngIf="!imageFront">
+                <input
+                  id="file-front-input"
+                  type="file"
+                  accept="image/png, image/gif, image/jpeg, image/jpg"
+                  (change)="onSelectFileFront($event)"
+                />
+                <label>
+                  <b>Ảnh chụp hóa đơn thanh toán</b>
+                </label>
+              </div>
+
+              <div class="image-preview" *ngIf="imageFront">
+                <img
+                  style="max-width: 200px"
+                  [src]="imageFront"
+                  alt=""
+                  class="img-fluid"
+                />
+                <br />
+                <br />
+                <button
+                  (click)="onReUpload('front')"
+                  type="button"
+                  class="btn btn-outline-primary btn-next"
+                  rippleEffect
+                >
+                  <span class="align-middle">Tải lại</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="mt-1">
+              <a (click)="onConfirmPay()">
+                <button type="button" class="btn btn-primary" rippleEffect>
+                  Đã thanh toán
+                </button>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="col-sm"
+      *ngIf="data?.status != 1 && data?.status != -1 && data?.status != 30"
+    >
+      <div class="border rounded-lg card p-1 text-lg-center">
+        <h4 class="card-title">Quét mã qua ứng dụng ngân hàng/ ví điện tử</h4>
+
+        <div>
+          <img
+            src="https://img.vietqr.io/image/{{ data?.receiver_bank_code }}-{{
+              data?.receiver_banker_number
+            }}-print.jpg?amount={{ data?.amount }}&addInfo={{
+              data?.desc
+            }}&accountName={{ data?.receiver_name }}"
+            alt="QRCODE"
+            height="540px"
+            width="460px"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="col-sm"
+      *ngIf="data?.status == 1 || data?.status == -1 || data?.status == 30"
+    ></div>
+  </div>
+</div>

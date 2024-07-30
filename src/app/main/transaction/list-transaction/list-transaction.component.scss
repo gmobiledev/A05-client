@@ -1,0 +1,15 @@
+::ng-deep {
+    ngx-daterangepicker-material {
+    & {
+     .md-drppicker {
+        min-width: 600px !important;        
+ 
+        &.double {
+          .calendar {
+ 
+        }
+    }
+}
+    }
+}
+}

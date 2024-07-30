@@ -1,0 +1,27 @@
+@import '@core/scss/angular/libs/noui-slider.component.scss';
+
+#scanner-container {
+    position: relative;
+    .overlay {
+        position: absolute;
+        border: 1px solid red;
+        width: 100%;
+        top: 50%;
+    }
+    video {
+        width: 100%;
+    }
+    canvas {
+        display: none;
+    }
+}
+
+.image-upload{
+    input {
+        display: none;
+    }
+}
+
+.img-fluid{
+    max-height: 450px;
+}

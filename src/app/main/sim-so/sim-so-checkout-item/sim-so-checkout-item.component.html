@@ -1,0 +1,37 @@
+<div class="card ecommerce-card">
+    <div class="item-img">
+        <img src="/assets/images/elements/3g-gmobile.png" alt="img-placeholder" class="img-fluid" />
+        <div class="name">
+            {{ product.sim_no }}
+        </div>
+    </div>
+    <div class="card-body">
+      <!-- <div class="item-name mb-1">
+        <h6 class="mb-0">
+         {{ product.sim_no }}
+        </h6>
+      </div> -->
+      <div class="mb-1">
+        <span class="text-success mb-1">Cước hòa mạng: </span>{{ product.price }}
+      </div>
+      <div>
+        <span class="text-success">Cước thuê bao: </span>{{ product.price }}
+      </div>
+      
+    </div>
+    <div class="item-options text-center">
+      <div class="item-wrapper">
+        <div class="item-cost">
+          <h4 class="item-price"></h4>
+          <!-- <p class="card-text shipping" >
+            <span class="badge badge-pill badge-light-success">Free Shipping</span>
+          </p> -->
+        </div>
+      </div>
+      <button type="button" class="btn btn-light mt-1 remove-wishlist" (click)="removeFromCart(product)" rippleEffect>
+        <i data-feather="x" class="align-middle mr-25"></i>
+        <span>Xóa</span>
+      </button>
+    </div>
+  </div>
+  

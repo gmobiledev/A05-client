@@ -1,0 +1,92 @@
+<div class="container-fluid" *blockUI="'section-block'">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label for="">Chụp CMND/CCCD mặt trước:</label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="file" (change)="onFileSelected($event)" accept="image/png, image/gif, image/jpeg">
+                    </div>
+                    <div class="col-md-6">
+                        <img *ngIf="!identificationFrontBase64" style="width:100%" src="/assets/images/icons/cccd_front.png"
+                            class="img-fluid" alt="">
+                        <div class="image-preview" *ngIf="identificationFrontBase64">
+                            <img style="width:100%" [src]="identificationFrontBase64" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+                </div>
+            
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label for="">Chụp CMND/CCCD mặt sau:</label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="file" (change)="onFileSelectedBack($event)" accept="image/png, image/gif, image/jpeg">
+                    </div>
+                    <div class="col-md-6">
+                        <img *ngIf="!identificationBackBase64" style="width:100%" src="/assets/images/icons/cccd_back.png" class="img-fluid"
+                alt="">
+                        <div class="image-preview" *ngIf="identificationBackBase64">
+                            <img style="width:100%" [src]="identificationBackBase64" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>                                
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label for="">Chụp ảnh chân dung</label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="file" (change)="onFileSelectedSelfie($event)" accept="image/png, image/gif, image/jpeg">
+                    </div>
+                    <div class="col-md-6">
+                        <img *ngIf="!selfieBase64" style="width:100%;" src="/assets/images/icons/selfie.png" class="img-fluid"
+                alt="">
+                        <div class="image-preview" *ngIf="selfieBase64">
+                            <img style="width:100%" [src]="selfieBase64" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>                                
+            </div>
+        </div>
+    </div>
+    
+    <div class="row" *blockUI="'section-serial-sim'">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label for="">Tải ảnh phôi sim</label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="file" (change)="onFileSelectedSim($event)" accept="image/png, image/gif, image/jpeg">
+                    </div>
+                    <div class="col-md-6">
+                        
+                        <div class="image-preview" *ngIf="simBase64">
+                            <img style="width:100%" [src]="simBase64" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label for="">Số serial sim</label>
+                <input type="text" [(ngModel)]="serial_sim" class="form-control">
+            </div>
+        </div>
+    </div>
+        <div class="text-center">
+            <button  (click)="onSubmit()" type="button" class="btn btn btn-primary">Tiếp tục</button>
+        </div>
+    </div>

@@ -1,0 +1,195 @@
+<!-- Statistics Card -->
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+    <div class="row" id="table-striped">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">{{ contentHeader.headerTitle }}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row match-height">
+      
+      <!-- <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="card card-congratulations">
+          <div class="card-body text-center">
+            <img
+              src="assets/images/elements/decore-left.png"
+              class="congratulations-img-left"
+              alt="card-img-left"
+            />
+            <img
+              src="assets/images/elements/decore-right.png"
+              class="congratulations-img-right"
+              alt="card-img-right"
+            />
+            <div class="avatar avatar-xl bg-primary shadow">
+              <div class="avatar-content">
+                <i data-feather="award" class="font-large-1"></i>
+              </div>
+            </div>
+            <div class="text-center">
+              <h1 class="mb-1 text-white">
+                Congratulations {{ "Nguyen Thanh Son" }},
+              </h1>
+              <p class="card-text m-auto w-75">
+                This page can be accessed
+                <strong>only by administrators</strong>.
+              </p>
+
+              <p class="card-text m-auto w-75">
+                All users from secure (admin only) api end point.
+                <span
+                  *ngIf="loading"
+                  class="spinner-border spinner-border-sm"
+                ></span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>  -->
+
+      <div class="col-lg-3 col-sm-6 col-12">
+        <div class="card">
+          <div class="card-header d-flex flex-column pb-0">
+            <div class="row">
+              <div class="col-12">
+                <div class="avatar bg-light-primary p-50 m-0">
+                  <div class="avatar-content">
+                    <i data-feather="cast" class="font-medium-5"></i>
+                  </div>
+                </div>
+
+                <div class="avatar bg-white p-50 m-0 pull-right">
+                  <div class="custom-control custom-switch">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="customSwitch1"
+                      checked
+                    />
+                    <label class="custom-control-label" for="customSwitch1">
+                      <span class="switch-icon-left"
+                        ><i data-feather="check"></i
+                      ></span>
+                      <span class="switch-icon-right"
+                        ><i data-feather="x"></i
+                      ></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <h2 class="font-weight-bolder mt-1">
+                  {{ "AirTime" }}
+                </h2>
+                <p class="mb-0">Người đăng ký đã đạt được</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Apexchart component-->
+          <div id="gainedChartoptions" #gainedChartRef>
+            <apx-chart
+              [series]="data.subscribers_gained.series"
+              [chart]="{
+                height: 100,
+                width:
+                  isMenuToggled === true
+                    ? gainedChartRef.offsetWidth
+                    : gainedChartoptions.chart.width,
+                type: 'area',
+                toolbar: {
+                  show: false
+                },
+                sparkline: {
+                  enabled: true
+                }
+              }"
+              [stroke]="gainedChartoptions.stroke"
+              [fill]="gainedChartoptions.fill"
+              [tooltip]="gainedChartoptions.tooltip"
+              [colors]="gainedChartoptions.colors"
+              [dataLabels]="gainedChartoptions.dataLabels"
+            ></apx-chart>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-sm-6 col-12">
+        <div class="card">
+          <div class="card-header d-flex flex-column pb-0">
+            <div class="row">
+              <div class="col-12">
+                <div class="avatar bg-light-primary p-50 m-0">
+                  <div class="avatar-content">
+                    <i data-feather="message-square" class="font-medium-5"></i>
+                  </div>
+                </div>
+
+                <div class="avatar bg-white p-50 m-0 pull-right">
+                  <div class="custom-control custom-switch">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="customSwitch2"
+                      checked
+                    />
+                    <label class="custom-control-label" for="customSwitch2">
+                      <span class="switch-icon-left"
+                        ><i data-feather="check"></i
+                      ></span>
+                      <span class="switch-icon-right"
+                        ><i data-feather="x"></i
+                      ></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <h2 class="font-weight-bolder mt-1">
+                  {{ "GIP" }}
+                </h2>
+                <p class="mb-0">Người đăng ký đã đạt được</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Apexchart component-->
+          <div id="orderChartoptions" #orderChartRef>
+            <apx-chart
+              [series]="data.ordersRecevied.series"
+              [chart]="{
+                height: 100,
+                width:
+                  isMenuToggled === true
+                    ? orderChartRef.offsetWidth
+                    : orderChartoptions.chart.width,
+                type: 'area',
+                toolbar: {
+                  show: false
+                },
+                sparkline: {
+                  enabled: true
+                }
+              }"
+              [stroke]="orderChartoptions.stroke"
+              [fill]="orderChartoptions.fill"
+              [tooltip]="orderChartoptions.tooltip"
+              [colors]="orderChartoptions.colors"
+              [dataLabels]="orderChartoptions.dataLabels"
+            ></apx-chart>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>

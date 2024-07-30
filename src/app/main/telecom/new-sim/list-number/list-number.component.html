@@ -1,0 +1,67 @@
+<div class="row" id="table-striped">
+    <div class="col-12">
+      
+      <div class="card">
+        <!-- <div class="card-header"><h4 class="card-title">Mua số</h4></div> -->
+        <div class="card-body">
+          <form>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <input type="tel" (change)="onSubmitSearch()" name="keysearch" 
+                
+                [(ngModel)]="paramsSearch.keysearch" class="form-control" placeholder="Ví dụ 099*88">
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <select class="form-control" name="brand" [(ngModel)]="paramsSearch.brand" (change)="onSubmitSearch()">
+                  <option value="">Chọn nhà mạng</option>
+                  <option value="VNM">Vietnammobile</option>
+                  <option value="VMS">Mobifone</option>
+                </select>                
+              </div>
+            </div>
+            
+            <!-- <div class="col-md-2">
+              <div class="form-group">
+                <button type="submit" class="btn btn-block btn-info">Lọc kết quả <span [data-feather]="'search'"></span></button>
+              </div>
+            </div> -->
+          </div>
+        </form>
+        <div >
+            <table class="table table-striped text-nowrap"  *blockUI="'section-block'">
+                <thead>
+                  <tr>
+
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                   
+                    <th></th>
+                    
+                  </tr>
+                </thead>
+                <tbody *ngIf="list">
+                  <tr *ngFor="let item of list;index as i">
+                    <td>
+                      <div [innerHTML]="item.brand | showIconMno"></div>
+                    </td>
+                    <td>{{ item?.name }}</td>
+                    <td>{{ item?.price | number  }}</td>                    
+                    <td>
+                        <a class="btn-pick-number" (click)="onSelectSim($event, item)">
+                          <button type="button" class="btn btn-warning" rippleEffect>Chọn số</button>
+                          </a>
+                    </td>
+                    
+                  </tr>
+                </tbody>
+              </table>
+        </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>

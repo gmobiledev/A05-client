@@ -1,0 +1,169 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+    <div class="row">
+      <div class="col-lg-3 col-sm-6 col-12">
+        <div class="card">
+          <div class="card-header d-flex flex-column pb-0">
+            <div class="row">
+              <div class="col-12">
+                <div class="avatar bg-light-primary p-50 m-0">
+                  <div class="avatar-content">
+                    <i data-feather="cast" class="font-medium-5"></i>
+                  </div>
+                </div>
+
+                <div class="avatar bg-white p-50 m-0 pull-right">
+                  <div class="custom-control custom-switch">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="customSwitch3"
+                      checked
+                    />
+                    <label class="custom-control-label" for="customSwitch3">
+                      <span class="switch-icon-left"
+                        ><i data-feather="check"></i
+                      ></span>
+                      <span class="switch-icon-right"
+                        ><i data-feather="x"></i
+                      ></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <h2 class="font-weight-bolder mt-1">
+                  {{ "GIP" }}
+                </h2>
+                <p class="mb-0">Người đăng ký đã đạt được</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Apexchart component-->
+          <div id="gainedChartoptions" #gainedChartRef>
+            <apx-chart
+              [series]="data.subscribers_gained.series"
+              [chart]="{
+                height: 100,
+                width:
+                  isMenuToggled === true
+                    ? gainedChartRef.offsetWidth
+                    : gainedChartoptions.chart.width,
+                type: 'area',
+                toolbar: {
+                  show: false
+                },
+                sparkline: {
+                  enabled: true
+                }
+              }"
+              [stroke]="gainedChartoptions.stroke"
+              [fill]="gainedChartoptions.fill"
+              [tooltip]="gainedChartoptions.tooltip"
+              [colors]="gainedChartoptions.colors"
+              [dataLabels]="gainedChartoptions.dataLabels"
+            ></apx-chart>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-12">
+        <!-- <div class="mb-2">
+            <button type="button" class="btn btn-primary" rippleEffect>
+              <span [data-feather]="'lock'" [class]="'mr-25'"></span>Khóa
+            </button>
+          </div> -->
+
+        <!-- <div class="mb-2">
+            <a [routerLink]="['/payment/list']" routerLinkActive="active">
+              <button type="button" class="btn btn-primary" rippleEffect>
+                <span [data-feather]="'credit-card'" [class]="'mr-25'"></span>Nạp
+                tiền
+              </button>
+            </a>
+          </div> -->
+
+        <div class="mb-2">
+          <h2>
+            <p>Tài khoản chính:</p>
+            <div>
+              <b>
+                <span *ngIf="showBalance == true">{{
+                  balance | currency : "VND" : true
+                }}</span>
+                <span *ngIf="showBalance == false">**********</span>
+              </b>
+              <span
+                ><i
+                  class="feather m-1"
+                  [ngClass]="{
+                    'icon-eye-off': showBalance,
+                    'icon-eye': !showBalance
+                  }"
+                  (click)="toggleBalanceTextType()"
+                ></i
+              ></span>
+            </div>
+          </h2>
+        </div>
+
+        <div class="mb-2">
+          <h2>
+            <div>
+              <p>Thông tin gói cước:</p>
+
+              <b> {{ package.RatingPlan }} - {{ package.Account }} </b>
+            </div>
+          </h2>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-12">
+        <ul ngbNav #navWithIcons="ngbNav" class="nav-tabs">
+          <li ngbNavItem>
+            <a ngbNavLink><span [data-feather]="'cast'"></span> Tổng quan</a>
+            <ng-template ngbNavContent>
+              <p>
+                Tổng đài giúp doanh nghiệp quản lí và kiểm soát các cuộc gọi
+                trong và ngoài doanh nghiệp, và mở rộng hạ tầng tổng đài yêu nhu
+                cầu. Ngoài ra doanh nghiệp còn có thể thiết lập hạn chế cuộc gọi
+                số quốc tế, số di động hoặc Hạn chế hoàn toàn chiều gọi đến hoặc
+                đi Giải pháp tổng đài doanh nghiệp của Gmobile cung cấp hệ thống
+                tổng đài phù hợp cho nhu cầu, mô hình và quy mô doanh nghiệp với
+                hệ thống VOIP. Giải pháp tổng đài doanh nghiệp được tích hợp với
+                các phần mềm quản lí khách hàng (CRM) để hỗ trợ các doanh nghiệp
+                quản lí khách hàng, ghi nhận các cuộc gọi , phản hồi khách hàng
+                và quản lí thông tin liên lạc.
+              </p>
+            </ng-template>
+          </li>
+
+          <!-- <li ngbNavItem>
+            <a ngbNavLink><span [data-feather]="'lock'"></span> Tài liệu</a>
+            <ng-template ngbNavContent>
+        
+
+              <h4>Tên gói cước: {{ package.RatingPlan }}</h4>
+              <h4>Mã gói cước: {{ package.Account }}</h4>
+            </ng-template>
+          </li> -->
+
+          <!-- <li ngbNavItem>
+            <a ngbNavLink><span [data-feather]="'award'"></span> Chi phí</a>
+            <ng-template ngbNavContent>
+              <p>
+               
+              </p>
+            </ng-template>
+          </li> -->
+        </ul>
+      </div>
+
+      <div [ngbNavOutlet]="navWithIcons" class="mt-2"></div>
+    </div>
+  </div>
+</div>

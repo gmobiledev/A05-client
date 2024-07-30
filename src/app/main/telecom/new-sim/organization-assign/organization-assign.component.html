@@ -1,0 +1,63 @@
+<div id="table-striped" *blockUI="'section-block'">
+    <div class="card">
+        <div class="card-body">
+            <div class="custom-control custom-radio">
+                <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input"
+                    [(ngModel)]="assignType" (ngModelChange)="checkOwnerIsUse($event)" value="OWNER" />
+                <label class="custom-control-label" for="customRadio1">Người đại diện là người sử dụng</label>
+            </div>
+            <div class="custom-control custom-radio">
+                <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input"
+                    [(ngModel)]="assignType" (ngModelChange)="checkOwnerIsUse($event)" value="ONE" />
+                <label class="custom-control-label" for="customRadio2">Chỉ 1 người sử dụng</label>
+            </div>
+            <div class="custom-control custom-radio">
+                <input type="radio" id="customRadio3" name="customRadio" class="custom-control-input"
+                    [(ngModel)]="assignType" (ngModelChange)="checkOwnerIsUse($event)" value="MANY" />
+                <label class="custom-control-label" for="customRadio3">Nhiều người sử dụng</label>
+            </div>
+
+            <br>
+
+        </div>
+    </div>
+    <div class="card" *ngIf="assignType == 'OWNER'">
+        <ng-container *ngFor="let msisdn of currentTask.msisdns">
+            <div class="card-header">
+                <h4 class="card-title">{{msisdn.mno}} - {{msisdn.msisdn}} - {{msisdn.serial}}</h4>
+            </div>
+        </ng-container>
+    </div>
+
+    <div class="card" *ngIf="assignType == 'ONE'">
+        <ng-container *ngFor="let msisdn of currentTask.msisdns">
+            <div class="card-header">
+                <h4 class="card-title">{{msisdn.mno}} - {{msisdn.msisdn}} - {{msisdn.serial}}</h4>
+            </div>
+        </ng-container>
+        <div class="card-body">
+            <form-people [isOcr]="true" [csubmitted]="csubmitted" [people]="people"
+                (outPeople)="formPeopleData($event)"></form-people>
+        </div>
+    </div>
+
+    <div *ngIf="assignType == 'MANY'">
+        <div class="card" *ngFor="let msisdn of currentTask.msisdns">
+            <div class="card-header">
+                <h4 class="card-title">{{msisdn.mno}} - {{msisdn.msisdn}} - {{msisdn.serial}}</h4>
+            </div>
+            <div class="card-body">
+                <form-people [isOcr]="true" [csubmitted]="csubmitted"
+                    [people]="{mobile:msisdn.msisdn,options:msisdn.msisdn}"
+                    (outPeople)="formPeopleData($event)"></form-people>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <button (click)="onNextStep()" type="button" class="btn btn-block btn-primary btn-next" rippleEffect>
+            <span class="align-middle ">Tiếp tục</span>
+            <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+        </button>
+    </div>
+</div>

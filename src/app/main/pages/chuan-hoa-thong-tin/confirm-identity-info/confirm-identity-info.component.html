@@ -1,0 +1,102 @@
+<div class="container-fluid">
+    <div class="row">
+        <!-- <div class="top"></div> -->
+        <h3 style="margin-top: 20px;margin-left: 10px;">Xác nhận thông tin</h3>
+    </div>
+    <div class="row" style="margin-top: 30px;">
+        <div class="col-md-12 ">
+            <p>Họ và tên</p>
+            <input type="text" class="form-control" placeholder="họ và tên..."  [(ngModel)]="formData.name"
+            [disabled]="formData.name"
+            >
+        </div>
+    </div>
+    <div class="row" style="margin-top: 30px;">
+        <div class="col-md-12 ">
+            <p>Ngày sinh</p>
+            <div class="input-group">
+                <input
+                  class="form-control"
+                  placeholder="dd/mm/yyyy"
+                  [(ngModel)]="formData.birth"
+                  (click)="basicDP.toggle()"                  
+                  ngbDatepicker
+                  #basicDP="ngbDatepicker"
+                  [disabled]="formData.birth && formData.birth.year && formData.birth.month && formData.birth.day"
+                />
+                <div class="input-group-append">
+                  <button
+                    class="btn rounded-0 btn-outline-secondary feather icon-calendar"
+                    (click)="basicDP.toggle()"
+                    type="button"
+                    rippleEffect
+                  ></button>
+                </div>
+              </div>
+
+        </div>
+    </div>
+    <div class="row" style="margin-top: 30px;">
+        <div class="col-md-12 ">
+            <p>Số CCCD</p>
+            <input type="text" class="form-control" placeholder="Số CCCD..."  [(ngModel)]="formData.id_no"
+            [disabled]="formData.id_no"
+            >
+        </div>
+    </div>
+    <div class="row" style="margin-top: 30px;">
+        <div class="col-md-12 ">
+            <p>Ngày cấp</p>
+            <div class="input-group">
+                <input
+                  class="form-control"
+                  placeholder="dd/mm/yyyy"
+                  [(ngModel)]="formData.id_doi"
+                  (click)="basicDP.toggle()"                  
+                  ngbDatepicker
+                  #basicDP="ngbDatepicker"
+                  [disabled]="formData.id_doi && formData.id_doi.year && formData.id_doi.month && formData.id_doi.day"
+                />
+                <div class="input-group-append">
+                  <button
+                    class="btn rounded-0 btn-outline-secondary feather icon-calendar"
+                    (click)="basicDP.toggle()"
+                    type="button"
+                    rippleEffect
+                  ></button>
+                </div>
+              </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 30px;">
+        <div class="col-md-12 ">
+            <p>Nơi cấp</p>
+            <input type="text" class="form-control" placeholder="Nơi cấp..." [disabled]="formData.id_poi" [(ngModel)]="formData.id_poi">
+        </div>
+    </div>
+    <div class="row" style="margin-top: 30px;">
+        <div class="col-md-12 ">
+            <p>Địa chỉ thường trú</p>
+            <input type="text" class="form-control" placeholder="Địa chỉ thường trú..."  [disabled]="formData.resident_full" [(ngModel)]="formData.resident_full">
+        </div>
+    </div>
+    <div class="row" style="margin-top: 30px;">
+        <div class="col-md-12 ">
+            <p>Số điện thoại liên hệ</p>
+            <input type="text" class="form-control" 
+            mask="0000000000"
+            (focus)="onFoucsInputMobile()"
+            (focusout)="checkMobile()"
+            placeholder="Điện thoại liên hệ..."  [(ngModel)]="formData.contact_mobile">
+            <div *ngIf="errorInputMobile" class="invalid-feedback">
+                <div *ngIf="errorInputMobile">{{ errorInputMobile }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center">
+        <button (click)="onSubmit()" type="button" class="btn btn btn-primary"
+            style="width:150px;height: 50px;margin-top: 40px;font-weight: bold;"
+            [disabled]="!formData.contact_mobile || errorInputMobile"
+            >Tiếp tục</button>
+    </div>
+</div>

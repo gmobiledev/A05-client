@@ -1,0 +1,107 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <div class="row" id="table-striped">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Tra cứu sim/số</h4>
+          </div>
+
+          <div class="card-body" *blockUI="'section-block'">
+            <form (ngSubmit)="onSubmitSearch()">
+              <div class="row">
+                <div class="col-md-10">
+                  <div class="form-group">
+                    <input type="text" name="keyword" [(ngModel)]="searchSim.keyword" class="form-control"
+                      placeholder="Tìm kiếm" />
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-block btn-info">
+                      Lọc kết quả <span [data-feather]="'search'"></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+
+
+            <div class="table-responsive" >
+              <table class="table table-striped text-nowrap" *ngIf="item">
+                <thead>
+                  <tr>
+                    <th>Số thuê bao</th>
+                    <th>Số Serial</th>
+                    <th>Trạng thái kho</th>
+                    <th>Trạng thái TB</th>
+                    <th>Ngày ĐKTTB</th>
+                    <th>Số dư tài khoản chính</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td>{{ item?.msisdn }}</td>
+                    <td>{{ item?.serial }}</td>
+                    <td>
+                      <div *ngIf="item?.is_kit === 0">Chưa kit</div>
+                      <div *ngIf="item?.is_kit === 1">Đã kit</div>
+                    </td>
+                    <td>
+                      <span [innerHTML]="item.state | showStatusMsisdn"></span>
+                    </td>
+                    <td>{{ item?.info?.sync_time }}</td>
+
+                    <td>{{ item?.balance?.coreBalance | number }}₫</td>
+                  </tr>
+
+                </tbody>
+              </table>
+
+              <table class="table table-striped text-nowrap" *ngIf="item">
+                <thead>
+                  <tr>
+                    <th>Thông tin Gói Cước</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <div *ngFor="let pkg of item?.packages" class="m-2">
+                      <p>Mã gói cước : {{ pkg.package }} </p>
+                      <p>Ngày bắt đầu : {{ pkg.timeStart }} </p>
+                      <p>Ngày kết thúc : {{ pkg.timeEnd }}</p>
+                      <p>Data còn lại : <span *ngIf="pkg.dataRemain" >{{ pkg.dataRemain }} MB</span></p>
+                      <p>Tổng data : <span *ngIf="pkg.dataTotal" >{{ pkg.dataTotal }} MB</span></p>
+                      <p>--------------------------------------------</p>
+
+                    </div>
+                  </tr>
+
+                </tbody>
+              </table>
+              <!-- <div class="row mt-2" *ngIf="item">
+                <div class="col-12">
+                  <h4>Thông tin thuê bao</h4>
+                  <pre>
+                    <code class="text-white">
+                       {{ showJSON(item?.info) }}
+                    </code>
+                  </pre>
+                </div>
+              </div> -->
+
+              <div *ngIf="showMessage">
+                <h6 style="text-align: center">
+                  Không tìm thấy thông tin sim/số. Vui lòng nhập lại!
+                </h6>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

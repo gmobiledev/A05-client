@@ -1,0 +1,65 @@
+<div class="row" id="table-striped">
+    <div class="col-12">
+      
+      <div class="card">
+        <div class="card-header"><h4 class="card-title">Mua số</h4></div>
+        <div class="card-body">
+          <form (ngSubmit)="onSubmitSearch()">
+          <div class="row">
+            <div class="col-md-10">
+              <div class="form-group">
+                <input type="text" name="keysearch" [(ngModel)]="searchForm.keysearch" class="form-control" placeholder="Tìm kiếm">
+              </div>
+            </div>
+            
+            <div class="col-md-2">
+              <div class="form-group">
+                <button type="submit" class="btn btn-block btn-info">Lọc kết quả <span [data-feather]="'search'"></span></button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="table-responsive" *blockUI="'section-block'">
+            <table class="table table-striped text-nowrap" *ngIf="list">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>STT</th>
+                    <th>Số</th>
+                    <th>Phí hòa mạng</th>
+                    <th>Cước phí thuê bao</th>
+                    <th></th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of list;index as i">
+                    <td>
+                      <input type="checkbox" (change)="onSelectSim($event, item)" >                    
+                    </td>
+                    <td>
+                      {{ (paramsSearch.take) * (page-1)+(i + 1)}}
+                    </td>
+                    <td>{{ item?.name }}</td>
+                    <td>{{ item?.price }}</td>
+                    <td>{{ item?.price }}</td>
+                    <td></td>
+                    
+                  </tr>
+                </tbody>
+              </table>
+
+          <ngb-pagination
+          class="d-flex justify-content-end pr-3 pt-2"
+                [collectionSize]="total"
+                [(page)]="searchForm.page"
+                [pageSize]="paramsSearch.take"
+                [directionLinks]="false"
+                (pageChange)="loadPage($event)"
+              ></ngb-pagination>
+        </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>

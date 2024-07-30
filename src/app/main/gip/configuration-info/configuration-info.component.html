@@ -1,0 +1,73 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+    <!-- users edit start -->
+    <section class="app-user-edit">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">{{ contentHeader.headerTitle }}</h4>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="formConfirm" (ngSubmit)="onSubmit()">
+            <div class="row">
+
+
+              <div class="col-6 mb-1">
+                <div class="form-group">
+                  <label>IP Destination</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Nhập địa chỉ ip"
+                    formControlName="ip"
+                    style="background-color: aliceblue;"
+                  />
+
+                  <div
+                    *ngIf="submitted && f.ip.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.ip.errors.required">
+                      Vui lòng nhập trường này
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6 mb-1">
+                <div class="form-group">
+                  <label>Mật khẩu tài khoản</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    placeholder="Nhập mã số bí mật"
+                    formControlName="password"
+                  />
+                  <div
+                    *ngIf="submitted && f.password.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.password.errors.required">
+                      Vui lòng nhập trường này
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <button
+                type="submit"
+                class="btn btn-primary mr-1 mt-1 pull-right"
+                rippleEffect
+              >
+                Cập nhật
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

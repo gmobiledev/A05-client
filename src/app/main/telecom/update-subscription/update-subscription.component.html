@@ -1,0 +1,264 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <!-- <app-content-header [contentHeader]="contentHeader"></app-content-header> -->
+    <div class="row mb-1">
+      <div class="col-2"></div>
+      <div class="col-8">
+        <h4 class="text-center">Cập nhật thông tin thuê bao</h4>
+      </div>
+      <div class="col-2"></div>
+    </div>
+    <section class="horizontal-wizard">
+      <div id="stepper1" class="bs-stepper horizontal-wizard-example">
+        <div class="bs-stepper-header">
+          <div class="step" data-target="#account-details">
+            <button disabled class="step-trigger">
+              <span class="bs-stepper-box">1</span>
+            </button>
+          </div>
+          <div class="line">
+            <i data-feather="chevron-right" class="font-medium-2"></i>
+          </div>
+          <div class="step" data-target="#upload-cccd">
+            <button type="button" disabled class="step-trigger">
+              <span class="bs-stepper-box">2</span>
+            </button>
+          </div>
+          <div class="line">
+            <i data-feather="chevron-right" class="font-medium-2"></i>
+          </div>
+          <div class="step" data-target="#upload-file">
+            <button disabled class="step-trigger">
+              <span class="bs-stepper-box">3</span>
+            </button>
+          </div>
+        </div>
+        <div class="bs-stepper-content">
+          <div id="account-details" class="content">
+            <section class="horizontal-wizard">
+              <div class="card">
+                <div class="card-body">
+                  <form
+                    [formGroup]="ReactiveChangeSimForm"
+                    (ngSubmit)="ReactiveUDFormOnSubmit()"
+                  >
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="form-group">
+                          <label for="msisdn">Số điện thoại</label>
+                          <input
+                            type="tel"
+                            id="mobile"
+                            formControlName="mobile"
+                            placeholder="(099) 612 00 00"
+                            mask="(099)0 000 000"
+                            class="form-control"
+                            [ngClass]="{
+                              'is-invalid':
+                                ReactiveUDFormSubmitted &&
+                                ReactiveUDForm.mobile.errors
+                            }"
+                          />
+                          <div
+                            *ngIf="
+                              ReactiveUDFormSubmitted &&
+                              ReactiveUDForm.mobile.errors
+                            "
+                            class="invalid-feedback"
+                          >
+                            <div *ngIf="ReactiveUDForm.mobile.errors.required">
+                              Trường thông tin không được để trống
+                            </div>
+                            <div *ngIf="ReactiveUDForm.mobile.errors.minlength">
+                              Số điện thoại không đúng định dạng
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-12">
+                        <div class="form-group">
+                          <label for="identification_no">Số CMND/CCCD</label>
+                          <input
+                            type="text"
+                            id="identification_no"
+                            maxlength="12"
+                            formControlName="identification_no"
+                            class="form-control"
+                            [ngClass]="{
+                              'is-invalid':
+                                ReactiveUDFormSubmitted &&
+                                ReactiveUDForm.identification_no.errors
+                            }"
+                          />
+                          <div
+                            *ngIf="
+                              ReactiveUDFormSubmitted &&
+                              ReactiveUDForm.identification_no.errors
+                            "
+                            class="invalid-feedback"
+                          >
+                            <div
+                              *ngIf="
+                                ReactiveUDForm.identification_no.errors.required
+                              "
+                            >
+                              Trường thông tin không được để trống
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" rippleEffect>
+                      Tìm kiếm
+                    </button>
+                  </form>
+                </div>
+                <div class="card" *ngIf="msisdnInfo">
+                  <div class="card-header">
+                    <h4 class="card-title">Kết quả tìm kiếm</h4>
+                  </div>
+                  <div class="card-body">
+                    <div
+                      class="d-flex justify-content-between align-items-center"
+                    >
+                      <div class="media">
+                        <div class="avatar mr-75">
+                          <img
+                            src="assets/images/mno/{{
+                              msisdnInfo.mno == 'VNM'
+                                ? 'vnm.png'
+                                : 'mobifone.png'
+                            }}"
+                            class="rounded"
+                            width="42"
+                            height="42"
+                            alt="Avatar"
+                          />
+                        </div>
+                        <div class="media-body my-auto">
+                          <h6 class="mb-0">{{ msisdnInfo.msisdn }}</h6>
+                          <small>{{ msisdnInfo.people.name }}</small>
+                        </div>
+                      </div>
+                      <div class="d-flex align-items-center">
+                        <button
+                          (click)="horizontalWizardStepper.next()"
+                          class="btn btn-info waves-effect waves-float waves-light"
+                        >
+                          Bắt đầu
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div id="upload-cccd" class="content" style="text-align: center">
+            <div class="row-cols-12" *ngIf="msisdnInfo">
+              <div class="border-bottom-danger">
+                <h4>Số điện thoại: {{ msisdnInfo?.msisdn }}</h4>
+                <h4>
+                  Số CMND/CCCD: {{ msisdnInfo?.people.identification_no }}
+                </h4>
+                <h4>Tên: {{ msisdnInfo?.people.name }}</h4>
+              </div>
+            </div>
+
+            <div class="row mt-1">
+              <app-form-personal
+                #formPeopleComponent
+                [countries]="countries"
+                [provinces]="provinces"
+                [submitted]="submitted"
+                [dataInput]="dataInput"
+              ></app-form-personal>
+            </div>
+
+            <div
+              class="col-12 mt-2 mb-1"
+              style="padding-bottom: 20px"
+            >
+              <button
+                class="btn btn-block btn-primary btn-next"
+                style="width: 100%"
+                type="submit"
+                (click)="horizontalWizardStepperNext()"
+              >
+                <span>Tiếp tục</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="upload-file" class="content">
+            <div class="col-12">
+              <h4 class="m-1">Phiếu yêu cầu thay đổi thông tin thuê bao</h4>
+              <pdf-viewer
+                [src]="'data:application/pdf;base64,' + currentContract"
+                [render-text]="true"
+                [original-size]="false"
+                style="height: 750px"
+              ></pdf-viewer>
+            </div>
+
+            <div class="col-12" style="text-align: center">
+              <div class="image-preview" *ngIf="signatureBase64">
+                <img
+                  [src]="'data:image/png;base64,' + signatureBase64"
+                  alt=""
+                  class="img-fluid"
+                />
+              </div>
+            </div>
+
+            <div class="col-12 mt-1" style="text-align: center">
+              <button
+                type="button"
+                (click)="modalOpen(modalBasic)"
+                class="btn btn-outline-primary"
+                rippleEffect
+              >
+                <span *ngIf="signatureBase64">Ký lại</span>
+                <span *ngIf="!signatureBase64">Bắt đầu ký</span>
+              </button>
+            </div>
+
+            <div *ngIf="signatureBase64" class="col-12 mt-2 pb-2">
+              <button
+                (click)="updateSignature()"
+                type="button"
+                class="btn btn-block btn-primary btn-next"
+                rippleEffect
+              >
+                <span class="align-middle">Hoàn thành</span>
+              </button>
+            </div>
+
+            <ng-template #modalBasic let-modal>
+              <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel1">
+                  Chữ ký của khách hàng
+                </h4>
+                <button
+                  type="button"
+                  class="close"
+                  (click)="modal.dismiss('Cross click')"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body" tabindex="0" ngbAutofocus>
+                <app-signature-change
+                  (outSignatureBase64)="onSignature($event)"
+                ></app-signature-change>
+              </div>
+              <div class="modal-footer"></div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

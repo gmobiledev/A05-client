@@ -1,0 +1,82 @@
+/*================================================================================
+	Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
+	Author: PIXINVENT
+	Author URL: http://www.themeforest.net/user/pixinvent
+================================================================================
+
+NOTE:
+------
+PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
+WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+
+body {
+    height: auto !important;
+    &.disable-pull-refresh {
+        overscroll-behavior: contain;
+        // .content-body {
+        //     position: fixed;
+        // }
+    }
+    .header-navbar {
+        &.navbar-static-top {
+            background: #fff !important;
+        }
+    }
+    font-weight: 500 !important;
+    .btn {
+        border-radius: 30px;
+    }
+    .btn-primary {
+        background-color: #EB9B00;
+        border-color: #EB9B00;
+    }
+}
+.invalid-feedback {
+    display: block;
+}
+.inline-spacing {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    > * {
+        margin-right: 1.5rem;
+        margin-top: 1.5rem;
+    }
+}
+::ng-deep {
+    ngx-daterangepicker-material {
+    & {
+     .md-drppicker {
+        min-width: 600px !important;        
+ 
+        &.double {
+          .calendar {
+ 
+        }
+    }
+}
+    }
+}
+}
+
+.md-drppicker {
+    min-width: 600px !important;        
+
+    &.double {
+      .calendar {
+
+    }
+}
+}
+
+.main-menu  {
+    .navbar-header 
+    {
+        height: auto !important;
+        .navbar-brand {
+            .brand-logo img {
+            }
+        }
+    }
+}

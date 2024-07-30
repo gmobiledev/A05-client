@@ -1,0 +1,330 @@
+<div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+        <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+        <div class="row" id="table-striped">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">{{ contentHeader.headerTitle }}</h4>                        
+                    </div>
+
+                    <div class="card-body" *blockUI="'section-block'">
+                        <div class="row">
+                            <div class="col-4">
+                                <p>Ngày tạo: {{ data?.created_at | formatDate }}</p>
+                                <p>Mã đơn: {{ data?.id }}</p>
+                                <p *ngIf="[taskServiceCode.SIM_PROFILE ].includes(data?.service_code)" >Loại sản phẩm: SIM trắng</p>
+                                <p>Số lượng: {{ data?.amount | number }} {{ currency }}</p>
+                                <p *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_BUNDLE,
+                                 taskServiceCode.ADD_MOBILE_PACKAGE].includes(data?.service_code)" >Thành tiền: {{ price | number }} VND</p>
+                                <!-- <p *ngIf="[taskServiceCode.SIM_PROFILE ].includes(data?.service_code)" >Nhà mạng: {{ getJSONDetail('mno') }}</p> -->
+                                <p *ngIf="[taskServiceCode.SIM_PROFILE ].includes(data?.service_code)" >Số lượng đã upload: {{ getJSONDetail('uploaded') | number }}</p>
+                                
+                                <p *ngIf="[taskServiceCode.SIM_KITTING ].includes(data?.service_code)" >SL thành công: {{ getJSONDetail('kitted') }}</p>
+                                <p *ngIf="[taskServiceCode.SIM_KITTING ].includes(data?.service_code)" >SL thất bại: {{ getJSONDetail('failed') }}</p>
+
+                                <p *ngIf="[taskServiceCode.ADD_MOBILE_PACKAGE ].includes(data?.service_code)" >SL thuê bao: {{ listSerial.length }}</p>
+                                <p *ngIf="[taskServiceCode.ADD_MOBILE_PACKAGE, taskServiceCode.SIM_REGISTER ].includes(data?.service_code)" >SL thành công: {{ getJSONDetail('successed') }}</p>
+                                <p *ngIf="[taskServiceCode.ADD_MOBILE_PACKAGE, taskServiceCode.SIM_REGISTER ].includes(data?.service_code)" >SL thất bại: {{ getJSONDetail('failed') }}</p>
+
+                                <p *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_BUNDLE, taskServiceCode.ADD_MOBILE_PACKAGE ].includes(data?.service_code)" >Gói cước: {{ getJSONDetail('package') }}</p>
+                                <p>Trạng thái: <span [innerHTML]="data?.status | showStatusTask"></span></p>
+                            </div>
+                            <div class="col-8 border-left">
+                                <ng-container *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_REGISTER, 
+                                taskServiceCode.SIM_BUNDLE,
+                                taskServiceCode.ADD_MOBILE_PACKAGE,
+                                taskServiceCode.SIM_PROFILE].includes(data?.service_code)" >
+                                
+                                <div class="row">
+                                    <div class="col-md-4 col-12">
+                                        <div class="d-flex justify-content-between align-items-center m-1">
+                                            <label class="d-flex align-items-center">Show
+                                                <select class="form-control mx-25" [(ngModel)]="basicSelectedOption">
+                                                    <option value="10">10</option>
+                                                    <option value="25">25</option>
+                                                    <option value="50">50</option>
+                                                    <option value="100">100</option>
+                                                </select>
+                                                entries</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8 col-12 d-flex justify-content-md-end">
+                                        <div class="d-flex align-items-center justify-content-end pr-1 pb-1 pl-1 pl-md-0 pb-md-0">
+                                            <div class="d-flex align-items-center">Search<input type="search" placeholder="Search"
+                                                    class="form-control ml-25" (keyup)="filterList($event)" /></div>
+                                        <select (change)="onChangeStateMsisnd($event)" name="" id="" class="form-control w-auto ml-1" *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_REGISTER].includes(data?.service_code)">
+                                            <option value="">Lọc trạng thái</option>                                            
+                                            <option value="{{ msisdnStatus.STATUS_KITTED }}">Kitting thành công</option>
+                                            <option value="{{ msisdnStatus.STATUS_KIT_FAIL }}">Kitting lỗi</option>                                            
+                                            <option value="{{ msisdnStatus.STATUS_PACKAGED }}">Đã đăng ký gói</option>
+                                            <option value="{{ msisdnStatus.STATUS_PACKAGE_FAIL }}">Đăng ký gói lỗi</option>
+                                        </select>
+                                        <a (click)="exportExcel()" class="ml-1 btn btn-outline-warning float-right btn-sm"
+                                        ngbTooltip="Tải file excel"
+                                            rippleEffect><i data-feather="download" class="cursor-pointer"></i></a>
+
+                                            <a (click)="onRetryTask()" class="ml-1 btn btn-outline-warning float-right btn-sm"
+                                            ngbTooltip="Thực hiện lại"
+                                            *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_REGISTER,                                 
+                                taskServiceCode.ADD_MOBILE_PACKAGE].includes(data?.service_code) "
+                                            ><i data-feather="rotate-cw" class="cursor-pointer"></i></a>
+                                        </div>
+
+                                        
+                                    </div>
+                                </div>
+                                <ngx-datatable [rows]="listSerialShow" rowHeight="auto" class="bootstrap core-bootstrap" [limit]="25"
+                                    [columnMode]="'force'" [headerHeight]="40" [footerHeight]="50" [scrollbarH]="true" >
+                                    <ngx-datatable-column name="Số điện thoại" *ngIf="[taskServiceCode.ADD_MOBILE_PACKAGE].includes(data?.service_code)">
+                                        <ng-template let-row="row"  ngx-datatable-cell-template>
+                                            <div class="align-items-center">
+                                                <div class="cell-line-height">
+                                                    <p class="font-medium-1 font-weight-bold line-height-1 mb-25">
+                                                        {{ row.value }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+                                    <ngx-datatable-column name="Trạng thái" *ngIf="[taskServiceCode.ADD_MOBILE_PACKAGE].includes(data?.service_code)">
+                                        <ng-template let-row="row"  ngx-datatable-cell-template>
+                                            <div class="align-items-center">
+                                                <div class="cell-line-height">
+                                                    <p class="font-medium-1 font-weight-bold line-height-1 mb-25">
+                                                        <span [innerHTML]=" getJSONDetail('status', row.desc) | showStatusTask"></span>
+                                                        
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+                                    <ngx-datatable-column name="Note" *ngIf="[taskServiceCode.ADD_MOBILE_PACKAGE].includes(data?.service_code)">
+                                        <ng-template let-row="row"  ngx-datatable-cell-template>
+                                            <div class="align-items-center">
+                                                <div class="cell-line-height">
+                                                    <p class="font-medium-1 font-weight-bold line-height-1 mb-25">
+                                                        {{ getJSONDetail('desc', row.desc) | json }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+                                    <ngx-datatable-column name="Serial" *ngIf="[taskServiceCode.SIM_PROFILE].includes(data?.service_code)">
+                                        <ng-template let-row="row"  ngx-datatable-cell-template>
+                                            <div class="align-items-center">
+                                                <div class="cell-line-height">
+                                                    <p class="font-medium-1 font-weight-bold line-height-1 mb-25">
+                                                        {{ row.name }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </ngx-datatable-column>   
+                                    
+                                    <ngx-datatable-column name="Số thuê bao" *ngIf="[taskServiceCode.SIM_KITTING,
+                                    taskServiceCode.SIM_BUNDLE,
+                                    taskServiceCode.SIM_REGISTER].includes(data?.service_code)">
+                                        <ng-template let-row="row"  ngx-datatable-cell-template>
+                                            <div class="align-items-center">
+                                                <div class="cell-line-height">
+                                                    <p class="font-medium-1 font-weight-bold line-height-1 mb-25">
+                                                        {{ row.msisdn }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </ngx-datatable-column> 
+                                    <ngx-datatable-column name="Serial" *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_BUNDLE, taskServiceCode.SIM_REGISTER].includes(data?.service_code)">
+                                        <ng-template let-row="row"  ngx-datatable-cell-template>
+                                            <div class="align-items-center">
+                                                <div class="cell-line-height">
+                                                    <p class="font-medium-1 font-weight-bold line-height-1 mb-25">
+                                                        {{ row.serial }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </ngx-datatable-column> 
+                                    <ngx-datatable-column name="Trạng thái" *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_BUNDLE, taskServiceCode.SIM_REGISTER].includes(data?.service_code)">
+                                        <ng-template let-row="row"  ngx-datatable-cell-template>
+                                            <div class="align-items-center">
+                                                <div class="cell-line-height">
+                                                    <p class="font-medium-1 font-weight-bold line-height-1 mb-25">
+                                                        <span [innerHTML]="row.state | showStatusMsisdn"></span>                                                        
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </ngx-datatable-column> 
+
+                                    <ngx-datatable-column name="Note" *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_BUNDLE, taskServiceCode.SIM_REGISTER].includes(data?.service_code)">
+                                        <ng-template let-row="row"  ngx-datatable-cell-template>
+                                            <div class="align-items-center">
+                                                <div class="cell-line-height">
+                                                    <p class="font-medium-1 font-weight-bold line-height-1 mb-25">
+                                                        {{ row.note }}                                                        
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </ngx-datatable-column>
+
+                                </ngx-datatable>
+                            </ng-container>
+
+                            <ng-container *ngIf="[taskServiceCode.ADD_DATA_BALANCE, taskServiceCode.ADD_MONEY_BALANCE].includes(data?.service_code)" >
+                                <div class="border rounded-lg card p-1 text-lg-center">
+                                    <h4 class="card-title">Quét mã qua ứng dụng ngân hàng/ ví điện tử</h4>
+                                
+                                    <div>
+                                        <img src="https://img.vietqr.io/image/{{ data?.receiver_bank_code }}-{{
+                                                                          data?.receiver_banker_number
+                                                                        }}-print.jpg?amount={{ price }}&addInfo={{
+                                                                          data?.desc
+                                                                        }}&accountName={{ data?.receiver_name }}" alt="QRCODE" height="450px"
+                                             />
+                                    </div>
+                                </div>
+                            </ng-container>
+
+                            </div>
+                            
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12 text-center" *ngIf="data?.status == taskStatus.STATUS_INIT" >
+                                <button class="btn btn-danger  mb-2 mr-2" (click)="onCancelTask()">
+                                    <i data-feather="cancel" class="text-white cursor-pointer"></i> Hủy đơn
+                                </button>
+
+                                <button *ngIf="data?.service_code == taskServiceCode.SIM_PROFILE" class="btn btn-success  mb-2 mr-2" (click)="modalOpen(modalUpdate)" >
+                                    <i data-feather="pencil" class="text-white cursor-pointer"></i> Sửa đơn
+                                </button>
+
+                                <button class="btn btn-success  mb-2 mr-2"  (click)="onConfirmTask()" >
+                                    <i data-feather="check" class="text-white cursor-pointer"></i> Xác nhận
+                                </button>
+                            </div>
+
+                            <div class="col-12 text-center" *ngIf="
+                            data?.service_code == taskServiceCode.SIM_PROFILE && 
+                            (data?.status == taskStatus.STATUS_APPROVED ||data?.status == taskStatus.STATUS_IN_PROGRESS )" >
+                               
+                                <button class="btn btn-success  mb-2 mr-2"  (click)="modalOpen(modalUploadData)" >
+                                    <i data-feather="upload" class="text-white cursor-pointer"></i> Upload Serial
+                                </button>
+                            </div>
+
+                            <div class="col-12 text-center" *ngIf="
+                            [taskServiceCode.ADD_MONEY_BALANCE, taskServiceCode.ADD_DATA_BALANCE].includes(data?.service_code) && 
+                            data?.status == taskStatus.STATUS_WAITING_PAYMENT" >
+                                <button class="btn btn-danger  mb-2 mr-2" (click)="onCancelTask()">
+                                    <i data-feather="cancel" class="text-white cursor-pointer"></i> Hủy đơn
+                                </button>
+                                
+                                <button class="btn btn-success  mb-2 mr-2"  (click)="modalOpen(modalConfirmPay)" >
+                                    <i data-feather="upload" class="text-white cursor-pointer"></i> Xác nhận thanh toán
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #modalUploadData let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title text-info" id="myModalLabel160">
+            Tải lên dữ liệu lên
+        </h5>
+        <button type="button" class="close" (click)="modalClose()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus *blockUI="'item-block'">
+        <ng-container>
+            <div class="form-group">
+                <i class="fa fa-upload" aria-hidden="true"></i>
+                <input type="file" (change)="onFileChangeExcelSerial($event)" />
+                <label>Tải lên file excel</label>
+
+                <a href="/assets/sim-profile-serial.xlsx" class="ml-2">File mẫu tại đây</a>
+            </div>
+        </ng-container>
+
+    </div>
+    <div class="modal-footer">
+        <button (click)="onSubmitUploadSerial()" type="submit" [disabled]="submitted" class="btn btn-primary"
+            rippleEffect>
+            <span class="spinner-border spinner-border-sm" aria-hidden="true" *ngIf="submitted"></span>
+            Submit
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #modalConfirmPay let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title text-info" id="myModalLabel160">
+            Xác nhận thanh toán
+        </h5>
+        <button type="button" class="close" (click)="modalClose()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus *blockUI="'item-block'">
+        <ng-container>
+            <div class="form-group">
+                <i class="fa fa-upload" aria-hidden="true"></i>
+                <input type="file" (change)="onSelectFileConfirmPay($event)" />
+                <label>Tải lên file chứng thực thanh toán</label>
+            </div>
+        </ng-container>
+
+    </div>
+    <div class="modal-footer">
+        <button (click)="onConfirmPay()" type="submit" [disabled]="submitted" class="btn btn-primary"
+            rippleEffect>
+            <span class="spinner-border spinner-border-sm" aria-hidden="true" *ngIf="submitted"></span>
+            Submit
+        </button>
+    </div>
+</ng-template>
+
+
+<ng-template #modalUpdate let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title text-info" id="myModalLabel160">
+            Sửa đơn
+        </h5>
+        <button type="button" class="close" (click)="modalClose()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus *blockUI="'item-block'">
+        <ng-container>
+            <div class="form-group">
+                <label for="">Số lượng</label>
+                <input 
+                type="text" class="form-control"
+                mask="separator"
+                thousandSeparator=","
+                [(ngModel)]="dataUpdate.amount"
+                >
+            </div>
+        </ng-container>
+
+    </div>
+    <div class="modal-footer">
+        <button (click)="onConfirmUpdate()" type="submit" [disabled]="submitted" class="btn btn-primary"
+            rippleEffect>
+            <span class="spinner-border spinner-border-sm" aria-hidden="true" *ngIf="submitted"></span>
+            Submit
+        </button>
+    </div>
+</ng-template>

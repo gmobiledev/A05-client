@@ -1,0 +1,102 @@
+<div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+      <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+<div class="row" id="table-striped">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header"><h4 class="card-title">{{ contentHeader.headerTitle }}</h4></div>
+        <div class="card-body">
+          <form (ngSubmit)="onSubmitSearch()">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <input type="text" name="user" [(ngModel)]="searchForm.user" class="form-control" placeholder="Nhập tên, sđt, email của user">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <input type="text" 
+                placeholder="Khoảng thời gian"
+                [ngModelOptions]="{standalone: true}" 
+                ngxDaterangepickerMd [(ngModel)]="dateRange" 
+                [ranges]="ranges"
+                [locale]="{applyLabel: 'Chọn',format: 'DD/MM/YYYY'}"
+                [showCustomRangeLabel]="true"
+                [alwaysShowCalendars]="true"
+                name="date_range"
+                class="form-control"/>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <select class="form-control" name="trans_type" [(ngModel)]="searchForm.trans_type">
+                  <option value="">Chọn loại giao dịch</option>                                  
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <button type="submit" class="btn btn-block btn-info">Lọc kết quả <span [data-feather]="'search'"></span></button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="table-responsive" *blockUI="'section-block'">
+          <table class="table table-striped text-nowrap">
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Mã giao dịch G99</th>
+                <th>Mã giao dịch merchant</th>
+                <th>Số thẻ</th>
+                <th>Họ và tên</th>
+                <th>Số tài khoản</th>
+                <th>Tên ngân hàng</th>
+                <th>Số tiền</th>
+                <th>Phí merchant</th>
+                <th>Tổng tiền</th>
+                <th>Thời gian</th>
+                <th>Nội dung chuyển</th>
+                <th>Trạng thái</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- <tr *ngFor="let item of list">
+                <td>
+                  {{ listTransType[item.trans_type] }}
+                </td>
+                <td>{{ item.request_id }}</td>
+                <td>
+                    {{ item.gateway }}
+                </td>
+                <td>
+                  {{ item.created_at | date: 'dd/MM/yyyy H:mm' }}
+              </td>
+                <td>
+                    {{ item.amount }}     
+                </td>                
+                
+                <td>
+
+                </td>
+              </tr> -->
+            </tbody>
+          </table>
+
+          <!-- <ngb-pagination
+          class="d-flex justify-content-end pr-3 pt-2"
+                [collectionSize]="totalPage"
+                [(page)]="page"
+                [pageSize]="pageSize"
+                [directionLinks]="false"
+              ></ngb-pagination> -->
+        </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+    </div>
+</div>

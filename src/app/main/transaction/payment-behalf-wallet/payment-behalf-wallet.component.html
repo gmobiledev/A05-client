@@ -1,0 +1,46 @@
+
+          <table class="table table-striped text-nowrap" *ngIf="list">
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Mã giao dịch</th>
+                <th>Tên người nhận</th>
+                <th>SĐT người nhận</th>
+                <th>Số tiền</th>
+                <th>Phí merchant</th>
+                <th>Tổng tiền</th>
+                <th>Thời gian</th>
+                <th>Nội dung chuyển</th>
+                <th>Trạng thái</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of list;index as i">
+                <td>
+                  {{ (page-1)*pageSize + i + 1 }}
+                </td>
+                <td>{{ item?.trans_id }}</td>
+                <td>{{ item?.people?.name }}</td>
+                <td>{{ item?.people?.mobile }}</td>
+                <td>{{ item?.amount | currency:' ':'symbol':'0.0-1' }}</td>
+                <td>{{ item?.fee | currency:' ':'symbol':'0.0-1' }}</td>
+                <td>{{ showSum(item?.amount, item?.fee) }}</td>
+                <td>{{ item?.created_at | date: 'dd/MM/yyyy H:mm' }}</td>
+                <td>{{ item?.desc }}</td>
+
+                <!-- <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td> -->
+
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        

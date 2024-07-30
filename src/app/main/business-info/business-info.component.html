@@ -1,0 +1,363 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+    <!-- users edit start -->
+    <section class="app-user-edit">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">{{ contentHeader.headerTitle }}</h4>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="formConfirm" (ngSubmit)="onSubmit()">
+            <div class="row">
+              <div class="col-md-6 col-sm-12 col-xs-12 mb-1">
+                <div class="form-group">
+                  <label>Tên tổ chức</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Tên tổ chức / doanh nghiệp"
+                    formControlName="name"
+                  />
+                  <div
+                    *ngIf="submitted && f.name.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.name.errors.required">
+                      Vui lòng nhập trường này
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6 mb-1">
+                <div class="form-group">
+                  <label>Địa chỉ</label>
+
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Nhập địa chỉ"
+                    formControlName="address"
+                  />
+                  <div
+                    *ngIf="submitted && f.address.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.address.errors.required">
+                      Vui lòng nhập trường này
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-xs-12 mb-1">
+                <div class="form-group">
+                  <label> Ngày cấp</label>
+                  <div class="input-group">
+                    <input
+                      type="datetime"
+                      class="form-control"
+                      placeholder="Nhập địa chỉ"
+                      formControlName="license_issue_date"
+                    />
+                    <div
+                      *ngIf="submitted && f.license_issue_date.errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="f.license_issue_date.errors.required">
+                        Vui lòng nhập trường này
+                      </div>
+                    </div>
+
+                    <!-- <input
+                      class="form-control"
+                      placeholder="dd/mm/yyyy"
+                      formControlName="license_issue_date"
+                      (click)="basicDP.toggle()"
+                      ngbDatepicker
+                      #basicDP="ngbDatepicker"
+                    />
+                    <div class="input-group-append">
+                      <button
+                        class="btn rounded-0 btn-outline-secondary feather icon-calendar"
+                        (click)="basicDP.toggle()"
+                        type="button"
+                        rippleEffect
+                      ></button>
+                    </div> -->
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-xs-12 mb-1">
+                <div class="form-group">
+                  <label>Nơi cấp</label>
+
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Nơi cấp"
+                    formControlName="license_issue_place"
+                  />
+                  <div
+                    *ngIf="submitted && f.license_issue_place.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.license_issue_place.errors.required">
+                      Vui lòng nhập trường này
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-xs-12 mb-1">
+                <div class="form-group">
+                  <label>Số ĐKKD</label>
+
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Số ĐKKD"
+                    mask="0*"
+                    formControlName="tax_no"
+                  />
+                  <div
+                    *ngIf="submitted && f.tax_no.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.tax_no.errors.required">
+                      Vui lòng nhập trường này
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-xs-12 mb-1">
+                <div class="form-group">
+                  <label for="">Mã số thuế</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Số ĐKKD"
+                    mask="0*"
+                    formControlName="license_no"
+                  />
+                  <div
+                    *ngIf="submitted && f.license_no.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.license_no.errors.required">
+                      Vui lòng nhập trường này
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 mb-1">
+                <label for="">Giấy ĐKKD</label>
+                <div style="overflow-y: auto; height: 450px" class="border">
+                  <img
+                    class="img-fluid rounded mb-75"
+                    src="data:image/png;base64,{{ data?.task?.document_image }}"
+                    alt="avatar img"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 mb-1">
+                <label for="">Ảnh hợp đồng</label>
+                <div style="overflow-y: auto; height: 450px" class="border">
+                  <img
+                    class="img-fluid rounded mb-75"
+                    src="data:image/png;base64,{{ data?.task?.document_image }}"
+                    alt="avatar img"
+                  />
+                </div>
+              </div>
+
+              <h4 class="col-md-6 col-sm-12 col-xs-12 mb-1 card-title">
+                Thông tin người đại diện
+              </h4>
+
+              <h4 class="col-md-6 col-sm-12 col-xs-12 mb-1 card-title"></h4>
+
+              <div class="col-md-6 col-sm-12 col-xs-12 mb-1">
+                <div class="form-group">
+                  <label for="">Họ tên người đại diện</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Tên người đại diện"
+                    mask="0*"
+                    formControlName="representative_name"
+                  />
+                  <div
+                    *ngIf="submitted && f.representative_name.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.representative_name.errors.required">
+                      Vui lòng nhập trường này
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-xs-12 mb-1">
+                <div class="form-group">
+                  <label for=""> Số CCCD</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Số CCCD"
+                    mask="0*"
+                    formControlName="representative_CCCD"
+                  />
+                  <div
+                    *ngIf="submitted && f.representative_CCCD.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.representative_CCCD.errors.required">
+                      Vui lòng nhập trường này
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-xs-12 mb-1">
+                <div class="form-group">
+                  <label for="">Ngày cấp</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Ngày cấp CCCD"
+                    mask="0*"
+                    formControlName="representative_date"
+                  />
+                  <div
+                    *ngIf="submitted && f.representative_date.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.representative_date.errors.required">
+                      Vui lòng nhập trường này
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-xs-12 mb-1">
+                <div class="form-group">
+                  <label for="">Nơi cấp</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Nới cấp"
+                    mask="0*"
+                    formControlName="representative_place"
+                  />
+                  <div
+                    *ngIf="submitted && f.representative_place.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.representative_place.errors.required">
+                      Vui lòng nhập trường này
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-xs-12 mb-1">
+                <div class="form-group">
+                  <label for="">Ngày sinh</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Ngày tháng sinh"
+                    mask="0*"
+                    formControlName="representative_birth"
+                  />
+                  <div
+                    *ngIf="submitted && f.representative_birth.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.license_no.representative_birth.required">
+                      Vui lòng nhập trường này
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-sm-12 col-xs-12 mb-1">
+                <div class="form-group">
+                  <label for="">Địa chỉ thường trú</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Địa chỉ"
+                    mask="0*"
+                    formControlName="representative_place"
+                  />
+                  <div
+                    *ngIf="submitted && f.representative_place.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.representative_place.errors.required">
+                      Vui lòng nhập trường này
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4 col-sm-12 mb-1">
+                <label for="">Ảnh mặt trước</label><br />
+                <img
+                  class="img-fluid rounded mb-75"
+                  src="data:image/png;base64,{{
+                    data?.customer?.people?.identification_front_file
+                  }}"
+                  alt="avatar img"
+                  style="height: 400px"
+                />
+              </div>
+              <div class="col-md-4 col-sm-12 mb-1">
+                <label for="">Ảnh mặt sau</label><br />
+                <img
+                  class="img-fluid rounded mb-75"
+                  src="data:image/png;base64,{{
+                    data?.customer?.people?.identification_back_file
+                  }}"
+                  alt="avatar img"
+                  style="height: 400px"
+                />
+              </div>
+
+              <div class="col-md-4 col-sm-12 mb-1">
+                <label for="">Ảnh chân dung</label><br />
+                <img
+                  class="img-fluid rounded mb-75"
+                  src="data:image/png;base64,{{
+                    data?.customer?.people?.identification_selfie_file
+                  }}"
+                  alt="avatar img"
+                  style="height: 400px"
+                />
+              </div>
+
+              <div class="col-12">
+                <button
+                  type="submit"
+                  class="btn btn-primary mr-1 mt-1"
+                  rippleEffect
+                >
+                  Lưu
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <!-- users edit ends -->
+  </div>
+</div>

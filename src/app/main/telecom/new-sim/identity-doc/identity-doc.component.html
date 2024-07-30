@@ -1,0 +1,68 @@
+<div id="table-striped" *blockUI="'section-block'">
+
+    <div class="card-body">
+        <ul ngbNav #navWithIcons="ngbNav" class="nav-tabs nav-fill" style="background-color: #f8f8f8;">
+            <li ngbNavItem>
+                <a ngbNavLink><span [data-feather]="'user'"></span> Cá Nhân</a>
+                <ng-template ngbNavContent>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="image-upload" *ngIf="!imageFront">
+                                <label for="file-front-input">
+                                    <img src="/assets/images/icons/cccd_front.png" class="img-fluid" alt="">
+                                    <h6 class="text-center">Ảnh CCCD/CMND mặt trước</h6>
+                                </label>
+                                <input id="file-front-input" type="file" (change)="onSelectFileFront($event)" />
+                            </div>
+
+                            <div class="image-preview" *ngIf="imageFront">
+                                <img style="max-width: 300px;" [src]="imageFront" alt="" class="img-fluid">
+
+                                <button (click)="onReUpload('front')" type="button"
+                                    class="btn btn-outline-primary btn-next" rippleEffect>
+                                    <span class="align-middle ">Tải lại</span>
+
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="image-upload" *ngIf="!imageBack">
+                                <label for="file-back-input">
+                                    <img src="/assets/images/icons/cccd_back.png" class="img-fluid" alt="">
+                                    <h6 class="text-center">Ảnh CCCD/CMND mặt sau</h6>
+                                </label>
+                                <input id="file-back-input" type="file" (change)="onSelectFileBack($event)" />
+                            </div>
+
+                            <div class="image-preview" *ngIf="imageBack">
+                                <img style="max-width: 300px;" [src]="imageBack" alt="" class="img-fluid">
+                                <button (click)="onReUpload('back')" type="button"
+                                    class="btn btn-outline-primary btn-next" rippleEffect>
+                                    <span class="align-middle ">Tải lại</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt-1">
+                            <button (click)="onNextStep()" type="button" class="btn btn-block btn-primary btn-next"
+                                rippleEffect>
+                                <span class="align-middle ">Tiếp tục</span>
+                                <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                            </button>
+                        </div>
+                    </div>
+                </ng-template>
+            </li>
+            <li ngbNavItem>
+                <a ngbNavLink><span [data-feather]="'users'"></span> Tổ chức/Doanh nghiệp</a>
+                <ng-template ngbNavContent>
+                    <organization-doc (nextStep)="ekycOrganization($event)"
+                        [currentTaskId]="currentTaskId"></organization-doc>
+                </ng-template>
+            </li>
+
+        </ul>
+        <div [ngbNavOutlet]="navWithIcons" class="mt-2"></div>
+    </div>
+
+
+</div>

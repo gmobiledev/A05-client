@@ -1,0 +1,20 @@
+.img-icon-mno {
+    max-width: 50px;
+}
+@media (max-width: 992px) {
+.table {
+    td {
+        padding: 0.6rem 0;
+    }
+
+    .img-icon-mno {
+        width: 40px !important;
+    }
+    .btn-pick-number {
+        background: #FCB71E;
+        border-radius: 5px;
+        color: #000;
+        padding: 5px 8px;
+    }
+}
+}

@@ -1,0 +1,452 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+    <div class="row box-summary" style="display: none">
+      <div class="col-sm-6 col-xl-3 mb-2 mb-xl-0">
+        <div class="card" [ngClass]="{ active: isActivedBoxNewInit }">
+          <div class="card-header"></div>
+          <div class="card-body statistics-body">
+            <div class="media">
+              <div class="avatar bg-light-primary mr-2">
+                <div class="avatar-content">
+                  <!-- <i [data-feather]="item.show_icon" class="avatar-icon"></i>  -->
+                </div>
+              </div>
+              <div class="media-body my-auto">
+                <h5 class="font-weight-bolder mb-0">
+                  {{ summaryTask?.init_new_sim }} đấu nối sim mới
+                </h5>
+                <p class="card-text font-small-3 mb-1">Mới khởi tạo</p>
+                <a
+                  (click)="
+                    viewDetailSummary(
+                      [taskTelecomStatus.STATUS_NEW_ORDER],
+                      listTaskAction.new_sim.value
+                    )
+                  "
+                  >Xem chi tiết</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xl-3 mb-2 mb-xl-0">
+        <div class="card" [ngClass]="{ active: isActivedBoxNewProcessing }">
+          <div class="card-header"></div>
+          <div class="card-body statistics-body">
+            <div class="media">
+              <div class="avatar bg-light-primary mr-2">
+                <div class="avatar-content">
+                  <!-- <i [data-feather]="item.show_icon" class="avatar-icon"></i>  -->
+                </div>
+              </div>
+              <div class="media-body my-auto">
+                <h5 class="font-weight-bolder mb-0">
+                  {{ summaryTask?.processing_new_sim }} đấu nối sim mới
+                </h5>
+                <p class="card-text font-small-3 mb-1">Đang xử lý</p>
+                <a
+                  (click)="
+                    viewDetailSummary(
+                      [
+                        taskTelecomStatus.STATUS_PROCESSING,
+                        taskTelecomStatus.STATUS_PROCESS_TO_MNO
+                      ],
+                      listTaskAction.new_sim.value
+                    )
+                  "
+                  >Xem chi tiết</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-xl-3 mb-2 mb-xl-0">
+        <div class="card" [ngClass]="{ active: isActivedBoxChangeSimInit }">
+          <div class="card-header"></div>
+          <div class="card-body statistics-body">
+            <div class="media">
+              <div class="avatar bg-light-primary mr-2">
+                <div class="avatar-content">
+                  <!-- <i [data-feather]="item.show_icon" class="avatar-icon"></i>  -->
+                </div>
+              </div>
+              <div class="media-body my-auto">
+                <h5 class="font-weight-bolder mb-0">
+                  {{ summaryTask?.init_change_info }} đổi sim
+                </h5>
+                <p class="card-text font-small-3 mb-1">Mới tạo</p>
+                <a
+                  (click)="
+                    viewDetailSummary(
+                      [taskTelecomStatus.STATUS_NEW_ORDER],
+                      listTaskAction.change_info.value
+                    )
+                  "
+                  >Xem chi tiết</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xl-3 mb-2 mb-xl-0">
+        <div
+          class="card"
+          [ngClass]="{ active: isActivedBoxChangeSimProcessing }"
+        >
+          <div class="card-header"></div>
+          <div class="card-body statistics-body">
+            <div class="media">
+              <div class="avatar bg-light-primary mr-2">
+                <div class="avatar-content">
+                  <!-- <i [data-feather]="item.show_icon" class="avatar-icon"></i>  -->
+                </div>
+              </div>
+              <div class="media-body my-auto">
+                <h5 class="font-weight-bolder mb-0">
+                  {{ summaryTask?.processing_change_info }} đổi sim
+                </h5>
+                <p class="card-text font-small-3 mb-1">Đang xử lý</p>
+                <a
+                  (click)="
+                    viewDetailSummary(
+                      [
+                        taskTelecomStatus.STATUS_PROCESSING,
+                        taskTelecomStatus.STATUS_PROCESS_TO_MNO
+                      ],
+                      listTaskAction.change_info.value
+                    )
+                  "
+                  >Xem chi tiết</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" id="table-striped">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">{{ contentHeader.headerTitle }}</h4>
+          </div>
+          <div class="card-body">
+            <form (ngSubmit)="onSubmitSearch()" class="mb-2">
+              <div class="row">
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      name="keysearch"
+                      [(ngModel)]="searchForm.keysearch"
+                      class="form-control"
+                      placeholder="Nhập số điện thoại"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <select
+                      class="form-control"
+                      name="status"
+                      [(ngModel)]="searchForm.status"
+                    >
+                      <option value="">Chọn trạng thái</option>
+                      <option
+                        *ngFor="let item of taskTelecomStatus | keyvalue"
+                        [value]="item.value"
+                        [id]="item.key"
+                      >
+                        <span
+                          [innerHTML]="item.value | showStatusTelecom"
+                        ></span>
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <select
+                      class="form-control"
+                      name="action"
+                      [(ngModel)]="searchForm.action"
+                    >
+                      <option value="">Chọn loại</option>
+                      <option value="new_sim">Đăng ký mới</option>
+                      <option value="change_sim">Đổi SIM</option>
+                      <option value="change_info">Cập nhật TTTB</option>
+                    </select>
+                  </div>
+                </div>
+                
+              </div>
+              <div class="row mt-2">
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-block btn-info">
+                      Lọc kết quả <span [data-feather]="'search'"></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+
+            <div class="row">
+              <div class="col-md-12">
+                <span>Tổng số :</span> <b>{{ totalItems }}</b>
+              </div>
+              <div class="col-md-6" *ngFor="let item of list; let i = index">
+                <div class="card-task card" #taskItem>
+                  <b
+                    >{{ i + 1 }} .
+                    {{
+                      listTaskAction[item.action]
+                        ? listTaskAction[item.action]["label"]
+                        : item.action
+                    }}
+                    (Mã: {{ item.id }})</b
+                  >
+                  <div class="row">
+                    <label class="col-sm-3">Khách hàng:</label>
+                    <div class="col-sm-9">{{ item.customer_type }}</div>
+                  </div>
+                  <div class="row">
+                    <label class="col-sm-3">SĐT:</label>
+                    <div class="col-sm-9">{{ item.msisdn }}</div>
+                  </div>
+                  <div class="row">
+                    <label class="col-sm-3">Thời gian:</label>
+                    <div class="col-sm-9">
+                      {{ item.request_time | date : "dd/MM/yyyy H:mm" : "GMT" }}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label class="col-sm-3">Trạng thái:</label>
+                    <div class="col-sm-9">
+                      <div [innerHTML]="item.status | showStatusTelecom"></div>
+                    </div>
+                  </div>
+                  <container
+                    *ngIf="item.action == listTaskAction.change_sim.value"
+                  >
+                    <div class="row">
+                      <label class="col-sm-3">Phôi sim mới:</label>
+                      <div class="col-sm-9">
+                        {{ getDetailTask(item.detail, "serial") }}
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-sm-3">Số thường xuyên liên hệ:</label>
+                      <div class="col-sm-9">
+                        {{ getDetailTask(item.detail, "dialed_numbers") }}
+                      </div>
+                    </div>
+                  </container>
+                  <div class="text-info">Ghi chú: {{ item.note }}</div>
+
+                  <div class="row">
+                    <container
+                    *ngIf="
+                      item.action == 'new_sim' ||
+                      item.action == listTaskAction.change_info.value
+                    "
+                  >
+                    <div class="m-1">
+                      <button
+                        *ngIf="
+                          item.status == 4 ||
+                          item.status == 40 ||
+                          item.status == 0
+                        "
+                        class="btn btn-outline-primary btn-sm"
+                        (click)="onClickTask(item)"
+                      >
+                        <span [data-feather]="'edit'"></span> Cập nhật
+                      </button>
+                      <button
+                        *ngIf="
+                          item.status == 50 &&
+                          item.customer_type == 'ORGANIZATION'
+                        "
+                        (click)="modalOpen(modalUpload, item, 'sm')"
+                        class="btn btn-outline-primary btn-sm"
+                      >
+                        <span [data-feather]="'upload'"></span> Tải lên hợp đồng
+                      </button>
+
+                      <button        
+                      *ngIf="![1,0,-1].includes(item.status) && !item.otp"               
+                        (click)="modalOpen(modalOTP, item, 'sm', 'VERIFY_MSISDN')"
+                        class="btn btn-outline-primary btn-sm"
+                      >
+                        <span [data-feather]="'mail'"></span> Gửi OTP
+                      </button>
+                    </div>
+                    </container>
+
+                    <container
+                      *ngIf="
+                        item.action == listTaskAction.change_sim.value ||
+                        item.action == listTaskAction.change_info.value
+                      "
+                    >
+                      <div class="m-1">
+                        <button
+                          *ngIf="
+                            item.status == 4 ||
+                            item.status == 40 ||
+                            item.status == 0
+                            || (item.status == 5 && item.action == 'change_sim') 
+                          "
+                          class="btn btn-outline-danger btn-sm"
+                          (click)="onCancelTask(item)"
+                        >
+                          <span [data-feather]="'delete'"></span> Hủy
+                        </button>
+                      </div>
+                    </container>
+                  </div>
+
+                  <!-- <container
+                    *ngIf="
+                      item.action == 'new_sim' ||
+                      item.action == listTaskAction.change_info.value
+                    "
+                  >
+                    <div class="mt-1 demo-inline-spacing">
+                      <button
+                        *ngIf="
+                          item.status == 4 ||
+                          item.status == 40 ||
+                          item.status == 0
+                        "
+                        class="btn btn-outline-primary btn-sm"
+                        (click)="onClickTask(item)"
+                      >
+                        <span [data-feather]="'edit'"></span> Cập nhật
+                      </button>
+                      <button
+                        *ngIf="
+                          item.status == 50 &&
+                          item.customer_type == 'ORGANIZATION'
+                        "
+                        (click)="modalOpen(modalUpload, item, 'sm')"
+                        class="btn btn-outline-primary btn-sm"
+                      >
+                        <span [data-feather]="'upload'"></span> Tải lên hợp đồng
+                      </button>
+                    </div>
+
+                  </container>
+
+                  <container
+                    *ngIf="
+                      item.action == listTaskAction.change_sim.value ||
+                      item.action == listTaskAction.change_info.value
+                    "
+                  >
+                    <div class="mt-1">
+                      <button
+                        *ngIf="
+                          item.status == 4 ||
+                          item.status == 40 ||
+                          item.status == 0
+                        "
+                        class="btn btn-outline-danger btn-sm"
+                        (click)="onCancelTask(item)"
+                      >
+                        <span [data-feather]="'delete'"></span> Hủy
+                      </button>
+                    </div>
+                  </container> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #modalUpload let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="myModalLabel160"></h5>
+    <button
+      type="button"
+      class="close"
+      (click)="modalClose()"
+      aria-label="Close"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" tabindex="0" *blockUI="'item-block'">
+    <div class="row">
+      <div class="col-12">
+        <label for="">Upload file pdf hợp đồng</label>
+        <input
+          id="file-front-input"
+          type="file"
+          (change)="onSelectFile($event)"
+          accept="application/pdf"
+        />
+      </div>
+      <div class="col-12 mt-2">
+        <a class="btn btn-success" (click)="onSubmitUpload()">
+          <i data-feather="check-circle" class="text-white cursor-pointer"></i>
+          Gửi
+        </a>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #modalOTP let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="myModalLabel160"></h5>
+    <button
+      type="button"
+      class="close"
+      (click)="modalClose()"
+      aria-label="Close"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" tabindex="0" *blockUI="'item-block'">
+    <div class="row">
+      <div class="col-12" *ngIf="!isSentOtp">
+        <label for="">Số điện thoại</label>
+        <select name="" id="" class="form-control" [(ngModel)]="formOTPMsisdn.mobile">
+          <option value="">-- Chọn số điện thoại nhận OTP --</option>
+        <option value="{{ item.msisdn }}" *ngFor="let item of listSucessMsisdn">
+        {{ item.msisdn }}</option>
+        
+        </select>
+        <a (click)="isSentOtp = true"><u><small>Đã nhận được OTP</small></u></a>
+      </div>
+
+      <div class="col-12" *ngIf="isSentOtp">
+        <label for="">Mã OTP</label>
+        <input mask="000000" class="form-control" [(ngModel)]="formOTPMsisdn.otp"/>
+      </div>
+
+      <div class="col-12 mt-2">
+        <a class="btn btn-success" (click)="onSendOTPMsisdn()">
+          <i data-feather="check-circle" class="text-white cursor-pointer"></i>
+          Gửi
+        </a>
+      </div>
+    </div>
+  </div>
+</ng-template>

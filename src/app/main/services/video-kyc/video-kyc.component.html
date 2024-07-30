@@ -1,0 +1,184 @@
+<div class="content-wrapper container-xxl p-0">
+  <div class="content-body">
+    <app-content-header [contentHeader]="contentHeader"></app-content-header>
+
+    <div class="row">
+      <div class="col-lg-3 col-sm-6 col-12">
+        <div class="card">
+          <div class="card-header d-flex flex-column pb-0">
+            <div class="row">
+              <div class="col-12">
+                <div class="avatar bg-light-primary p-50 m-0">
+                  <div class="avatar-content">
+                    <i data-feather="aperture" class="font-medium-5"></i>
+                  </div>
+                </div>
+
+                <div class="avatar bg-white p-50 m-0 pull-right">
+                  <div class="custom-control custom-switch">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="customSwitch3"
+                      checked
+                    />
+                    <label class="custom-control-label" for="customSwitch3">
+                      <span class="switch-icon-left"
+                        ><i data-feather="check"></i
+                      ></span>
+                      <span class="switch-icon-right"
+                        ><i data-feather="x"></i
+                      ></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <h2 class="font-weight-bolder mt-1">
+                  {{ "Video KYC" }}
+                </h2>
+                <p class="mb-0">Người đăng ký đã đạt được</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Apexchart component-->
+          <div id="gainedChartoptions" #gainedChartRef>
+            <apx-chart
+              [series]="data.subscribers_gained.series"
+              [chart]="{
+                height: 100,
+                width:
+                  isMenuToggled === true
+                    ? gainedChartRef.offsetWidth
+                    : gainedChartoptions.chart.width,
+                type: 'area',
+                toolbar: {
+                  show: false
+                },
+                sparkline: {
+                  enabled: true
+                }
+              }"
+              [stroke]="gainedChartoptions.stroke"
+              [fill]="gainedChartoptions.fill"
+              [tooltip]="gainedChartoptions.tooltip"
+              [colors]="gainedChartoptions.colors"
+              [dataLabels]="gainedChartoptions.dataLabels"
+            ></apx-chart>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-12">
+        <div class="mb-2">
+          <button type="button" class="btn btn-primary" rippleEffect>
+            <span [data-feather]="'lock'" [class]="'mr-25'"></span>Khóa
+          </button>
+        </div>
+
+        <div class="mb-2">
+          <a [routerLink]="['/services/payment']" routerLinkActive="active">
+            <button
+              type="button"
+              (click)="modalOpen(modalCreate)"
+              class="btn btn-primary"
+              rippleEffect
+            >
+              <span [data-feather]="'credit-card'" [class]="'mr-25'"></span>Nạp
+              tiền
+            </button>
+          </a>
+        </div>
+
+        <div class="mb-2">
+          <h3><b>Tài khoản chính: X.000.000 đ.</b></h3>
+        </div>
+
+        <div>
+          <h3><b>Tài khoản khuyến mại: X.000.000 đ</b></h3>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-12">
+        <ul ngbNav #navWithIcons="ngbNav" class="nav-tabs">
+          <li ngbNavItem>
+            <a ngbNavLink><span [data-feather]="'cast'"></span> Tài liệu</a>
+            <ng-template ngbNavContent>
+              <p>
+                Video KYC là hình thức định danh khách hàng thông qua cuộc gọi
+                video. Cụ thể, khách hàng sẽ hoàn thành việc xác thực thông tin
+                cá nhân 100% online thông qua cuộc gọi video trực tiếp với các
+                nhân viên của Ngân hàng số Cake by VPBank. Thông qua Video KYC,
+                các nhân viên ngân hàng sẽ xác minh giấy tờ tùy thân, kiểm tra
+                tính chân thực của hình ảnh, từ đó hỗ trợ hoàn thành các yêu cầu
+                của khách hàng.
+              </p>
+            </ng-template>
+          </li>
+
+          <li ngbNavItem>
+            <a ngbNavLink><span [data-feather]="'lock'"></span> Tài liệu</a>
+            <ng-template ngbNavContent>
+              <p>
+                Biết khách hàng của bạn (KYC) là một quy trình lâu dài và bắt
+                buộc được áp dụng trong nhiều ngành khác nhau, đặc biệt là trong
+                ngân hàng, hầu hết được áp dụng để đảm bảo tổ chức tiến hành
+                kinh doanh với khách hàng hợp pháp và an toàn, đồng thời tuân
+                thủ KYC và AML (chống -rửa tiền) các yêu cầu pháp lý ; tùy thuộc
+                vào tính chất của một tổ chức và hoạt động kinh doanh mà tổ chức
+                đó tiến hành, điều này có thể bao gồm cả việc tuân thủ các quy
+                định quốc tế/địa phương/quốc gia. Theo truyền thống, KYC yêu cầu
+                kiểm tra thủ công và trực tiếp đối với khách hàng. Ví dụ: khi
+                một khách hàng muốn mở tài khoản với một ngân hàng mới, trước
+                đây họ phải đến chi nhánh địa phương của họ và mang theo các tài
+                liệu cần thiết để chứng minh danh tính và tất cả điều này sẽ
+                được xác minh trực tiếp bởi một người thực. Quá trình này được
+                gọi là chương trình nhận dạng khách hàng thủ công (CIP) và
+                thường có thể mất hàng tuần để lên lịch và hoàn thành, thường
+                được coi là nguyên nhân dẫn đến tỷ lệ bỏ ngang cao trong quá
+                trình giới thiệu. Quy trình nhận dạng khách hàng video chỉ thực
+                hiện giống như KYC truyền thống, nhưng theo cách từ xa và thúc
+                đẩy bảo mật tốt hơn, tiết kiệm chi phí và nhanh hơn nhiều vì đây
+                là một quy trình hoàn toàn từ xa.
+              </p>
+            </ng-template>
+          </li>
+
+          <li ngbNavItem>
+            <a ngbNavLink><span [data-feather]="'award'"></span> Chi phí</a>
+            <ng-template ngbNavContent>
+              <p>
+                Trong khi chuyển đổi sang công nghệ mới, chúng tôi hiểu rằng
+                nhiều người lo ngại về chi phí lớn mà quá trình này có thể phải
+                gánh chịu. Tại Shufti Pro, chúng tôi đưa ra mức giá trả theo mức
+                sử dụng nên bạn chỉ trả cho những gì bạn cần và sử dụng. Kiểm
+                tra thị trường IDV và xem liệu điều này có phù hợp với bạn hay
+                không hoặc có những gói giá nào và chọn gói nào phù hợp nhất với
+                nhu cầu kinh doanh và ngành của bạn.
+              </p>
+            </ng-template>
+          </li>
+        </ul>
+      </div>
+
+      <div [ngbNavOutlet]="navWithIcons" class="mt-2"></div>
+    </div>
+  </div>
+</div>
+<ng-template #modalCreate let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="myModalLabel160">{{ titleModal }}</h5>
+    <button
+      type="button"
+      class="close"
+      (click)="modalClose()"
+      aria-label="Close"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!-- <div>Xem ở main/agent</div> -->
+  <div class="m-1">Tính năng đang phát triển</div>
+</ng-template>

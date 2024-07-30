@@ -1,0 +1,41 @@
+<div class="checkout-options">
+    <div class="card">
+      <div class="card-body">
+        <!-- <label class="section-label mb-1">Options</label>
+        <div class="coupons input-group input-group-merge">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Coupons"
+            aria-label="Coupons"
+            aria-describedby="input-coupons"
+          />
+          <div class="input-group-append">
+            <span class="input-group-text text-primary" id="input-coupons">Apply</span>
+          </div>
+        </div>
+        <hr /> -->
+        <div class="price-details">
+          <h6 class="price-title"></h6>
+          <ul class="list-unstyled">
+            <li class="price-detail">
+              <div class="detail-title">Tổng cước hòa mạng</div>
+              <div class="detail-amt">{{ totalPhihoamang }}</div>
+            </li>
+            <li class="price-detail">
+              <div class="detail-title">Tổng cước thuê bao</div>
+              <div class="detail-amt discount-amt text-success">{{ totalCuoc }}</div>
+            </li>            
+          </ul>
+          <hr />
+          <ul class="list-unstyled">
+            <li class="price-detail">
+              <div class="detail-title detail-total">Tổng tiền</div>
+              <div class="detail-amt font-weight-bolder">{{ totalPrice }}</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- Checkout Place Order Right ends -->
+  </div>

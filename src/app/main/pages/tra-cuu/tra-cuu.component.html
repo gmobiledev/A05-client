@@ -1,0 +1,155 @@
+<div class="content-wrapper container-xxl p-0">
+    <div class="content-body">
+        <div class="card">
+            <div class="card-body">
+                <div style="max-width: 700px;margin: 20px auto; min-height: 500px;">
+                    <h3 style="margin-top: 20px;margin-left: 10px;text-align: center;">
+                    </h3>
+                    <div class="divider">
+                        <h3 class="divider-text" style="font-size: 25px;">Tra cứu thông tin thuê bao - Gmobile</h3>
+
+                    </div>
+                    <div>
+                        <p>Tra cứu thuê bao nằm trong danh sách chuyển đổi sim 4G, Gsim</p>
+                    </div>
+                    <!--
+                    <form class="mt-2" [formGroup]="formGroup">
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-12 ">
+                                <label>Số điện thoại 2G</label>
+                                <input type="tel" class="form-control" maxlength="10" minlength="10"
+                                    (focus)="onFoucsInputMsisdn()" (focusout)="checkMobileGmobile()"
+                                    placeholder="Nhập số điện thoại..." mask="0000000000" formControlName="msisdn">
+                                <div *ngIf="errorInputMsisdn" class="invalid-feedback">
+                                    <div *ngIf="errorInputMsisdn">{{ errorInputMsisdn }}</div>
+                                </div>
+                                <div *ngIf="submitted && f.msisdn.errors" class="invalid-feedback">
+                                    <div *ngIf="f.msisdn.errors.required">Vui lòng nhập trường này</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 " style="margin-top:20px">
+                                <re-captcha formControlName="captcha"
+                                    (resolved)="addTokenLog('Reactive form mode resolved', $event)"></re-captcha>
+                                <div *ngIf="submitted && f.captcha.errors" class="invalid-feedback">
+                                    <div *ngIf="f.captcha.errors.required">Vui lòng nhập trường này</div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="text-center" *ngIf="!msisdnValid">
+                            <button (click)="submit()" type="button" class="btn btn btn-primary"
+                                style="width:150px;height: 50px;margin-top: 40px;font-weight: bold;">Tra cứu</button>
+
+                        </div>
+                    </form>
+                    -->
+
+                    <container *ngIf="msisdnValid">
+                        <form class="mt-2" [formGroup]="formGroupTiket">
+                            <div class="row">
+                                <div class="col-md-12 ">
+                                    <label>Số điện thoại 2G (*)</label>
+                                    <input type="tel" class="form-control" maxlength="10" minlength="10"
+                                        (focus)="onFoucsInputMsisdn()" (focusout)="checkMobileGmobile()"
+                                        placeholder="Nhập số điện thoại..." mask="0000000000" formControlName="mobile">
+                                    <div *ngIf="errorInputMsisdn" class="invalid-feedback">
+                                        <div *ngIf="errorInputMsisdn">{{ errorInputMsisdn }}</div>
+                                    </div>
+                                    <div *ngIf="submitted && fTicket.mobile.errors" class="invalid-feedback">
+                                        <div *ngIf="fTicket.mobile.errors.required">Vui lòng nhập trường này</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 30px;">
+                                <div class="col-md-12 ">
+                                    <label>Họ tên (*)</label>
+                                    <input type="text" class="form-control" placeholder="Tên đầy đủ theo giấy tờ"
+                                        formControlName="full_name" oninput="this.value = this.value.toUpperCase()">
+                                    <div *ngIf="submitted && fTicket.full_name.errors" class="invalid-feedback">
+                                        <div *ngIf="fTicket.full_name.errors.required">Vui lòng nhập trường này</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 30px;">
+                                <div class="col-md-12 ">
+                                    <label>Số CCCD/CMND/Hộ chiếu (*)</label>
+                                    <input type="text" class="form-control" placeholder="Nhập chính xác" maxlength="12" 
+                                        formControlName="identification_no">
+
+                                    <div *ngIf="submitted && fTicket.identification_no.errors" class="invalid-feedback">
+                                        <div *ngIf="fTicket.identification_no.errors.required">Vui lòng nhập trường này
+                                        </div>
+                                    </div>
+                                    <div *ngIf="submitted && fTicket.identification_no.errors" class="invalid-feedback">
+                                        <div *ngIf="fTicket.identification_no.errors.pattern">Số giấy tờ không hợp lệ
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 30px;">
+                                <div class="col-md-12 ">
+                                    <label>SĐT liên hệ (*)</label>
+                                    <input type="tel" class="form-control" maxlength="10" minlength="10"
+                                        placeholder="Nhập số điện thoại..." mask="0000000000"
+                                        formControlName="contact_mobile">
+                                   
+                                    <div *ngIf="submitted && fTicket.contact_mobile.errors" class="invalid-feedback">
+                                        <div *ngIf="fTicket.contact_mobile.errors.required">Vui lòng nhập trường này
+                                        </div>
+                                    </div>
+                                    <div *ngIf="submitted && fTicket.contact_mobile.errors" class="invalid-feedback">
+                                        <div *ngIf="fTicket.contact_mobile.errors.mask || fTicket.contact_mobile.errors.isMobile">Định dạng số điện thoại không
+                                            hợp lệ</div>
+                                    </div>
+                                 
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 30px;">
+                                <div class="col-md-12 ">
+                                    <label>Ghi chú (*)</label>
+                                    <textarea type="text" class="form-control" maxlength="200"
+                                        placeholder="Lời nhắn cho Gmoible" formControlName="note"></textarea>
+
+                                    <div *ngIf="submitted && fTicket.note.errors" class="invalid-feedback">
+                                        <div *ngIf="fTicket.note.errors.required">Vui lòng nhập trường này</div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 " style="margin-top:20px">
+                                    <re-captcha formControlName="captcha" #captchaRef="reCaptcha"
+                                        (resolved)="addTokenLog('Reactive form mode resolved', $event)"></re-captcha>
+                                    <div *ngIf="submitted && fTicket.captcha.errors" class="invalid-feedback">
+                                        <div *ngIf="fTicket.captcha.errors.required">Vui lòng nhập trường này</div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="text-center">
+                                <a href="https://gmobile.vn" type="button" class="btn btn btn-default"
+                                    style="width:250px;height: 50px;margin-top: 40px;font-weight: bold;">Trang
+                                    chủ</a>
+                                <button (click)="submitTiket();captchaRef.reset()" type="button" class="btn btn btn-primary"
+                                    style="width:250px;height: 50px;margin-top: 40px;font-weight: bold;" >Tra cứu</button>
+
+
+                            </div>
+                        </form>
+
+                    </container>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    #nav-login {
+        display: none
+    }
+</style>
