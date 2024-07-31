@@ -43,7 +43,8 @@ export class ChangeSimComponent implements OnInit {
   selfieBase64: string
   simBase64: string
   signatureBase64: string
-  isLoading = false
+  isLoading = false;
+  isCheckOcr = 1;
 
   // Reactive User Details form data
   public ChangeSimForm = {
@@ -346,13 +347,14 @@ export class ChangeSimComponent implements OnInit {
     }
   }
 
-  beforeSumitChangeSim() {
+  async beforeSumitChangeSim() {
     this.isLoading = true;
     let data = {
       card_front: this.identificationFrontBase64.replace('data:image/png;base64,', ''),
       card_back: this.identificationBackBase64.replace('data:image/png;base64,', ''),
       selfie: this.selfieBase64.replace('data:image/png;base64,', ''),
       action: "change_sim",
+      check_ocr: this.isCheckOcr,
       msisdn: this.msisdnInfo.msisdn,
       identification_no: this.msisdnInfo.people.identification_no
     }
@@ -360,18 +362,29 @@ export class ChangeSimComponent implements OnInit {
       data['task_id'] = this.task.task_id;
     }
 
-    this.telecomService.beforeSumitChangeSim(data).subscribe(res => {
+    this.telecomService.beforeSumitChangeSim(data).subscribe(async res => {
       this.isLoading = false;
       if (!res.status) {
-        this.alertService.showError(res.message, 6000);
-      }
-      this.task = res.data;
-      if(this.currentSubAction == this.taskSubAction.SIM_TO_ESIM) {
-        this.horizontalWizardStepper.next();
+        if(res.code == 'CANT_READ_IDIMAGE' && ![this.taskSubAction.SIM_TO_ESIM + ''].includes(this.currentSubAction)) {
+          if ((await this.alertService.showConfirm(res.message, "", "Tiếp tục để duyệt trên admin.g99", "Thực hiện lại")).value === true) {
+            this.isCheckOcr = 0;
+            this.beforeSumitChangeSim();
+          } else {    
+            this.isCheckOcr = 1;
+            return;                    
+          }
+        } else {
+          this.alertService.showError(res.message, 6000);
+        }
+        
       } else {
-        this.isVerifyCustomerInfo = true;
-      }
-      
+        this.task = res.data;
+        if(this.currentSubAction == this.taskSubAction.SIM_TO_ESIM) {
+          this.horizontalWizardStepper.next();
+        } else {
+          this.isVerifyCustomerInfo = true;
+        }
+      }            
     }, err => {
       this.isLoading = false;
       this.alertService.showError(err, 6000);

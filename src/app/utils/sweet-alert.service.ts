@@ -10,7 +10,7 @@ export class SweetAlertService {
     
   ) {}
 
-  showConfirm(title, text = '', confirmButtonText = 'Đồng ý', cancelButtonText = 'Hủy') {
+  showConfirm(title, text = '', confirmButtonText = 'Đồng ý', cancelButtonText = 'Hủy', allowOutsideClick = true) {
     return Swal.fire({
         title: title,        
         text: "",
@@ -21,6 +21,8 @@ export class SweetAlertService {
         confirmButtonText: confirmButtonText,
         cancelButtonText: cancelButtonText,
         animation: true,
+        allowOutsideClick: allowOutsideClick,
+        allowEscapeKey: allowOutsideClick,
         showClass: { popup: 'animate__animated animate__flipInX' },
         customClass: {
           confirmButton: 'btn btn-primary',
