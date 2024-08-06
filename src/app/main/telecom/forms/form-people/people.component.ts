@@ -181,6 +181,9 @@ export class PeopleComponent implements OnInit, OnChanges {
       let idateArr = data.identification_date.split("-");
       let identification_date = `${idateArr[2]}-${idateArr[1]}-${idateArr[0]}`
       people.identification_date = Math.floor((new Date(identification_date)).getTime() / 1000);
+    } else if (data.identification_date && data.identification_date.length == 8) {
+      let identification_date = `${data.identification_date.substring(4, 8)}-${data.identification_date.substring(2, 4)}-${data.identification_date.substring(0, 2)}`
+      people.identification_date = Math.floor((new Date(identification_date)).getTime() / 1000);
     } else {
       delete people.identification_date
     }
@@ -189,18 +192,24 @@ export class PeopleComponent implements OnInit, OnChanges {
       let birth = `${data.birth.year}-${data.birth.month}-${data.birth.day}`
       people.birth = Math.floor((new Date(birth)).getTime() / 1000);
     }
-    else if (data.birth) {
+    else if (data.birth && data.birth.split("-").length >= 3) {
       let birthArr = data.birth.split("-");
       data.birth += '';
       let birth = `${birthArr[2]}-${birthArr[1]}-${birthArr[0]}`
       people.birth = Math.floor((new Date(birth)).getTime() / 1000);
+    } else if (data.birth && data.birth.length == 8) {
+      let birth = `${data.birth.substring(4, 8)}-${data.birth.substring(2, 4)}-${data.birth.substring(0, 2)}`
+      people.birth = Math.floor((new Date(birth)).getTime() / 1000);
     } else
       delete people.birth
 
-    if (data.identification_expire_date) {
+    if (data.identification_expire_date && data.identification_expire_date.split("-").length >= 3) {
       data.identification_expire_date += '';
       let expireArr = data.identification_expire_date.split("-");
       let identification_expire_date = `${expireArr[2]}-${expireArr[1]}-${[0]}`
+      people.identification_expire_date = Math.floor((new Date(identification_expire_date)).getTime() / 1000);
+    } else if (data.identification_expire_date && data.identification_expire_date.length == 8) {
+      let identification_expire_date = `${data.identification_expire_date.substring(4, 8)}-${data.identification_expire_date.substring(2, 4)}-${data.birth.substring(0, 2)}`
       people.identification_expire_date = Math.floor((new Date(identification_expire_date)).getTime() / 1000);
     } else if (data.identification_expire_date == '') {
       delete people.identification_expire_date
