@@ -176,10 +176,13 @@ export class PeopleComponent implements OnInit, OnChanges {
     people.residence_district = parseInt(data.residence_district)
     people.residence_commune = data.residence_commune ? parseInt(data.residence_commune) : ""
 
-    if (data.identification_date) {
+    if (data.identification_date && data.identification_date.year) {
+      let identification_date = `${data.identification_date.year}-${data.identification_date.month}-${data.identification_date.day}`
+      people.identification_date = Math.floor((new Date(identification_date)).getTime() / 1000);
+    } else if (data.identification_date && data.identification_date.split("-").length >= 3) {
+      let birthArr = data.identification_date.split("-");
       data.identification_date += '';
-      let idateArr = data.identification_date.split("-");
-      let identification_date = `${idateArr[2]}-${idateArr[1]}-${idateArr[0]}`
+      let identification_date = `${birthArr[2]}-${birthArr[1]}-${birthArr[0]}`
       people.identification_date = Math.floor((new Date(identification_date)).getTime() / 1000);
     } else if (data.identification_date && data.identification_date.length == 8) {
       let identification_date = `${data.identification_date.substring(4, 8)}-${data.identification_date.substring(2, 4)}-${data.identification_date.substring(0, 2)}`
