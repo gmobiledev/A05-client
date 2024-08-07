@@ -382,7 +382,7 @@
           <ng-container *ngIf="[listServiceCode.SIM_REGISTER].includes(currentService)">
             <div class="form-group">
               <label for="">Chọn doanh nghiệp</label>
-              <ng-select  [(ngModel)]="selectedCustomer" [editableSearchTerm]="true"
+              <ng-select  [(ngModel)]="dataCreate.customer_id" [editableSearchTerm]="true"
                 (search)="onSearch($event)"
                 (scroll)="onScroll($event)"
                 (scrollToEnd)="onScrollToEnd()"
@@ -412,9 +412,9 @@
           <div class="form-group" *ngIf="[listServiceCode.SIM_KITTING, listServiceCode.ADD_MOBILE_PACKAGE, listServiceCode.SIM_REGISTER].includes(currentService)">
             <div class="form-group">
               <label for="">Chọn mức độ ưu tiên</label>
-              <select name="" id="" class="form-control">
-                <option>Bình thường</option>
-                <option>Ưu tiên</option>
+              <select [(ngModel)]="dataCreate.priority" class="form-control">
+                <option value="{{ priority.NORMAL }}" >Bình thường</option>
+                <option value="{{ priority.HIGHT }}">Ưu tiên</option>
               </select>
             </div>
           </div>

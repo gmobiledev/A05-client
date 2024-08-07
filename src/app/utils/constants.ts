@@ -117,3 +117,8 @@ export enum CustomerType {
     PERSONAL = "PERSONAL",
     ORGANIZATION = "ORGANIZATION"
 }
+
+export enum Priority {
+    NORMAL = 'normal',
+    HIGHT = 'hight'
+}

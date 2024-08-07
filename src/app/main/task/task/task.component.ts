@@ -5,7 +5,7 @@ import { TelecomServivce, UserService } from 'app/auth/service';
 import { AddBalanceServiceDto } from 'app/auth/service/dto/add-balance-service.dto';
 import { PackagesService } from 'app/auth/service/packages.service';
 import { TaskService } from 'app/auth/service/task.service';
-import { ServiceCode, TaskStatus } from 'app/utils/constants';
+import { Priority, ServiceCode, TaskStatus } from 'app/utils/constants';
 import { SweetAlertService } from 'app/utils/sweet-alert.service';
 import dayjs from 'dayjs';
 dayjs.locale('vi')
@@ -85,7 +85,9 @@ export class TaskComponent implements OnInit {
   dataCreate = {
     amount: 0,
     service_code: '',
-    package: ''
+    package: '',
+    customer_id: '',
+    priority: Priority.NORMAL+''
 
   }
   btnCreate = 'Tạo đơn hàng';
@@ -109,6 +111,7 @@ export class TaskComponent implements OnInit {
     page_size: 20
   }
   isDoneData: boolean = false;
+  priority = Priority;
 
   constructor(
     private readonly taskService: TaskService,
@@ -221,8 +224,9 @@ export class TaskComponent implements OnInit {
     this.dataCreate = {
       amount: 0,
       service_code: '',
-      package: ''
-  
+      package: '',
+      customer_id: '',
+      priority: ''
     }
   }
 
@@ -343,6 +347,7 @@ export class TaskComponent implements OnInit {
     let formData = new FormData();
     formData.append("files", this.fileExcel);
     formData.append("package", this.dataCreate.package);
+    formData.append("priority", this.dataCreate.priority);
     this.taskService.createKitting(formData).subscribe(res => {
       if(!res.status) {
         // this.alertService.showMess(res.message);
@@ -365,7 +370,7 @@ export class TaskComponent implements OnInit {
   onCreateBundle() {
     let formData = new FormData();
     formData.append("files", this.fileExcel);
-    formData.append("package", this.dataCreate.package);
+    formData.append("package", this.dataCreate.package)    
     this.taskService.createBundle(formData).subscribe(res => {
       if(!res.status) {
         // this.alertService.showMess(res.message);
@@ -389,6 +394,8 @@ export class TaskComponent implements OnInit {
   onCreateSimRegister() {
     let formData = new FormData();
     formData.append("files", this.fileExcel);
+    formData.append("customer_id", this.dataCreate.customer_id);
+    formData.append("priority", this.dataCreate.priority);
 
     this.taskService.createSimRegister(formData).subscribe(res => {
       if(!res.status) {
