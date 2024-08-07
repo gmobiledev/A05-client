@@ -467,11 +467,9 @@ export class TaskComponent implements OnInit {
 	}
 
   onSearch(event) {
-    this.searchCustomer.keyword = event.term;
-    if(this.searchCustomer.keyword) {
-      this.searchCustomer.page = 1;
-      this.fetchMore();
-    }
+    this.searchCustomer.keyword = event.term;    
+    this.searchCustomer.page = 1;
+    this.fetchMore();    
   }
 
   fetchMore() {
