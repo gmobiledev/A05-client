@@ -112,3 +112,8 @@ export enum TelecomTaskSubAction {
     ESIM_REKIT_SIM = 'esim_to_sim',
     BUY_ESIM = 'buy_esim'
 }
+
+export enum CustomerType { 
+    PERSONAL = "PERSONAL",
+    ORGANIZATION = "ORGANIZATION"
+}

@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { User } from 'app/auth/models';
 import { Observable } from 'rxjs';
+import { CustomerType } from 'app/utils/constants';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -97,6 +98,10 @@ export class UserService {
 
   getService(code) {
     return this._http.get<any>(`${environment.apiUrl}/service/${code}`);
+  }
+
+  getListCustomerOrganization(params) {
+    return this._http.get<any>(`${environment.apiUrl}/customer/${CustomerType.ORGANIZATION}`, {params: params});
   }
 
 }

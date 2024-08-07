@@ -14,6 +14,7 @@ import { TaskDetailComponent } from './task-detail/task-detail.component';
 import { TaskSearchComponent } from './task-search/task-search.component';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import { TaskRechargeComponent } from './task-recharge/task-recharge.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 // routing
 const routes: Routes = [
@@ -106,6 +107,7 @@ const routes: Routes = [
     BlockUIModule.forRoot(),
     NgxMaskModule.forRoot(),
     NgxDaterangepickerMd.forRoot(),
+    NgSelectModule
   ],
   providers: []
 })

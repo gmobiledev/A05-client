@@ -100,6 +100,15 @@ export class TaskComponent implements OnInit {
     list: []
   };
   maxAmount = 1000000;
+  selectedCustomer;
+  isLoadingCustomer: boolean = false;
+  listCustomer = [];
+  searchCustomer = {
+    keyword: '',
+    page: 1,
+    page_size: 20
+  }
+  isDoneData: boolean = false;
 
   constructor(
     private readonly taskService: TaskService,
@@ -439,6 +448,42 @@ export class TaskComponent implements OnInit {
     }, error => {
       console.log("ERRRR");
       console.log(error);
+    });
+    this.userService.getListCustomerOrganization(this.searchCustomer).subscribe(res => {
+      this.listCustomer = res.data.items;    
+    })
+    
+  }
+
+  onScroll(event) {
+    console.log(event);    
+  }
+
+  onScrollToEnd() {
+    if(!this.isDoneData) {
+      this.searchCustomer.page++;
+      this.fetchMore();
+    }		
+	}
+
+  onSearch(event) {
+    this.searchCustomer.keyword = event.term;
+    if(this.searchCustomer.keyword) {
+      this.searchCustomer.page = 1;
+      this.fetchMore();
+    }
+  }
+
+  fetchMore() {
+    this.isLoadingCustomer = true;
+    this.userService.getListCustomerOrganization(this.searchCustomer).subscribe(res => {
+      this.isLoadingCustomer = false;
+      if(res.data.items.length > 0) {
+        Array.prototype.push.apply(this.listCustomer, res.data.items);      
+      } else {
+        this.isDoneData = true;
+      }
+      
     })
   }
   
