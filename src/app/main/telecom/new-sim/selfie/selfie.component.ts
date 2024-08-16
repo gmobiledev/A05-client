@@ -47,25 +47,27 @@ export class SelfieComponent implements OnInit,OnChanges {
         return;
       }
 
-      //call api tao hop dong
-      let dataContract = {
-        task_id: this.currentTaskId,
-        contract_type: "TELECOM",
-      }
+      this.nextStep.emit({ title: "Phiếu yêu cầu/hợp đồng", validate_step: true, doc_contract: res })
 
-      this.telecomService.taskDocSigner(dataContract).subscribe(res => {
-        if (!res.status) {
-          this.alertService.showError(res.message);
-          this.sectionBlockUI.stop();
-          return;
-        }
-        this.sectionBlockUI.stop();
-        this.nextStep.emit({ title: "Phiếu yêu cầu/hợp đồng", validate_step: true, doc_contract: res.data.base64 });
-      }, error => {
-        this.sectionBlockUI.stop();
-        this.alertService.showError(error);
-        return;
-      })      
+      // //call api tao hop dong
+      // let dataContract = {
+      //   task_id: this.currentTaskId,
+      //   contract_type: "TELECOM",
+      // }
+
+      // this.telecomService.taskDocSigner(dataContract).subscribe(res => {
+      //   if (!res.status) {
+      //     this.alertService.showError(res.message);
+      //     this.sectionBlockUI.stop();
+      //     return;
+      //   }
+      //   this.sectionBlockUI.stop();
+      //   this.nextStep.emit({ title: "Phiếu yêu cầu/hợp đồng", validate_step: true, doc_contract: res.data.base64 });
+      // }, error => {
+      //   this.sectionBlockUI.stop();
+      //   this.alertService.showError(error);
+      //   return;
+      // })      
     }, err => {
       this.alertService.showMess(err);
       this.sectionBlockUI.stop();
@@ -77,7 +79,7 @@ export class SelfieComponent implements OnInit,OnChanges {
     this.imageSelfie = null
   }
 
-  onSelectFile(event) {
+  onSelectFileSelfie(event) {
     this.convertFile(event.target.files[0]).subscribe(base64 => {
       this.imageSelfie = base64;
     });

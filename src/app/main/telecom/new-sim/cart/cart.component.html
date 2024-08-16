@@ -31,7 +31,8 @@
                 {{ item.amount | number }}
             </div>
         </div>
-        </div>
+        </div>        
+        
         <div class="row">
             <div class="col-12">
             <h6>Tổng tiền: {{ totalMoney | number  }}</h6>
@@ -39,6 +40,40 @@
         </div>
         </div>
 
+        <div class="row mb-2" *ngIf="taskDetail && taskDetail.sub_action == 'buy_esim'">
+            <form [formGroup]="shipInforForm" class="w-100">
+            <div class="col-12 mt-2 mb-1">
+                <div class="form-group">
+                    <label for="">Số điện thoại liên hệ</label>
+                    <input type="text" class="form-control custom-formcontrol" formControlName="mobile" placeholder="(098) 765 43 21"
+                        mask="(099)0 000 000" [ngClass]="{
+                            'is-invalid':
+                              submitShipInfo &&
+                              cShipInfoForm.mobile.errors
+                          }">
+                    <div *ngIf="submitShipInfo && cShipInfoForm.mobile.errors.required">
+                        Trường thông tin không được để trống
+                    </div>
+                </div>
+        
+            </div>
+            <div class="col-12 mt-2 mb-1">
+                <div class="form-group">
+                    <label for="">Email</label>
+                    <input type="text" class="form-control custom-formcontrol" formControlName="address" (keyup)="onTypeEmail($event)" [ngClass]="{
+                            'is-invalid':
+                              submitShipInfo &&
+                              cShipInfoForm.address.errors
+                          }">
+                    <div *ngIf="submitShipInfo && cShipInfoForm.address.errors.required">
+                        Trường thông tin không được để trống
+                    </div>
+                </div>
+        
+            </div>
+            </form>
+        </div>
+        
         <!-- <div class="row">
             <h6>Chọn loại khách hàng</h6>
             <div class="custom-control custom-radio">

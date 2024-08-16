@@ -18,3 +18,18 @@
     <!-- </div> -->
 </div>
 
+
+<ng-template #modalQR let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel1">
+            Mã QR
+        </h4>
+        <button type="button" class="close" (click)="modalQRClose()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+        <img class="img-fluid" [src]="imgQrEsim" />
+    </div>
+    <div class="modal-footer"></div>
+</ng-template>

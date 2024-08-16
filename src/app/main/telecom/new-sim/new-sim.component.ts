@@ -62,7 +62,7 @@ export class NewSimComponent implements OnInit, OnDestroy {
     }
     if (data.reload_data) {
       this.reloadData = data.reload_data;
-      if (this.horizontalWizardStepper._currentIndex == 2) {
+      if (this.horizontalWizardStepper._currentIndex == 2 || data.load_cart) {
         this.stateCart = !this.stateCart ? 'change' : '';
       }
     }
@@ -91,8 +91,11 @@ export class NewSimComponent implements OnInit, OnDestroy {
 
     this.identification_front_file = data.identification_front_file ? data.identification_front_file : null;
     this.identification_back_file = data.identification_back_file ? data.identification_back_file : null;
-    if (data.validate_step) {
+    if (data.validate_step && !data.step) {
       this.horizontalWizardStepper.next();
+    } 
+    if (data.validate_step && data.step) {
+      this.horizontalWizardStepper.to(data.step);
     }
 
     this.currentStep = this.horizontalWizardStepper._currentIndex + 2;

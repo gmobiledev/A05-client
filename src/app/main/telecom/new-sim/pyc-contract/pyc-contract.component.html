@@ -1,6 +1,7 @@
-<div id="table-striped">
-  <div class="col-12 border">
+<div id="table-striped" *ngIf="isConfirmTask">
+  <div class="col-12 border" *blockUI="'section-block'">
     <pdf-viewer
+      *ngIf="urlFile"
       [src]="urlFile"
       [render-text]="true"
       [original-size]="false"
@@ -96,4 +97,16 @@
       <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
     </button>
   </div>
+</div>
+
+<div class="row" *ngIf="!isConfirmTask">
+  <div class="col-12">
+    <p>
+        Sau khi bấm "Xác nhận đã thanh toán", sẽ chuyển tiếp qua bước ký phiếu xác nhận.
+    </p>
+
+    <button class="btn btn-primary" (click)="onConfirmPayment()"
+        [ngClass]="{ disabled: isLoading }" [disabled]="isLoading">Xác nhận đã thanh toán</button>
+  </div>
+
 </div>

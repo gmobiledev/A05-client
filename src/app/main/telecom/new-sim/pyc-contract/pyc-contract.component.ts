@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { TelecomServivce, UserService } from 'app/auth/service';
-import { ObjectLocalStorage } from 'app/utils/constants';
+import { ObjectLocalStorage, TelecomTaskSubAction } from 'app/utils/constants';
 import { SweetAlertService } from 'app/utils/sweet-alert.service';
 import { CommonService } from 'app/utils/common.service';
 import { FileUploader } from 'ng2-file-upload';
@@ -13,7 +13,9 @@ const URL = 'https://your-url.com';
   templateUrl: './pyc-contract.component.html',
   styleUrls: ['./pyc-contract.component.scss']
 })
-export class PycContractComponent implements OnInit {
+export class PycContractComponent implements OnInit, OnChanges {
+
+  @BlockUI('section-block') sectionBlockUI: NgBlockUI;
 
   @Output() nextStep = new EventEmitter<any>();
   @Output() toNStep = new EventEmitter<any>();
@@ -27,6 +29,8 @@ export class PycContractComponent implements OnInit {
   public fileContract;
   @BlockUI('item-block') itemBlockUI: NgBlockUI;
 
+  isConfirmTask: boolean = false;  
+  imgQrEsim;  
 
   constructor(
     private telecomService: TelecomServivce,
@@ -64,13 +68,100 @@ export class PycContractComponent implements OnInit {
     }
   }
 
+  async onConfirmPayment() {
+    if ((await this.alertService.showConfirm("Bạn có đồng ý xác nhận đã thanh toán?")).value) {
+      let dataPost = {
+        task_id: this.currentTaskId
+      }
+      this.telecomService.confirmPayTask(dataPost).subscribe(res => {
+        if (!res.status) {
+          this.alertService.showMess(!res.message);
+          return;
+        }
+
+        this.isConfirmTask = true;
+        if (res.data.qr) {
+          localStorage.setItem(ObjectLocalStorage.ESIMQR, res.data.qr)          
+        } else {
+          this.alertService.showMess(res.message);
+        }
+
+        let dataContract = {
+          task_id: this.currentTaskId,
+          contract_type: "TELECOM",
+        }
+  
+        this.telecomService.taskDocSigner(dataContract).subscribe(res => {
+          if (!res.status) {
+            this.alertService.showError(res.message);
+            this.sectionBlockUI.stop();
+            return;
+          }
+          this.sectionBlockUI.stop();
+          this.urlFile = this.base64ToArrayBuffer(res.data.base64)
+        }, error => {
+          this.sectionBlockUI.stop();
+          this.alertService.showError(error);
+          return;
+        })
+
+        
+      }, error => {
+        this.alertService.showMess(error);
+        return;
+      })
+    }
+  }
+
   ngOnInit(): void {
   }
 
-  ngOnChanges(): void {
-    if (this.currentContract) {
-      this.urlFile = this.base64ToArrayBuffer(this.currentContract)
+  async ngOnChanges() {
+    const task = JSON.parse(localStorage.getItem(ObjectLocalStorage.CURRENT_TASK));
+    if(task.sub_action != TelecomTaskSubAction.BUY_ESIM) {
+      this.isConfirmTask = true;
     }
+    console.log("ngOnChanges this.currentContract", this.currentContract);
+    if (this.isConfirmTask) {
+      console.log("ngOnChanges: create pyc")
+      //call api tao hop dong
+      let dataContract = {
+        task_id: this.currentTaskId,
+        contract_type: "TELECOM",
+      }
+
+      this.telecomService.taskDocSigner(dataContract).subscribe(res => {
+        if (!res.status) {
+          this.alertService.showError(res.message);
+          this.sectionBlockUI.stop();
+          return;
+        }
+        this.sectionBlockUI.stop();
+        this.urlFile = this.base64ToArrayBuffer(res.data.base64)
+      }, error => {
+        this.sectionBlockUI.stop();
+        this.alertService.showError(error);
+        return;
+      })   
+
+      // let res;
+      // try {
+      //   res = await this.telecomService.taskDocSigner(dataContract).toPromise();
+      //   if (!res.status) {
+      //     this.alertService.showError(res.message);
+      //     this.sectionBlockUI.stop();
+      //     return;
+      //   }
+      //   this.sectionBlockUI.stop();        
+      //   this.urlFile = this.base64ToArrayBuffer(res.data.base64)
+      // } catch (error) {
+      //   this.sectionBlockUI.stop();
+      //   this.alertService.showError(error);
+      //   return;
+      // }
+      
+    }
+    
   }
 
   base64ToArrayBuffer(base64): Uint8Array {

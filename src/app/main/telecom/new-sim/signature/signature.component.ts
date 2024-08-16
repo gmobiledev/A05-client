@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, Sanitizer, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TelecomServivce } from 'app/auth/service';
@@ -7,6 +7,7 @@ import { ObjectLocalStorage } from 'app/utils/constants';
 import { SweetAlertService } from 'app/utils/sweet-alert.service';
 import { fromEvent, Observable, merge } from 'rxjs';
 import { concatMap, pairwise, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { DomSanitizer } from '@angular/platform-browser';
 
 export enum Direction {
   up,
@@ -43,11 +44,12 @@ export const DistanceConfig = {
 export class SignatureComponent implements OnInit {
 
   @Output() nextStep = new EventEmitter<any>();
-  @Output() toNStep = new EventEmitter<any>();
+  @Output() toNStep = new EventEmitter<any>();  
   @Input() currentTaskId;
   @Input() showPopupSignature;
 
   @ViewChild('myCanvas') public myCanvas: ElementRef | undefined;
+  @ViewChild('modalQR') public modalQR: ElementRef | undefined;
   @Input() public width = 300;
   @Input() public height = 300;
 
@@ -55,11 +57,15 @@ export class SignatureComponent implements OnInit {
   public modalRef: any;
   
   private cx: CanvasRenderingContext2D | null | undefined;
+  isSubmitSignature: boolean = false;
+  isCompleteTask: boolean = false;
+  imgQrEsim;
 
   constructor(
     private modalService: NgbModal,
     private telecomService: TelecomServivce,
-    private alertService: SweetAlertService
+    private alertService: SweetAlertService,
+    private sanitizer: DomSanitizer
   ) {
 
   }
@@ -87,15 +93,39 @@ export class SignatureComponent implements OnInit {
         this.alertService.showError(res.message);
         return;
       }
-      this.alertService.showSuccess(res.message);
+      this.isSubmitSignature = true;
+      const qrEsim = localStorage.getItem(ObjectLocalStorage.ESIMQR);
+            
       localStorage.removeItem(ObjectLocalStorage.CURRENT_PEOPLE_INFO_NEW_SIM);
       localStorage.removeItem(ObjectLocalStorage.CURRENT_TASK);
       localStorage.removeItem(ObjectLocalStorage.CURRENT_SELECT_MOBILE);
-      this.toNStep.emit({step: 1, clear_data: true});
+      
+      if(qrEsim) {
+        this.showPopupSignature = false;
+        this.imgQrEsim = this.sanitizer.bypassSecurityTrustResourceUrl(qrEsim);
+        this.modalRef = this.modalService.open(this.modalQR, {
+          centered: true,
+          windowClass: 'modal modal-primary',
+          size: 'sm',
+          backdrop: 'static',
+          keyboard: false
+        });            
+      } else {
+        this.alertService.showSuccess(res.message);
+        this.toNStep.emit({step: 1, clear_data: true});
+      }
+      
     }, error => {
       this.alertService.showError(error);
       return;
     })  
+  }
+  
+  modalQRClose() {
+    this.isCompleteTask = true;
+    localStorage.removeItem(ObjectLocalStorage.ESIMQR);
+    this.modalRef.close();
+    this.toNStep.emit({step: 1, clear_data: true});
   }
 
   public ngAfterViewInit() {

@@ -6,6 +6,7 @@ export enum ObjectLocalStorage {
     FCM_SUBSCRIBE = 'currentFcmSub',
     CURRENT_USERNAME_LOGIN = 'currentUsername',
     CURRENT_TASK_UPDATE_INFO = 'currentTaskUpdateInfo',
+    ESIMQR = 'esimQR'
 }
 
 export class TaskTelecom {
@@ -109,4 +110,5 @@ export enum TelecomTaskSubAction {
     ESIM = "ESIM",
     SIM_TO_ESIM = 'sim_to_esim',
     ESIM_REKIT_SIM = 'esim_to_sim',
+    BUY_ESIM = 'buy_esim'
 }

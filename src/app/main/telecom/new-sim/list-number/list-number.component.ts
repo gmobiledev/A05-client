@@ -1,10 +1,11 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, QueryList, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { TelecomServivce } from 'app/auth/service';
 import { LockMobileDto } from 'app/auth/service/dto/new-sim.dto';
 import { ProductService } from 'app/auth/service/product.service';
 import { ObjectLocalStorage } from 'app/utils/constants';
 import { SweetAlertService } from 'app/utils/sweet-alert.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-list-number',
@@ -21,6 +22,10 @@ export class ListNumberComponent implements OnInit {
   @Input() isLoadData;
   @Input() currentStep;
 
+  @ViewChildren('listNumber') listNumber: QueryList<ElementRef>
+
+  isInViewEl: boolean = false;
+  isLastListData: boolean = false;
   public list = [];
   public total:any;
   public searchForm: any = {
@@ -30,7 +35,7 @@ export class ListNumberComponent implements OnInit {
   public paramsSearch = {
     keysearch: '',
     brand: '',
-    take: 25,
+    take: 10,
     skip: 0,
   }
   public page:number=1;
@@ -48,11 +53,21 @@ export class ListNumberComponent implements OnInit {
 
   @HostListener('window:scroll', ['$event'])
   onWindowScroll($event) {
-    if(this.currentStep && this.currentStep != undefined && this.currentStep == 1 && (window.innerHeight + window.scrollY + 2) >= document.body.offsetHeight) {
-      this.paramsSearch.skip += 25;
+    if (this.isInViewport(this.listNumber.last.nativeElement) && !this.isInViewEl && !this.isLastListData) {
+      console.log("in");
+      this.isInViewEl = true;
+      this.paramsSearch.skip += 10;
       this.page++;
       this.getData();
+    } else if (!this.isInViewport(this.listNumber.last.nativeElement)) {
+      console.log("not in");
+      this.isInViewEl = false;
     }
+    // if(this.currentStep && this.currentStep != undefined && this.currentStep == 1 && (window.innerHeight + window.scrollY + 2) >= document.body.offsetHeight) {
+    //   this.paramsSearch.skip += 25;
+    //   this.page++;
+    //   this.getData();
+    // }
   }
 
   onSubmitSearch() {
@@ -60,13 +75,14 @@ export class ListNumberComponent implements OnInit {
     this.getData();
   }
 
-  async onSelectSim(event, item) {
-    // this.listSelected.emit({item: item, event: event});
-
+  async processSelectSim(event, item, sim_type = null) {
     let data = new LockMobileDto();
     data.mobile = item.name
     if(this.currentTaskId) {
       data.task_id = this.currentTaskId;
+    }
+    if(sim_type) {
+      data['sim_type'] = sim_type;
     }
 
     //call api add mobile
@@ -85,6 +101,23 @@ export class ListNumberComponent implements OnInit {
       this.alertService.showError(error);
       return;
     }
+  }
+  async onSelectSim(event, item) {
+    // this.listSelected.emit({item: item, event: event});
+    if(!this.currentTaskId) {
+      const swal = await this.alertService.showConfirm("Bạn muốn chọn loại SIM nào", "", "SIM vật lý", "Esim", true, false);
+      if (swal.isConfirmed ) {
+        console.log('sim');
+        this.processSelectSim(event, item, 1);
+      } else if (swal.dismiss === Swal.DismissReason.cancel ) {
+        console.log('esim');
+        this.processSelectSim(event, item, 2);
+      }
+    } else {
+      this.processSelectSim(event, item);
+    }
+    
+    
     //end
 
     
@@ -116,12 +149,25 @@ export class ListNumberComponent implements OnInit {
     this.productService.getAll(this.paramsSearch).subscribe(res => {
       if(res.data.products.length > 0) {
         Array.prototype.push.apply(this.list, res.data.products);
+      } else {
+        this.isLastListData = true;
       }
       
       this.total= res.data.count;
       this.sectionBlockUI.stop();
       this.loadDone.emit({isLoadData: false});
     })
+  }
+
+  isInViewport(elm) {
+    let elementTop = elm.getBoundingClientRect().top + window.scrollY;
+    let elementBottom = elementTop + elm.offsetHeight;
+
+    // in this specific case the scroller is document.documentElement (<html></html> node)
+    let viewportTop = document.documentElement.scrollTop;
+    let viewportBottom = viewportTop + document.documentElement.clientHeight;
+    // console.log(elementTop, elementBottom, viewportTop, viewportBottom);
+    return elementBottom > viewportTop && elementTop < viewportBottom;
   }
 
 }

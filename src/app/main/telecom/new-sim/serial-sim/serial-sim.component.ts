@@ -3,7 +3,7 @@ import { TelecomServivce } from 'app/auth/service';
 import Quagga from 'quagga';
 import { getMainBarcodeScanningCamera } from './camera-access';
 import { SweetAlertService } from 'app/utils/sweet-alert.service';
-import { ObjectLocalStorage } from 'app/utils/constants';
+import { ObjectLocalStorage, TelecomTaskSubAction } from 'app/utils/constants';
 import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 import {BarcodeFormat , MultiFormatReader, DecodeHintType, BrowserMultiFormatReader, RGBLuminanceSource, BinaryBitmap, HybridBinarizer} from '@zxing/library';
 import { HTMLCanvasElementLuminanceSource } from '@zxing/browser';
@@ -58,6 +58,7 @@ export class SerialSimComponent implements OnInit {
   private isScanSuccess: boolean = false;
 
   @BlockUI('section-block') sectionBlockUI: NgBlockUI;
+  currentTask: any;
 
   constructor(
     private telecomService: TelecomServivce,
@@ -103,11 +104,11 @@ export class SerialSimComponent implements OnInit {
         return;
       }
     }    
-    if (!this.serialSim || !this.imageFront) {
+    if (this.currentTask.sub_action != TelecomTaskSubAction.BUY_ESIM &&  (!this.serialSim || !this.imageFront)) {
       this.alertService.showError("Vui lòng nhập serial SIM và tải ảnh SIM")
       return;
     }
-    if((this.enableScanCode && this.isScanSuccess) || this.serialSim) {
+    if((this.enableScanCode && this.isScanSuccess) || this.serialSim || this.currentTask.sub_action == TelecomTaskSubAction.BUY_ESIM) {
       this.submitData();
     }    
   }
@@ -133,16 +134,20 @@ export class SerialSimComponent implements OnInit {
         this.imageSim = this.dataURLtoFile(this.imgBarCode, `${this.serialSim}.png`);
       }   
     } else {
-      this.imageSim = this.dataURLtoFile('data:image/png;base64,'+this.imageFront, `${this.serialSim}.png`);
+      this.imageSim = this.imageFront ? this.dataURLtoFile('data:image/png;base64,'+this.imageFront, `${this.serialSim}.png`) : null;
     }
      
     let formData = new FormData();
     formData.append("task_id", this.currentTaskId);
     formData.append("mobile", this.selectedMobile);
     formData.append("package", this.selectedPackage);
-    formData.append("serial", this.serialSim);
-    formData.append("sim_file", this.imageSim);
-    
+    if(this.serialSim) {
+      formData.append("serial", this.serialSim);
+    }
+    if(this.imageSim) {
+      formData.append("sim_file", this.imageSim);
+    }
+        
     this.stopCameraStream();
     this.telecomService.taskAddKit(formData).subscribe(res => {
       if (!res.status) {
@@ -150,7 +155,12 @@ export class SerialSimComponent implements OnInit {
         return;
       }
       localStorage.removeItem(ObjectLocalStorage.CURRENT_SELECT_MOBILE);
-      this.nextStep.emit({ title: "Đơn hàng", validate_step: true, reload_data: true });
+      if(this.currentTask.sub_action != TelecomTaskSubAction.BUY_ESIM) {
+        this.nextStep.emit({ title: "Đơn hàng", validate_step: true, reload_data: true, load_cart: true });
+      } else {
+        this.nextStep.emit({ title: "Đơn hàng", validate_step: true, reload_data: true, load_cart: true, step: 4 });
+      }
+      
     }, error => {
       this.alertService.showError(error);
       return;
@@ -304,6 +314,10 @@ export class SerialSimComponent implements OnInit {
       if(this.enableScanCode) {
         this.initCamera();
       }      
+      this.currentTask = JSON.parse(localStorage.getItem(ObjectLocalStorage.CURRENT_TASK));
+      if( this.currentTask.sub_action == TelecomTaskSubAction.BUY_ESIM) {
+        this.submitData();
+      }
     }    
   }
 

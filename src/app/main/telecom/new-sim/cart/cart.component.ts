@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TelecomServivce } from 'app/auth/service';
 import { RemoveNumberDto } from 'app/auth/service/dto/new-sim.dto';
-import { ObjectLocalStorage } from 'app/utils/constants';
+import { ObjectLocalStorage, TelecomTaskSubAction } from 'app/utils/constants';
 import { SweetAlertService } from 'app/utils/sweet-alert.service';
 
 @Component({
@@ -17,20 +18,41 @@ export class CartComponent implements OnInit {
   @Input() state;
   public taskDetail;
   public totalMoney = 0;
-
+  public shipInforForm: FormGroup;
+  submitShipInfo: boolean = false;
+  typeSim;
+  
   constructor(
     private telecomService: TelecomServivce,
     private alertService: SweetAlertService,
+    private formBuilder: FormBuilder
   ) { }
 
   async onNextStep() {
     const listUncompleteMsisdn = this.taskDetail.msisdns.filter(item => { return (!item.serial || !item.package) });
-    if(listUncompleteMsisdn.length > 0) {
+    if(listUncompleteMsisdn.length > 0 && this.taskDetail.sub_action != TelecomTaskSubAction.BUY_ESIM) {
       if ((await this.alertService.showConfirm(`Số ${listUncompleteMsisdn[0].msisdn} chưa chọn gói cước và SIM`, "Vui lòng cập nhật thêm thông tin", "Cập nhật", "Bỏ qua")).value) {
         this.toNStep.emit({step: 2, clear_data: false, selected_mobile: listUncompleteMsisdn[0].msisdn, telco: listUncompleteMsisdn[0].mno });
       }
     } else {
-      this.nextStep.emit({ title: "Chụp ảnh giấy tờ", validate_step: true });
+      if(this.taskDetail.sub_action == TelecomTaskSubAction.BUY_ESIM) {
+        console.log("esim ship info");
+        const listUncompleteMsisdn = this.taskDetail.msisdns.filter(item => { return ( !item.package) });
+        if(listUncompleteMsisdn.length > 0) {
+          if ((await this.alertService.showConfirm(`Số ${listUncompleteMsisdn[0].msisdn} chưa chọn gói cước`, "Vui lòng cập nhật thêm thông tin", "Cập nhật", "Bỏ qua")).value) {
+            this.toNStep.emit({step: 2, clear_data: false, selected_mobile: listUncompleteMsisdn[0].msisdn, telco: listUncompleteMsisdn[0].mno });
+            return;
+          }
+        }
+        const rShip = await this.onSubmitShipInfo();
+        if(rShip) {
+          this.nextStep.emit({ title: "Chụp ảnh giấy tờ", validate_step: true });
+        }        
+      } else {
+        console.log("next");
+        this.nextStep.emit({ title: "Chụp ảnh giấy tờ", validate_step: true });
+      }
+      
     }    
   }
 
@@ -89,8 +111,41 @@ export class CartComponent implements OnInit {
     localStorage.removeItem(ObjectLocalStorage.CURRENT_SELECT_MOBILE);
   }
 
+  async onSubmitShipInfo() {
+    this.submitShipInfo = true;
+    if (this.shipInforForm.invalid) {
+      console.log('invalid ship info');
+      return false;
+    }
+    let dataPost = {
+      task_id: this.currentTaskId,
+      title: 'Qr Esim',
+      email: this.shipInforForm.value.address,
+      ...this.shipInforForm.value
+    }
+    try {
+      await this.telecomService.addShipInfo(dataPost).toPromise();
+      // this.isvalidTask = true;
+      this.submitShipInfo = false;
+      return true;
+    } catch (error) {
+      this.alertService.showMess(error);
+      // this.isLoading = false;
+      this.submitShipInfo = false;
+      return false;
+    }
+  }
+
   ngOnInit(): void {
+    this.shipInforForm = this.formBuilder.group({
+      address: ['', Validators.required],
+      mobile: ['', Validators.required]
+    })
     this.getData();
+  }
+
+  get cShipInfoForm() {
+    return this.shipInforForm.controls;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -120,6 +175,13 @@ export class CartComponent implements OnInit {
     } else {
       this.taskDetail = null;
     }
+  }
+
+  onTypeEmail(event) {
+    event.target.value = event.target.value.replace(/[^a-zA-Z0-9-.-@-_]/g, '');
+    this.shipInforForm.patchValue({
+      address: event.target.value
+    })
   }
 
 }
