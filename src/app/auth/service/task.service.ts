@@ -96,4 +96,8 @@ export class TaskService {
   retryTask(data) {
     return this._http.post<any>(`${environment.apiUrl}/task/retry`, data);
   }
+
+  updateStateRetry(id, data = null) {
+    return this._http.patch<any>(`${environment.apiUrl}/task/update-state-retry/${id}`, data);
+  }
 }

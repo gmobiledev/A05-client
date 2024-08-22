@@ -260,6 +260,25 @@ export class TaskDetailComponent implements OnInit {
     this.table.offset = 0;
   }
 
+  async onUpdateStateMsisndRetry(event, id) {
+    const val = event.target.value;
+    if ((await this.alertService.showConfirm('Bạn có đồng ý cập nhật?')).value) {
+      let data = {
+        state: parseInt(val)
+      }
+      this.taskService.updateStateRetry(id, data).subscribe(res => {
+        if(!res.status) {
+          this.alertService.showMess(res.message);
+          return;
+        }
+        this.alertService.showSuccess(res.message);
+        return;
+      }, error => {
+        this.alertService.showMess(error);
+      })
+    }
+  }
+
   exportExcel() {
     if(this.data.service_code == ServiceCode.SIM_PROFILE) {
       const dataExcel = this.listSerial.map(x => {return {'serial': x.name}})

@@ -476,7 +476,12 @@ export class TaskComponent implements OnInit {
   onSearch(event) {
     this.searchCustomer.keyword = event.term;    
     this.searchCustomer.page = 1;
-    this.fetchMore();    
+    this.isLoadingCustomer = true;
+    this.userService.getListCustomerOrganization(this.searchCustomer).subscribe(res => {
+      this.isLoadingCustomer = false;
+      this.listCustomer = res.data.items;
+      
+    })  
   }
 
   fetchMore() {
