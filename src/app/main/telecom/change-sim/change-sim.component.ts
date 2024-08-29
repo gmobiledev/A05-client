@@ -237,6 +237,9 @@ export class ChangeSimComponent implements OnInit {
         this.isLoading = false;
         this.alertService.showError(err, 6000);
       })
+    } else {
+      this.ReactiveUDFormSubmitted = false;
+      this.isLoading = false;
     }
 
   }
@@ -365,7 +368,7 @@ export class ChangeSimComponent implements OnInit {
     this.telecomService.beforeSumitChangeSim(data).subscribe(async res => {
       this.isLoading = false;
       if (!res.status) {
-        if(res.code == 'CANT_READ_IDIMAGE' && ![this.taskSubAction.SIM_TO_ESIM + ''].includes(this.currentSubAction)) {
+        if(res.code == 'CANT_READ_IDIMAGE') {
           if ((await this.alertService.showConfirm(res.message, "", "Tiếp tục để duyệt trên admin.g99", "Thực hiện lại")).value === true) {
             this.isCheckOcr = 0;
             this.beforeSumitChangeSim();
@@ -410,6 +413,7 @@ export class ChangeSimComponent implements OnInit {
       try {
         let res = await this.telecomService.initTask(dataPost).toPromise();
         this.task = res.data;  
+        this.isLoading = false;
       } catch (error) {
         this.alertService.showMess(error);
         this.isLoading = false;
@@ -437,6 +441,7 @@ export class ChangeSimComponent implements OnInit {
         await this.telecomService.addShipInfo(dataPost).toPromise();
         this.isvalidTask = true;
         this.submitShipInfo = false;
+        this.isLoading = false;
       } catch (error) {
         this.alertService.showMess(error);
         this.isLoading = false;
@@ -478,7 +483,10 @@ export class ChangeSimComponent implements OnInit {
         if(this.currentSubAction != this.taskSubAction.SIM_TO_ESIM) {
           this.horizontalWizardStepper.next();
         } else {
-          if(res.data.qr) {
+          if(!this.isCheckOcr) {
+            this.alertService.showSuccess(res.message);
+            this.router.navigate(['/telecom']);
+          } else if(res.data.qr) {
             this.imgQrEsim = this.sanitizer.bypassSecurityTrustResourceUrl(res.data.qr);
   
             this.modalRef = this.modalService.open(this.modalQR, {
@@ -489,16 +497,40 @@ export class ChangeSimComponent implements OnInit {
               keyboard: false
             });
           } else {
-            this.alertService.showMess(res.message);                
+            this.confirmPay(dataPost, 1);
           }
         }        
         
-      }, error => {
-        this.alertService.showMess(error);
+      }, async error => {
+        if(this.currentSubAction == TelecomTaskSubAction.SIM_TO_ESIM) {
+          if ((await this.alertService.showConfirm(error, "", "Tiếp tục để thực hiện lại trên admin.g99", "Đóng")).value === true) {
+            this.confirmPay(dataPost, 1);
+          } else {
+            return;                    
+          }
+        }
+        this.alertService.showMess(error);        
         return;
       })
     }
-  }  
+  } 
+  
+  confirmPay(dataPost, is_new_order = null) {
+    if (is_new_order) {
+      dataPost['is_new_order'] = 1;
+    }
+
+    this.telecomService.confirmPayTask(dataPost).subscribe(res => {
+      if (!res.status) {
+        this.alertService.showMess(!res.message);
+        return;
+      }
+      this.alertService.showSuccess(res.message);
+      this.router.navigate(['/telecom']);
+    }, error => {
+      this.alertService.showError(error);
+    })
+  }
 
   addTagFn = (term) => {
     if ((term.length == 10 || term.length == 11) && /^[0-9]+$/.test(term)) {
