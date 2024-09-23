@@ -16,7 +16,7 @@
                             </div>
 
                             <div class="image-preview" *ngIf="imageFront">
-                                <img style="max-width: 300px;" [src]="imageFront" alt="" class="img-fluid">
+                                <img style="max-width: 300px;" [src]="imageFront" alt="" class="img-fluid img-margin-right">
 
                                 <button (click)="onReUpload('front')" type="button"
                                     class="btn btn-outline-primary btn-next" rippleEffect>
@@ -35,7 +35,7 @@
                             </div>
 
                             <div class="image-preview" *ngIf="imageBack">
-                                <img style="max-width: 300px;" [src]="imageBack" alt="" class="img-fluid">
+                                <img style="max-width: 300px;" [src]="imageBack" alt="" class="img-fluid img-margin-right">
                                 <button (click)="onReUpload('back')" type="button"
                                     class="btn btn-outline-primary btn-next" rippleEffect>
                                     <span class="align-middle ">Tải lại</span>

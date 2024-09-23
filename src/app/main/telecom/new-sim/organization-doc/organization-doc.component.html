@@ -93,7 +93,7 @@
                 </div>
 
                 <div class="image-preview" *ngIf="imageFront">
-                    <img [src]="imageFront" alt="" class="img-fluid">
+                    <img [src]="imageFront" alt="" class="img-fluid img-margin-bottom">
 
                     <button (click)="onReUpload('front')" type="button" class="btn btn-outline-primary btn-next"
                         rippleEffect>
@@ -116,7 +116,7 @@
                 </div>
 
                 <div class="image-preview" *ngIf="imageBack">
-                    <img [src]="imageBack" alt="" class="img-fluid">
+                    <img [src]="imageBack" alt="" class="img-fluid img-margin-bottom">
                     <button (click)="onReUpload('back')" type="button" class="btn btn-outline-primary btn-next"
                         rippleEffect>
                         <span class="align-middle ">Tải lại</span>
@@ -128,7 +128,7 @@
                     <label for="identification_selfie_file">
                         <img *ngIf="!imageSelfie" src="/assets/images/icons/selfie.png" class="img-fluid"
                             style="width:200px" alt="">
-                        <img *ngIf="imageSelfie" [src]="imageSelfie" alt="" class="img-fluid">
+                        <img *ngIf="imageSelfie" [src]="imageSelfie" alt="" class="img-fluid img-margin-bottom">
                         <h6 class="text-center">Tải ảnh chân dung</h6>
                     </label>
                     <input type="file" class="form-control" id="identification_selfie_file"

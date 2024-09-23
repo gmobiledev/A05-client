@@ -1,5 +1,5 @@
 <form [formGroup]="formPeople">
-  <div *ngIf="isOcr" class="row">
+  <div *ngIf="isOcr" class="row" style="margin-bottom: 10px;">
     <div class="col-4">
       <div class="image-upload" *ngIf="!imageFront">
         <label for="file-front-input">
@@ -100,7 +100,7 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" *ngIf="formPeople">
     <div class="col-md-6">
       <div class="form-group row">
         <label for="identification_type" class="col-md-3 col-form-label"
@@ -331,7 +331,7 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" *ngIf="formPeople">
     <div class="col-md-6">
       <div class="row">
         <div class="col-12">
@@ -492,6 +492,7 @@
               >Tỉnh/TP - Thường trú</label
             >
             <div class="col-md-9">
+              <!-- <input type="text" formControlName="residence_province"> -->
               <ng-select
                 name=""
                 formControlName="residence_province"

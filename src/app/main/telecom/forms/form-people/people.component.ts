@@ -5,6 +5,11 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { AdminService } from 'app/auth/service/admin.service';
 import { CommonService } from 'app/utils/common.service';
+import { ObjectLocalStorage } from 'app/utils/constants';
+import { TelecomServivce } from 'app/auth/service';
+import { CardEkycDto } from 'app/auth/service/dto/new-sim.dto';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { SweetAlertService } from 'app/utils/sweet-alert.service';
 
 @Component({
   selector: 'form-people',
@@ -19,6 +24,7 @@ export class PeopleComponent implements OnInit, OnChanges {
   @Input() options: string = ''
 
   @Output() outPeople = new EventEmitter<any>();
+  @BlockUI('section-block') sectionBlockUI: NgBlockUI;
 
   public imageFront;
   public imageBack;
@@ -33,32 +39,71 @@ export class PeopleComponent implements OnInit, OnChanges {
   public home_districts = []
   public home_commues = []
   public residence: any = {}
-  @ViewChild('peopleFrom') peopleForm;
+  task_id;
+  // @ViewChild('peopleFrom') peopleForm;
 
 
   constructor(
     private formBuilder: FormBuilder,
     private adminSerivce: AdminService,
-    private datePipe: DatePipe
-  ) { }
+    private datePipe: DatePipe,
+    private readonly telecomService: TelecomServivce,
+    private readonly alertService: SweetAlertService,
+  ) {
+    this.initForm();
+  }
 
   ngOnInit(): void {
-    this.initForm()
-    this.getProvinces()
-    this.getCountries()
+    this.task_id = JSON.parse(localStorage.getItem(ObjectLocalStorage.CURRENT_TASK))?.id;
+    this.getProvinces();
+    this.getCountries();
+    console.log('people.component', this.people);
+
+    console.log('formPeople', this.formPeople);
+    try {
+
+      // this.formPeople.controls['name'].setValue(this.people.name)
+      this.formPeople.patchValue({
+        birth: this.people.birth,
+        gender: this.people.gender,
+        home_address: this.people.home_address,
+        identification_date: this.people.identification_date,
+        identification_expire_date: this.people.identification_expire_date,
+        identification_no: this.people.identification_no,
+        identification_place: this.people.identification_place,
+        identification_type: this.people.identification_type,
+        name: this.people.name,
+        residence_address: this.people.residence_address,
+        residence_commune: this.people.residence_commune,
+        residence_district: this.people.residence_district,
+        residence_province: this.people.residence_province,
+      });
+      // this.fillFromData();
+    } catch (error) {
+      console.log("people.component error patchValue", error)
+    }
+
+    console.log(2222, this.formPeople);
 
   }
 
   ngOnChanges(changes: any) {
+    // this.formPeople?.reset();
     // changes.prop contains the old and the new value...
-    if (changes.people && this.formPeople)
-      this.fillFromData()
-    if (changes.csubmitted && changes.csubmitted.currentValue > 0) {
+    if (changes?.people && this.formPeople) {
+      console.log("onchange people component")
+      // this.fillFromData();
+    };
+    if (changes?.csubmitted && changes?.csubmitted?.currentValue > 0) {
       console.log("ngOnChangesPeople", this.formPeople);
-      if (this.formPeople && this.formPeople.invalid) {
+      console.log('invalid', this.formPeople?.invalid);
+      if (!this.formPeople && this.formPeople?.invalid) {
+        console.log(123123);
+
         this.submitted = true;
         return;
       }
+      console.log(9882);
 
       this.outPeople.emit(this.formatPeople(this.formPeople.value))
     }
@@ -67,7 +112,9 @@ export class PeopleComponent implements OnInit, OnChanges {
 
   ngAfterContentInit() {
     // contentChild is set after the content has been initialized
-    this.fillFromData()
+    console.log(333);
+
+    this.fillFromData();
   }
 
   get f() {
@@ -75,9 +122,13 @@ export class PeopleComponent implements OnInit, OnChanges {
   }
 
   fillFromData() {
+    console.log(this.people);
+
     if (this.people) {
-      this.formPeople.patchValue(this.people)
-      if (this.people.residence_province) {
+      // this.formPeople?.patchValue(this.people);
+      // console.log(this.formPeople);
+
+      if (this.people?.residence_province) {
         this.onChangeResidenceProvince(this.people.residence_province, true)
       }
 
@@ -102,6 +153,9 @@ export class PeopleComponent implements OnInit, OnChanges {
       this.imageFront = await this.resizeImage(event.target.files[0])
       const regex = /^.*base64,/i;
       this.formPeople.controls['identification_front_file'].setValue(this.imageFront.replace(regex, ""));
+      if (this.formPeople?.value?.identification_selfie_file && this.imageSelfie && this.formPeople?.value?.identification_front_file && this.imageFront && this.formPeople?.value?.identification_back_file && this.imageBack) {
+        this.callCardEkyc();
+      }
     }
   }
 
@@ -110,6 +164,10 @@ export class PeopleComponent implements OnInit, OnChanges {
       this.imageBack = await this.resizeImage(event.target.files[0])
       const regex = /^.*base64,/i;
       this.formPeople.controls['identification_back_file'].setValue(this.imageBack.replace(regex, ""));
+      console.log('onSelectFileBack', this.formPeople);
+      if (this.formPeople?.value?.identification_selfie_file && this.imageSelfie && this.formPeople?.value?.identification_front_file && this.imageFront && this.formPeople?.value?.identification_back_file && this.imageBack) {
+        this.callCardEkyc();
+      }
     }
   }
 
@@ -118,7 +176,99 @@ export class PeopleComponent implements OnInit, OnChanges {
       this.imageSelfie = await this.resizeImage(event.target.files[0])
       const regex = /^.*base64,/i;
       this.formPeople.controls['identification_selfie_file'].setValue(this.imageSelfie.replace(regex, ""));
+      if (this.formPeople?.value?.identification_selfie_file && this.imageSelfie && this.formPeople?.value?.identification_front_file && this.imageFront && this.formPeople?.value?.identification_back_file && this.imageBack) {
+        this.callCardEkyc();
+      }
     }
+  }
+
+  callCardEkyc() {
+    //goi api card-ekyc
+    let data = new CardEkycDto();
+    data.card_back = this.formPeople?.value?.identification_back_file;
+    data.card_front = this.formPeople?.value?.identification_front_file;
+    data.task_id = this.task_id;
+    data.isOcr = 1;
+    this.sectionBlockUI.start();
+    this.telecomService.taskCardEkyc(data).subscribe(res => {
+      console.log(res);
+
+      if (!res.status) {
+        this.sectionBlockUI.stop();
+        this.alertService.showError(res.message);
+        return;
+      }
+
+      if (res.data) {
+        this.formPeople.patchValue({
+          birth: res.data.dob,
+          gender: res.data.sex,
+          // home_address: res.data,
+          identification_date: res.data.issue_date,
+          identification_expire_date: res.data.doe,
+          identification_no: res.data.id,
+          identification_place: res.data.issue_loc,
+          identification_type: res.data.type,
+          name: res.data.name,
+          residence_address: res.data.address,
+          residence_commune: parseInt(res.data.address_entities.ward_code),
+          residence_district: parseInt(res.data.address_entities.district_code),
+          residence_province: parseInt(res.data.address_entities.province_code),
+        });
+
+        if (this.formPeople?.value?.residence_province) {
+          this.onChangeResidenceProvince(this.formPeople?.value?.residence_province, true)
+        }
+
+        if (this.formPeople?.value?.residence_district) {
+          this.onChangeResidenceDistrict(this.formPeople?.value?.residence_district, true)
+        }
+        if (this.people.residence_commune) {
+          this.onChangeResidenceCommune(this.people.residence_commune);
+        }
+        this.sectionBlockUI.stop();
+        // if (this.formPeople?.value?.residence_province) {
+        //   if (this.provinces.length > 0) {
+        //     console.log(this.provinces);
+
+        //     this.residence['province'] = (this.provinces.find(item => item.id == this.formPeople?.value?.residence_province)).title;
+        //     console.log(this.residence['province']);
+
+        //   }
+        //   this.adminSerivce.getDistricts(this.formPeople?.value?.residence_province).subscribe((res: any) => {
+        //     console.log(res);
+
+        //     if (res.status == 1) {
+        //       this.residence_districts = res.data;
+        //       this.residence_commues = []
+        //       if (this.formPeople?.value?.residence_district) {
+        //         if (this.residence_districts.length > 0) {
+        //           this.residence['district'] = (this.residence_districts.find(item => item.id == this.formPeople?.value?.residence_district)).title;
+        //           console.log(this.residence['district']);
+
+        //         }
+        //         this.adminSerivce.getCommunes(this.formPeople?.value?.residence_district).subscribe((res: any) => {
+        //           if (res.status == 1) {
+        //             this.residence_commues = res.data;
+        //             if (this.formPeople?.value?.residence_commune) {
+        //               if (this.residence_commues.length > 0) {
+        //                 this.residence['commune'] = (this.residence_commues.find(item => item.id == this.formPeople?.value?.residence_commune)).title;
+        //                 console.log(this.residence['commune']);
+        //                 this.sectionBlockUI.stop();
+        //               }
+        //             }
+        //           }
+        //         })
+        //       }
+        //     }
+        //   })
+        // };
+      }
+    }, error => {
+      this.alertService.showError(error);
+      this.sectionBlockUI.stop();
+      return;
+    });
   }
 
   resizeImage(image) {
@@ -152,6 +302,8 @@ export class PeopleComponent implements OnInit, OnChanges {
 
   getProvinces() {
     this.adminSerivce.getProvinces().subscribe((res: any) => {
+      console.log('getProvinces', res);
+
       if (res.status == 1) {
         this.provinces = res.data
       }
@@ -164,6 +316,22 @@ export class PeopleComponent implements OnInit, OnChanges {
         this.countries = res.data
       }
     })
+  }
+
+  onReUpload(img) {
+    switch (img) {
+      case 'front':
+        this.imageFront = null;
+        break;
+      case 'back':
+        this.imageBack = null;
+        break;
+      case 'selfie':
+        this.imageSelfie = null;
+        break;
+      default:
+        break;
+    }
   }
 
   formatPeople(data) {
@@ -220,23 +388,36 @@ export class PeopleComponent implements OnInit, OnChanges {
 
 
     if (!data.residence_full_address && this.residence) {
+
       if (data.residence_address.length < 30) {
+        console.log('vào đây rồi');
+
         people.residence_full_address = ""
         people.residence_full_address += people.residence_address ? people.residence_address + "," : ""
         people.residence_full_address += this.residence.commune ? this.residence.commune + "," : ""
         people.residence_full_address += `${this.residence.district},${this.residence.province}`
       } else
-        people.residence_full_address = data.residence_address
+        console.log(11112002);
+
+      people.residence_full_address = data.residence_address
     }
 
     return people;
   }
 
   onChangeResidenceProvince(id, init = null) {
+    console.log('ResidenceProvince', id);
+
     if (this.provinces.length > 0) {
+      console.log(this.provinces);
+
       this.residence['province'] = (this.provinces.find(item => item.id == id)).title;
+      console.log(this.residence);
+
     }
     this.adminSerivce.getDistricts(id).subscribe((res: any) => {
+      console.log(res);
+
       if (res.status == 1) {
         if (!init) {
           this.formPeople.controls['residence_district'].setValue('');
@@ -248,8 +429,12 @@ export class PeopleComponent implements OnInit, OnChanges {
   }
 
   onChangeResidenceDistrict(id, init = null) {
+    console.log(id, 'ResidenceDistrict');
+
     if (this.residence_districts.length > 0) {
       this.residence['district'] = (this.residence_districts.find(item => item.id == id)).title;
+      console.log(this.residence['district']);
+
     }
     this.adminSerivce.getCommunes(id).subscribe((res: any) => {
       if (res.status == 1) {
@@ -262,8 +447,12 @@ export class PeopleComponent implements OnInit, OnChanges {
   }
 
   onChangeResidenceCommune(event) {
+    console.log(event, 'ResidenceCommune');
+
     if (this.residence_commues.length > 0) {
       this.residence['commune'] = (this.residence_commues.find(item => item.id == event)).title;
+      console.log(this.residence['commune']);
+
     }
     // if (event.target['options'])
     //   this.residence['commune'] = event.target['options'][event.target['options'].selectedIndex].text;
@@ -308,25 +497,25 @@ export class PeopleComponent implements OnInit, OnChanges {
 
   initForm() {
     this.formPeople = this.formBuilder.group({
-      name: ['', Validators.required, Validators.maxLength(100), Validators.pattern('^[a-zA-Z ]*$')],
+      name: ['', [Validators.required, Validators.maxLength(100), Validators.pattern('^[a-zA-Z ]*$')]],
       birth: ['', [Validators.required]],
-      gender: ['', Validators.required],
-      country: ['VN', Validators.required],
-      identification_no: ['', Validators.required],
-      identification_place: ['', Validators.required],
+      gender: ['', [Validators.required]],
+      country: ['VN', [Validators.required]],
+      identification_no: ['', [Validators.required]],
+      identification_place: ['', [Validators.required]],
       identification_back_file: [''],
       identification_front_file: [''],
       identification_selfie_file: [''],
-      identification_date: ['', Validators.required],
-      identification_type: ['', Validators.required],
+      identification_date: ['', [Validators.required]],
+      identification_type: ['', [Validators.required]],
       identification_expire_date: [""],
-      home_country: ['VN', Validators.required], //Có trường người nước noài
+      home_country: ['VN', [Validators.required]], //Có trường người nước noài
       home_province: [''],
       home_district: [''],
       home_commune: [''],
       home_address: [''],
-      residence_province: ['', Validators.required],
-      residence_district: ['', Validators.required],
+      residence_province: ['', [Validators.required]],
+      residence_district: ['', [Validators.required]],
       residence_commune: [''],
       residence_address: [''], //Có trường hợp CCCD không có địa chỉ thường chú
       province: ['1'],
@@ -334,8 +523,15 @@ export class PeopleComponent implements OnInit, OnChanges {
       commune: ['1'],
       address: ['1'],
       otpions: [this.options], //any
-      mobile: ['', Validators.required],
+      mobile: ['', [Validators.required]],
     })
+
+    this.formPeople.statusChanges.subscribe((status) => {
+      console.log("formPeople status", status); //status will be "VALID", "INVALID", "PENDING" or "DISABLED"
+    });
+    this.formPeople.valueChanges.subscribe((value) => {
+      console.log('formPeople valueChanges', value);
+    });
 
   }
 

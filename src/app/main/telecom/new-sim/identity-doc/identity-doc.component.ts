@@ -131,7 +131,7 @@ export class IdentityDocComponent implements OnInit {
 
   ekycOrganization(data) {
     console.log("ekycOrganization",data);
-    this.nextStep.emit({ title: "Xác nhận thông tin", validate_step: true,doc_contract:true, personal:false });
+    this.nextStep.emit({ title: "Xác nhận thông tin", validate_step: true, personal:false });
   }
 
 }

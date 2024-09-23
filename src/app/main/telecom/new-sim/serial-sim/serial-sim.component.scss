@@ -2,26 +2,35 @@
 
 #scanner-container {
     position: relative;
+
     .overlay {
         position: absolute;
         border: 1px solid red;
         width: 100%;
         top: 50%;
     }
+
     video {
         width: 100%;
     }
+
     canvas {
         display: none;
     }
 }
 
-.image-upload{
+.image-upload {
     input {
         display: none;
     }
 }
 
-.img-fluid{
+.img-fluid {
     max-height: 450px;
+}
+
+.image-preview {
+    .img-margin-bottom {
+        margin-bottom: 10px;
+    }
 }

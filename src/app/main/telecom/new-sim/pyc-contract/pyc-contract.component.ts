@@ -116,13 +116,14 @@ export class PycContractComponent implements OnInit, OnChanges {
   ngOnInit(): void {
   }
 
-  async ngOnChanges() {
-    const task = JSON.parse(localStorage.getItem(ObjectLocalStorage.CURRENT_TASK));
+  async ngOnChanges(changes) {
+    console.log("pyc_changes", changes)
+;    const task = JSON.parse(localStorage.getItem(ObjectLocalStorage.CURRENT_TASK));
     if(task.sub_action != TelecomTaskSubAction.BUY_ESIM) {
       this.isConfirmTask = true;
     }
     console.log("ngOnChanges this.currentContract", this.currentContract);
-    if (this.isConfirmTask) {
+    if (this.isConfirmTask && !changes.currentContract.firstChange) {
       console.log("ngOnChanges: create pyc")
       //call api tao hop dong
       let dataContract = {

@@ -83,6 +83,7 @@ export class IdentityInfoComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    // console.log("identify info current task", this.currentTask)
     this.initForm();
     this.setDataPeople();
   }
@@ -95,9 +96,9 @@ export class IdentityInfoComponent implements OnInit, AfterViewInit {
         this.currentTask.customer.organization.delegation = this.currentTask.delegation
       }
     }
-    console.log(changes);
+    // console.log(changes);
 
-    console.log("---current_task", this.currentTask)
+    // console.log("---current_task", this.currentTask)
 
   }
 
@@ -108,6 +109,7 @@ export class IdentityInfoComponent implements OnInit, AfterViewInit {
   setDataPeople() {
     const dataPeopleRaw = localStorage.getItem(ObjectLocalStorage.CURRENT_PEOPLE_INFO_NEW_SIM);
     const dataPeopleRecord: any = dataPeopleRaw ? JSON.parse(dataPeopleRaw) : null;
+
     if (dataPeopleRecord) {
       this.dataPeople = {
         name: dataPeopleRecord.name,
@@ -118,12 +120,14 @@ export class IdentityInfoComponent implements OnInit, AfterViewInit {
         identification_date: dataPeopleRecord.issue_date,
         identification_type: dataPeopleRecord.type,
         home_address: dataPeopleRecord.home,
+        identification_expire_date: dataPeopleRecord.doe,
         residence_address: dataPeopleRecord.address,
         residence_province: dataPeopleRecord.address_entities ? parseInt(dataPeopleRecord.address_entities.province_code) : "",
         residence_district: dataPeopleRecord.address_entities ? parseInt(dataPeopleRecord.address_entities.district_code) : "",
         residence_commune: dataPeopleRecord.address_entities ? parseInt(dataPeopleRecord.address_entities.ward_code) : "",
+        current_time: new Date().getTime()
       }
-      console.log("xxx", this.dataPeople);
+      // console.log("xxx", this.dataPeople);
     }
   }
 
@@ -143,7 +147,7 @@ export class IdentityInfoComponent implements OnInit, AfterViewInit {
 
   fromOrganizationData(data) {
 
-    console.log("fromOrganizationData", data);
+    // console.log("fromOrganizationData", data);
     this.customer = Object.assign(this.customer, data)
     if (data.isDelegation) {
       this.customer.delegation = {
@@ -166,7 +170,7 @@ export class IdentityInfoComponent implements OnInit, AfterViewInit {
   }
 
   formPeopleData(people) {
-    console.log("formPeopleData", people);
+    // console.log("formPeopleData", people);
     this.countFormValid++
     if (!this.personal) {
       this.customer.people = Object.assign(this.customer.people, people)
@@ -181,7 +185,7 @@ export class IdentityInfoComponent implements OnInit, AfterViewInit {
       people.mobile = this.currentTask.msisdn
 
     let confirmEkyc = new ConfirmEkyc(people);
-    console.log(this.currentTask, people, confirmEkyc);
+    // console.log(this.currentTask, people, confirmEkyc);
 
     confirmEkyc.identification_back_file = this.identification_back_file;
     confirmEkyc.identification_front_file = this.identification_front_file;
@@ -202,7 +206,7 @@ export class IdentityInfoComponent implements OnInit, AfterViewInit {
 
 
   async updateCustomer() {
-    console.log("Customer", this.customer);
+    // console.log("Customer", this.customer);
     if (this.sectionBlockUI.isActive) {
       return;
     }
@@ -222,7 +226,7 @@ export class IdentityInfoComponent implements OnInit, AfterViewInit {
         return;
       }
       this.sectionBlockUI.stop();
-      console.log("newCustomer", res.data);
+      // console.log("newCustomer", res.data);
       this.currentTask.customer = res.data
       //update delegation
       localStorage.setItem(ObjectLocalStorage.CURRENT_TASK, JSON.stringify(this.currentTask))

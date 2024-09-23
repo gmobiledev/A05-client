@@ -55,8 +55,10 @@ export class NewSimComponent implements OnInit, OnDestroy {
   public modalRef: any;
 
 
- 
+
   horizontalWizardStepperNext(data) {
+    // console.log(this.horizontalWizardStepper);
+    // console.log("data_next_step", data, this.personal)
     if (data && data.title) {
       this.currentTitle = data.title;
     }
@@ -93,7 +95,7 @@ export class NewSimComponent implements OnInit, OnDestroy {
     this.identification_back_file = data.identification_back_file ? data.identification_back_file : null;
     if (data.validate_step && !data.step) {
       this.horizontalWizardStepper.next();
-    } 
+    }
     if (data.validate_step && data.step) {
       this.horizontalWizardStepper.to(data.step);
     }
@@ -116,6 +118,9 @@ export class NewSimComponent implements OnInit, OnDestroy {
   horizontalWizardStepperPrevious() {
 
     this.horizontalWizardStepper.previous();
+    // console.log(this.horizontalWizardStepper.previous());
+    // console.log(this.horizontalWizardStepper);
+    
     this.currentStep = this.horizontalWizardStepper._currentIndex;
     if (this.horizontalWizardStepper._currentIndex == 1) {
       this.currentTitle = 'Chọn số';
@@ -167,7 +172,7 @@ export class NewSimComponent implements OnInit, OnDestroy {
   }
 
   onToStep(data) {
-    console.log(data);
+    // console.log(data);
     this.currentStep = data.step;
     if (data.step === 1) {
       this.isLoadData = true;
@@ -272,28 +277,28 @@ export class NewSimComponent implements OnInit, OnDestroy {
     if (step !== null && step != undefined) {
       this.onToStep({ step: step });
       this.currentTask = JSON.parse(localStorage.getItem(ObjectLocalStorage.CURRENT_TASK || null));
-      if(this.currentTask && this.currentTask.customer &&this.currentTask.customer.people
-          && this.currentTask.action == 'new_sim') {
-          delete this.currentTask.customer.people['identification_back_file'];
-          delete this.currentTask.customer.people['identification_front_file'];
-          delete this.currentTask.customer.people['identification_selfie_file'];
-          delete this.currentTask.customer.people['identification_signature_file'];
-          localStorage.setItem(ObjectLocalStorage.CURRENT_PEOPLE_INFO_NEW_SIM, JSON.stringify(this.currentTask.customer.people));
-        
+      if (this.currentTask && this.currentTask.customer && this.currentTask.customer.people
+        && this.currentTask.action == 'new_sim') {
+        delete this.currentTask.customer.people['identification_back_file'];
+        delete this.currentTask.customer.people['identification_front_file'];
+        delete this.currentTask.customer.people['identification_selfie_file'];
+        delete this.currentTask.customer.people['identification_signature_file'];
+        localStorage.setItem(ObjectLocalStorage.CURRENT_PEOPLE_INFO_NEW_SIM, JSON.stringify(this.currentTask.customer.people));
+
       }
-      
+
     }
 
     //kiem tra co dang chon so nao ko
     this.selectedMobile = localStorage.getItem(ObjectLocalStorage.CURRENT_SELECT_MOBILE || null);
 
-    if(!this.currentTask) {
+    if (!this.currentTask) {
       let res = await this.telecomService.taskList({ status: 0, take: 1, action: 'new_sim' });
       if (res.status && res.data && res.data.tasks.length > 0) {
         this.currentTask = res.data.tasks[0];
         localStorage.setItem(ObjectLocalStorage.CURRENT_TASK, JSON.stringify(this.currentTask));
       }
-    }    
+    }
 
     //hien thi thong tin "có giỏ hàng chưa hoàn tất"
     if (this.currentTask && (this.currentTask.status == 0 || this.currentTask.status == undefined)) {
@@ -335,8 +340,8 @@ export class NewSimComponent implements OnInit, OnDestroy {
     //pubsub
     this.subscription = this.gsubService.taskObservable.subscribe(res => {
       this.currentTask = res;
-   
-      console.log("Subs------",res);
+
+      // console.log("Subs------", res);
     })
 
   }

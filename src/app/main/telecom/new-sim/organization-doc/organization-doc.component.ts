@@ -7,6 +7,7 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ObjectLocalStorage } from 'app/utils/constants';
 import { GSubService } from 'app/auth/service/gsub.service';
+import { CardEkycDto } from 'app/auth/service/dto/new-sim.dto';
 
 
 @Component({
@@ -71,10 +72,10 @@ export class OrganizationDocComponent implements OnInit {
       fr.onload = () => {
         var img = new Image();
         img.onload = () => {
-          console.log(img.width);
+          // console.log(img.width);
           let width = img.width < 900 ? img.width : 900;
           let height = img.width < 900 ? img.height : width * img.height / img.width;
-          console.log(width, height);
+          // console.log(width, height);
           let canvas = document.createElement('canvas');
           canvas.width = width;
           canvas.height = height;
@@ -117,14 +118,14 @@ export class OrganizationDocComponent implements OnInit {
   async onSelectFileLicense(event) {
     if (event.target.files && event.target.files[0]) {
       let file = event.target.files[0]
-      console.log(file);
+      // console.log(file);
       if (["image/jpeg", "image/jpg", "image/png", "application/pdf"].includes(file.type)) {
         this.license_file = file
 
 
         if (file.type == "application/pdf")
           this.formOgzOcr.controls['license_extension'].setValue("pdf");
-        else{
+        else {
           this.alertService.showError("Chỉ chấp nhận file Scan PDF")
           this.license_file = ""
         }
@@ -159,7 +160,7 @@ export class OrganizationDocComponent implements OnInit {
   }
 
   async onNextStep() {
-    console.log(this.formOgzOcr);
+    // console.log(this.formOgzOcr);
     if (this.formOgzOcr && this.formOgzOcr.invalid) {
       this.submitted = true;
       return;
@@ -168,31 +169,62 @@ export class OrganizationDocComponent implements OnInit {
     await this.convertOrganizationData()
     this.organizationData.task_id = this.currentTask.id
 
-    console.log("organization-------------", this.organizationData)
-    this.telecomService.createNewCustomerOCR(this.organizationData).subscribe(res => {
+    // console.log("organization-------------", this.organizationData)
+    //goi api card-ekyc
+    let data = new CardEkycDto();
+    data.card_back = this.organizationData?.identification_back_file;
+    data.card_front = this.organizationData?.identification_front_file;
+    data.task_id = this.currentTaskId;
+    data.isOcr = 1;
+    this.telecomService.taskCardEkyc(data).subscribe(res => {
+      // console.log(res);
+
       if (!res.status) {
         this.sectionBlockUI.stop();
         this.alertService.showError(res.message);
         return;
       }
-      console.log("OCR", res);
-      this.sectionBlockUI.stop();
-      this.currentTask.customer = res.data.customer
-      this.currentTask.customer.organization = res.data.organization || {}
-      this.currentTask.customer.organization.people = res.data.people
-      this.currentTask.customer.people = res.data.people
-      this.currentTask.people = res.data.people
-      this.currentTask.customer.organization.id = this.currentTask.customer.organization_id
+      if (res.data) {
+        localStorage.removeItem(ObjectLocalStorage.CURRENT_PEOPLE_INFO_NEW_SIM);
+        localStorage.setItem(ObjectLocalStorage.CURRENT_PEOPLE_INFO_NEW_SIM, JSON.stringify(res.data));
+        //goi api ocr
+        this.telecomService.createNewCustomerOCR(this.organizationData).subscribe(res => {
+          // console.log(res);
 
-      this.gsubService.taskSub.next(this.currentTask);
+          if (!res.status) {
+            this.alertService.showError(res.message);
+            return;
+          }
+          // console.log("OCR", res);
+          this.sectionBlockUI.stop();
+          this.currentTask.customer = res.data.customer
+          this.currentTask.customer.organization = res.data.organization || {}
+          this.currentTask.customer.organization.people = res.data.people
+          this.currentTask.customer.people = res.data.people
+          this.currentTask.people = res.data.people
+          this.currentTask.customer.organization.id = this.currentTask.customer.organization_id
 
-      localStorage.setItem(ObjectLocalStorage.CURRENT_TASK, JSON.stringify(this.currentTask));
-      this.nextStep.emit({ title: "Xác nhận thông tin", validate_step: true, personal: false });
+          this.gsubService.taskSub.next(this.currentTask);
+
+          localStorage.setItem(ObjectLocalStorage.CURRENT_TASK, JSON.stringify(this.currentTask));
+          this.nextStep.emit({ title: "Xác nhận thông tin", validate_step: true, personal: false, get_data_people: true });
+        }, error => {
+          this.alertService.showError(error);
+          this.sectionBlockUI.stop();
+          return;
+        })
+      }
+      // this.nextStep.emit({
+      //   title: "Xác nhận thông tin", validate_step: true, get_data_people: true, identification_front_file: data.card_front,
+      //   identification_back_file: data.card_back
+      // });
     }, error => {
       this.alertService.showError(error);
       this.sectionBlockUI.stop();
       return;
-    })
+    });
+
+
   }
 
   get f() {
@@ -208,16 +240,18 @@ export class OrganizationDocComponent implements OnInit {
   }
 
   setDataForm() {
+    // console.log(this.currentCustomer);
+
     if (this.currentCustomer) {
       this.formOgzOcr.patchValue({
         identification_no: this.currentCustomer.people.identification_no,
         identification_type: this.currentCustomer.people.identification_type
       })
 
-      if (this.currentCustomer.organization && this.currentCustomer.organization.license_no && this.currentCustomer.organization.license_file && this.currentCustomer.people.identification_no &&
-        this.currentCustomer.people.identification_back_file && this.currentCustomer.people.identification_front_file) {
-        this.nextStep.emit({ title: "Xác nhận thông tin", validate_step: true, personal: false });
-      }
+      // if (this.currentCustomer.organization && this.currentCustomer.organization.license_no && this.currentCustomer.organization.license_file && this.currentCustomer.people.identification_no &&
+      //   this.currentCustomer.people.identification_back_file && this.currentCustomer.people.identification_front_file) {
+      //   this.nextStep.emit({ title: "Xác nhận thông tin", validate_step: true, personal: false });
+      // }
     }
 
 

@@ -13,7 +13,7 @@
     <div class="col-12" *ngIf="!personal">
         <h4>Người đại diện tổ chức/Doanh nghiệp</h4>
         <br>
-        <form-people [people]="currentTask && currentTask.customer && currentTask.customer.people ? currentTask.customer.people:''" [csubmitted]="csubmitted" (outPeople)="formPeopleData($event)"></form-people>
+        <form-people [people]="currentTask && currentTask.customer && currentTask.customer.people ? dataPeople : currentTask.customer.people" [csubmitted]="csubmitted" (outPeople)="formPeopleData($event)"></form-people>
     </div>
 
     <div class="col-12 mt-2" *ngIf="personal">
