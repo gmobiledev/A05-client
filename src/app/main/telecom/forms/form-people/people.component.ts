@@ -226,44 +226,8 @@ export class PeopleComponent implements OnInit, OnChanges {
         if (this.people.residence_commune) {
           this.onChangeResidenceCommune(this.people.residence_commune);
         }
-        this.sectionBlockUI.stop();
-        // if (this.formPeople?.value?.residence_province) {
-        //   if (this.provinces.length > 0) {
-        //     console.log(this.provinces);
-
-        //     this.residence['province'] = (this.provinces.find(item => item.id == this.formPeople?.value?.residence_province)).title;
-        //     console.log(this.residence['province']);
-
-        //   }
-        //   this.adminSerivce.getDistricts(this.formPeople?.value?.residence_province).subscribe((res: any) => {
-        //     console.log(res);
-
-        //     if (res.status == 1) {
-        //       this.residence_districts = res.data;
-        //       this.residence_commues = []
-        //       if (this.formPeople?.value?.residence_district) {
-        //         if (this.residence_districts.length > 0) {
-        //           this.residence['district'] = (this.residence_districts.find(item => item.id == this.formPeople?.value?.residence_district)).title;
-        //           console.log(this.residence['district']);
-
-        //         }
-        //         this.adminSerivce.getCommunes(this.formPeople?.value?.residence_district).subscribe((res: any) => {
-        //           if (res.status == 1) {
-        //             this.residence_commues = res.data;
-        //             if (this.formPeople?.value?.residence_commune) {
-        //               if (this.residence_commues.length > 0) {
-        //                 this.residence['commune'] = (this.residence_commues.find(item => item.id == this.formPeople?.value?.residence_commune)).title;
-        //                 console.log(this.residence['commune']);
-        //                 this.sectionBlockUI.stop();
-        //               }
-        //             }
-        //           }
-        //         })
-        //       }
-        //     }
-        //   })
-        // };
       }
+      this.sectionBlockUI.stop();
     }, error => {
       this.alertService.showError(error);
       this.sectionBlockUI.stop();
