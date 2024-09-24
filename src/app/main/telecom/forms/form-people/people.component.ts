@@ -211,9 +211,9 @@ export class PeopleComponent implements OnInit, OnChanges {
           identification_type: res.data.type,
           name: res.data.name,
           residence_address: res.data.address,
-          residence_commune: parseInt(res.data.address_entities.ward_code),
-          residence_district: parseInt(res.data.address_entities.district_code),
-          residence_province: parseInt(res.data.address_entities.province_code),
+          residence_commune: parseInt(res.data?.address_entities?.ward_code),
+          residence_district: parseInt(res.data?.address_entities?.district_code),
+          residence_province: parseInt(res.data?.address_entities?.province_code),
         });
 
         if (this.formPeople?.value?.residence_province) {
@@ -226,6 +226,7 @@ export class PeopleComponent implements OnInit, OnChanges {
         if (this.people.residence_commune) {
           this.onChangeResidenceCommune(this.people.residence_commune);
         }
+
       }
       this.sectionBlockUI.stop();
     }, error => {
