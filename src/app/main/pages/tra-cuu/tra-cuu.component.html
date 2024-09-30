@@ -1,7 +1,7 @@
 <div class="content-wrapper container-xxl p-0">
     <div class="content-body">
         <div class="card">
-            <div class="card-body">
+            <div class="card-body" *ngIf="showLookUp">
                 <div style="max-width: 700px;margin: 20px auto; min-height: 500px;">
                     <h3 style="margin-top: 20px;margin-left: 10px;text-align: center;">
                     </h3>
@@ -76,7 +76,7 @@
                             <div class="row" style="margin-top: 30px;">
                                 <div class="col-md-12 ">
                                     <label>Số CCCD/CMND/Hộ chiếu (*)</label>
-                                    <input type="text" class="form-control" placeholder="Nhập chính xác" maxlength="12" 
+                                    <input type="text" class="form-control" placeholder="Nhập chính xác" maxlength="12"
                                         formControlName="identification_no">
 
                                     <div *ngIf="submitted && fTicket.identification_no.errors" class="invalid-feedback">
@@ -95,16 +95,18 @@
                                     <input type="tel" class="form-control" maxlength="10" minlength="10"
                                         placeholder="Nhập số điện thoại..." mask="0000000000"
                                         formControlName="contact_mobile">
-                                   
+
                                     <div *ngIf="submitted && fTicket.contact_mobile.errors" class="invalid-feedback">
                                         <div *ngIf="fTicket.contact_mobile.errors.required">Vui lòng nhập trường này
                                         </div>
                                     </div>
                                     <div *ngIf="submitted && fTicket.contact_mobile.errors" class="invalid-feedback">
-                                        <div *ngIf="fTicket.contact_mobile.errors.mask || fTicket.contact_mobile.errors.isMobile">Định dạng số điện thoại không
+                                        <div
+                                            *ngIf="fTicket.contact_mobile.errors.mask || fTicket.contact_mobile.errors.isMobile">
+                                            Định dạng số điện thoại không
                                             hợp lệ</div>
                                     </div>
-                                 
+
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 30px;">
@@ -133,14 +135,68 @@
                                 <a href="https://gmobile.vn" type="button" class="btn btn btn-default"
                                     style="width:250px;height: 50px;margin-top: 40px;font-weight: bold;">Trang
                                     chủ</a>
-                                <button (click)="submitTiket();captchaRef.reset()" type="button" class="btn btn btn-primary"
-                                    style="width:250px;height: 50px;margin-top: 40px;font-weight: bold;" >Tra cứu</button>
+                                <button (click)="submitTiket();captchaRef.reset()" type="button"
+                                    class="btn btn btn-primary"
+                                    style="width:250px;height: 50px;margin-top: 40px;font-weight: bold;">Tra
+                                    cứu</button>
 
 
                             </div>
                         </form>
 
                     </container>
+                </div>
+            </div>
+            <div class="card-body" *ngIf="!showLookUp">
+                <div class="f_page_D min_wrap">
+                    <h2 class="til_D">Thông báo chuyển đổi từ sim 2G sang sim 4G hợp tác VinaPhone và Mobifone đợt
+                        cuối<br></h2>
+                    <div class="f-detail clearfix">
+                        <p class="MsoNormal" style="text-align: justify; margin: 6pt 0in; line-height: 150%;"><span
+                                style="line-height: 150%;">&nbsp; &nbsp; Kính gửi Quý khách hàng!</span></p>
+                        <p class="MsoNormal" style="text-align: justify; margin: 6pt 0in; line-height: 150%;"><span
+                                style="line-height: 150%;">&nbsp; &nbsp;</span><span
+                                style="text-align: var(--bs-body-text-align);">Gmobile đang gia hạn thời gian hỗ trợ
+                                khách hàng thực hiện chuyển đổi sim 2G sang sim 4G hợp tác VinaPhone và Mobifone <b>đến
+                                    hết ngày 30/09/2024</b>, cụ thể như sau:</span></p>
+                        <p class="MsoNormal" style="text-align: justify; margin: 6pt 0in; line-height: 150%;"><span
+                                style="line-height: 150%;">&nbsp; &nbsp; &nbsp;</span>- Các thuê bao 2G đầu số 0592,
+                            0593, 0599, 0993, 0994, 0997 chuyển đổi sang sim 4G hợp tác VinaPhone.</p>
+                        <p class="MsoNormal" style="text-align: justify; margin: 6pt 0in; line-height: 150%;">&nbsp;
+                            &nbsp; &nbsp;- Các thuê bao sim 4G hợp tác Vietnamobile đầu số 0995 và các thuê bao 2G đầu
+                            số 0995, 09968, 09969 chuyển đổi sang sim 4G hợp tác Mobifone.</p>
+                        <p style="text-align: justify;">&nbsp; &nbsp;Nhằm đảm bảo quyền lợi cho khách hàng, đề nghị các
+                            thuê bao thuộc những đầu số trên đủ điều kiện chuyển đổi nhanh chóng hoàn tất hồ sơ qua các
+                            kênh sau:&nbsp;<br></p>
+                        <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;- Qua ứng dụng iZOTA.</p>
+                        <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;- Tại các điểm cung cấp dịch vụ viễn thông
+                            của Gmobile.</p>
+                        <p style="text-align: justify;">&nbsp; &nbsp;<b><i>Lưu ý:</i></b></p>
+                        <p style="text-align: justify;"><i style="">&nbsp; &nbsp;-&nbsp;</i>Với Quý khách hàng sử dụng
+                            thuê bao sim 4G hợp tác Vietnamobile thực hiện chuyển đổi sang sim 4G hợp tác Mobifone sẽ
+                            được miễn phí chi phí đổi sim và phí hòa mạng (nếu có).&nbsp;</p>
+                        <p style="text-align: justify;">&nbsp; &nbsp;- Với Quý khách hàng thực hiện chuyển đổi sim 2G
+                            sang sim 4G hợp tác VinaPhone và Mobifone thanh toán các chi phí như sau:</p>
+                        <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;+ Phí đổi sim: 25.000đ</p>
+                        <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;+ Phí hòa mạng: 25.000đ</p>
+                        <p style="text-align: justify;">&nbsp; &nbsp; + Phí vận chuyển sim: theo chi phí thực tế với đơn
+                            vị vận chuyển.</p>
+                        <p style="text-align: justify;"><b>Thông tin chi tiết vui lòng liên hệ:</b><br></p>
+                        <p style="text-align: justify;">Tổng đài CSKH: 1900 0292 / 0598 247 247<br></p>
+                        <p style="text-align: justify;">Email: CSKH@gmobile.vn<br></p>
+                        <p style="text-align: justify;">Zalo: <a href="https://zalo.me/gtelmobile"
+                                target="_self">https://zalo.me/gtelmobile</a><br></p>
+                        <p style="text-align: justify;">Địa chỉ các điểm cung cấp dịch vụ viễn thông của Gmobile<br></p>
+                        <p style="text-align: justify;">➢Tại Hà Nội: 105 Nguyễn Tuân, P.Thanh Xuân Trung, Q.Thanh Xuân,
+                            TP.Hà Nội</p>
+                        <p style="text-align: justify;">➢Tại Đà Nẵng:&nbsp;Số 06 (Lô 18) Thanh Sơn, P.Thanh Bình, Q.Hải
+                            Châu, TP.Đà Nẵng<br></p>
+                        <p style="text-align: justify;">➢Tại TP. HCM: 47A Phạm Viết Chánh, P. Nguyễn Cư Trinh, Quận 1,
+                            TP.HCM</p>
+                        <p style="text-align: justify;"><i
+                                style="color: var(--bs-body-color); font-family: var(--bs-body-font-family); font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align); background-color: var(--bs-body-bg);">*iZOTA
+                                là sản phẩm do Gmobile hợp tác phát triển*</i><br></p>
+                    </div><!-- End .f-detail -->
                 </div>
             </div>
         </div>

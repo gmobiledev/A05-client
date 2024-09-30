@@ -23,6 +23,7 @@ export class TraCuuComponent implements OnInit {
   errorInputMsisdn: string;
   submitted: boolean = false
   msisdnValid: boolean = true
+  showLookUp: boolean;
 
   // Private
   private _unsubscribeAll: Subject<any>;
@@ -43,27 +44,35 @@ export class TraCuuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle("Gmobile - Tra cứu thông tin thuê bao 2G")
-    this.initFormGroupTiket()
-    this._coreConfigService.config = {
-      layout: {
-        type: "horizontal",
-        animation: 'none',
-        navbar: {
-          hidden: false
-        },
-        menu: {
-          hidden: true
-        },
-        footer: {
-          hidden: false,
-          scrollTop: true
-        },
-        customizer: false,
-        enableLocalStorage: false
-      }
-    };
+    const now = Math.round(new Date().getTime() / 1000);
+    console.log(now);
+    const timeExpiryStamp = 1727672400;
+    if (now > timeExpiryStamp) {
+      this.showLookUp = false;
 
+    } else {
+      this.showLookUp = true;
+      this.titleService.setTitle("Gmobile - Tra cứu thông tin thuê bao 2G")
+      this.initFormGroupTiket()
+      this._coreConfigService.config = {
+        layout: {
+          type: "horizontal",
+          animation: 'none',
+          navbar: {
+            hidden: false
+          },
+          menu: {
+            hidden: true
+          },
+          footer: {
+            hidden: false,
+            scrollTop: true
+          },
+          customizer: false,
+          enableLocalStorage: false
+        }
+      };
+    }
   }
 
   ngAfterViewInit() {
@@ -93,10 +102,10 @@ export class TraCuuComponent implements OnInit {
   initFormGroupTiket() {
     this.formGroupTiket = this.formBuilder.group({
       mobile: ["", [Validators.required, Validators.maxLength(10), Validators.minLength(10), mobilePhoneValidator()]],
-      contact_mobile: ['', [Validators.required,mobilePhoneValidator()]],
+      contact_mobile: ['', [Validators.required, mobilePhoneValidator()]],
       full_name: ['', [Validators.required, Validators.maxLength(150)]],
       identification_no: ['', [Validators.required, Validators.maxLength(15), Validators.pattern('^[a-zA-Z0-9_.-]*$')]],
-      note: ['', [Validators.required,Validators.maxLength(1000)]],
+      note: ['', [Validators.required, Validators.maxLength(1000)]],
       captcha: ['', [Validators.required]]
     })
   }
