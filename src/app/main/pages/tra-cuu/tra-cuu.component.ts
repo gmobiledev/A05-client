@@ -45,8 +45,8 @@ export class TraCuuComponent implements OnInit {
 
   ngOnInit(): void {
     const now = Math.round(new Date().getTime() / 1000);
-    console.log(now);
-    const timeExpiryStamp = 1727672400;
+    // console.log(now);
+    const timeExpiryStamp = 1727740800;
     if (now > timeExpiryStamp) {
       this.showLookUp = false;
 
