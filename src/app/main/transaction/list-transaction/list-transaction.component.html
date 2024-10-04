@@ -105,10 +105,11 @@
             <thead>
               <tr>
                 <th>STT</th>
-                <th>Mã giao dịch</th>                
+                <th>Mã giao dịch</th>   
+                <th>Mã đơn</th>                
                 <th>Số tiền</th>                
                 <th>Thời gian</th>   
-                <th>Ghi chú</th>                          
+                <th>Nội dung</th>                          
               </tr>
             </thead>
             <tbody>
@@ -117,9 +118,10 @@
                   {{ (searchForm.page-1)*searchForm.take + i + 1 }}
                 </td>
                 <td>{{ item?.id }}</td>
+                <td>{{ item?.bill_id }}</td>
                 <td>{{ item?.amount | currency:' ':'symbol':'0.0-1' }}</td>               
                 <td>{{ item?.created_at | date: 'dd/MM/yyyy H:mm':'UTC' }}</td>
-                <td>{{ item?.response_desc }}</td>
+                <td>{{ item?.desc }}</td>
               </tr>
 
               <tr>
