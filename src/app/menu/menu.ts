@@ -104,15 +104,6 @@ export const menu: CoreMenu[] = [
           },
           {
             id: 'changeSim',
-            title: 'Đơn KITTING',
-            translate: '',
-            type: 'item',
-            icon: 'circle',
-            role: [ServiceCode.SIM_KITTING],
-            url: 'task/kitting'
-          },
-          {
-            id: 'changeSim',
             title: 'Đơn Bundle',
             translate: '',
             type: 'item',
@@ -206,6 +197,15 @@ export const menu: CoreMenu[] = [
         role: ['AIRTIME_TOPUP'],
         icon: 'cast',
         url: 'services/airtime'
+      },
+      {
+        id: 'users',
+        title: 'Đơn KITTING',
+        translate: '',
+        type: 'item',
+        role: [ServiceCode.SIM_KITTING],
+        icon: 'cast',
+        url: 'task/kitting'
       },
       {
         id: 'users',
