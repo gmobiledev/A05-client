@@ -104,12 +104,12 @@ export const menu: CoreMenu[] = [
           },
           {
             id: 'changeSim',
-            title: 'Đơn Bundle',
+            title: 'Đơn KITTING',
             translate: '',
             type: 'item',
+            role: [ServiceCode.SIM_KITTING],
             icon: 'circle',
-            role: [ServiceCode.SIM_BUNDLE],
-            url: 'task/sim-bundle'
+            url: 'task/kitting'
           },
           {
             id: 'changeSim',
@@ -200,12 +200,12 @@ export const menu: CoreMenu[] = [
       },
       {
         id: 'users',
-        title: 'Đơn KITTING',
+        title: 'Đơn Bundle',
         translate: '',
         type: 'item',
-        role: [ServiceCode.SIM_KITTING],
         icon: 'cast',
-        url: 'task/kitting'
+        role: [ServiceCode.SIM_BUNDLE],
+        url: 'task/sim-bundle'
       },
       {
         id: 'users',
