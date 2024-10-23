@@ -20,6 +20,12 @@ export class ShowStatusTelecomPipe implements PipeTransform {
     } else if (value === TaskTelecomStatus.STATUS_SUCCESS_PART) {
         html = '<span class="badge badge-pill badge-light-success mr-1">Thành công 1 phần</span>'
     }
+    else if (value === TaskTelecomStatus.STATUS_Waiting_For_Payment) {
+        html = '<span class="badge badge-pill badge-light-warning mr-1">Chờ thanh toán</span>'
+    }
+    else if (value === TaskTelecomStatus.STATUS_Waiting_For_Information) {
+        html = '<span class="badge badge-pill badge-light-warning mr-1">Chờ thanh toán</span>'
+    }
     return html;
   }
 }

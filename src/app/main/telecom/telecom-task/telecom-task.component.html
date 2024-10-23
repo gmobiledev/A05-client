@@ -140,7 +140,6 @@
           <div class="card-body">
             <form (ngSubmit)="onSubmitSearch()" class="mb-2">
               <div class="row">
-
                 <div class="col-md-4">
                   <div class="form-group">
                     <input
@@ -186,7 +185,6 @@
                     </select>
                   </div>
                 </div>
-                
               </div>
               <div class="row mt-2">
                 <div class="col-md-2">
@@ -254,42 +252,51 @@
 
                   <div class="row">
                     <container
-                    *ngIf="
-                      item.action == 'new_sim' ||
-                      item.action == listTaskAction.change_info.value
-                    "
-                  >
-                    <div class="m-1">
-                      <button
-                        *ngIf="
-                          item.status == 4 ||
-                          item.status == 40 ||
-                          item.status == 0
-                        "
-                        class="btn btn-outline-primary btn-sm"
-                        (click)="onClickTask(item)"
-                      >
-                        <span [data-feather]="'edit'"></span> Cập nhật
-                      </button>
-                      <button
-                        *ngIf="
-                          item.status == 50 &&
-                          item.customer_type == 'ORGANIZATION'
-                        "
-                        (click)="modalOpen(modalUpload, item, 'sm')"
-                        class="btn btn-outline-primary btn-sm"
-                      >
-                        <span [data-feather]="'upload'"></span> Tải lên hợp đồng
-                      </button>
+                      *ngIf="
+                        item.action == 'new_sim' ||
+                        item.action == listTaskAction.change_info.value
+                      "
+                    >
+                      <div class="m-1 d-flex" style="gap: 5px">
+                        <button
+                          *ngIf="
+                            item.status == 4 ||
+                            item.status == 40 ||
+                            item.status == 0
+                          "
+                          class="btn btn-outline-primary btn-sm"
+                          (click)="onClickTask(item)"
+                        >
+                          <span [data-feather]="'edit'"></span> Cập nhật
+                        </button>
+                        <button
+                          *ngIf="
+                            item.status == 50 &&
+                            item.customer_type == 'ORGANIZATION'
+                          "
+                          (click)="modalOpen(modalUpload, item, 'sm')"
+                          class="btn btn-outline-primary btn-sm"
+                        >
+                          <span [data-feather]="'upload'"></span> Tải lên hợp
+                          đồng
+                        </button>
 
-                      <button        
-                      *ngIf="![1,0,-1].includes(item.status) && !item.otp"               
-                        (click)="modalOpen(modalOTP, item, 'sm', 'VERIFY_MSISDN')"
-                        class="btn btn-outline-primary btn-sm"
-                      >
-                        <span [data-feather]="'mail'"></span> Gửi OTP
-                      </button>
-                    </div>
+                        <button
+                          *ngIf="![1, 0, -1].includes(item.status) && !item.otp"
+                          (click)="
+                            modalOpen(modalOTP, item, 'sm', 'VERIFY_MSISDN')
+                          "
+                          class="btn btn-outline-primary btn-sm"
+                        >
+                          <span [data-feather]="'mail'"></span> Gửi OTP
+                        </button>
+                        <button
+                          *ngIf="item.status == 20"
+                          class="btn btn-outline-primary btn-sm disabled" 
+                        >
+                          Thanh toán
+                        </button>
+                      </div>
                     </container>
 
                     <container
@@ -303,8 +310,8 @@
                           *ngIf="
                             item.status == 4 ||
                             item.status == 40 ||
-                            item.status == 0
-                            || (item.status == 5 && item.action == 'change_sim') 
+                            item.status == 0 ||
+                            (item.status == 5 && item.action == 'change_sim')
                           "
                           class="btn btn-outline-danger btn-sm"
                           (click)="onCancelTask(item)"
@@ -410,7 +417,6 @@
   </div>
 </ng-template>
 
-
 <ng-template #modalOTP let-modal>
   <div class="modal-header">
     <h5 class="modal-title" id="myModalLabel160"></h5>
@@ -427,18 +433,32 @@
     <div class="row">
       <div class="col-12" *ngIf="!isSentOtp">
         <label for="">Số điện thoại</label>
-        <select name="" id="" class="form-control" [(ngModel)]="formOTPMsisdn.mobile">
+        <select
+          name=""
+          id=""
+          class="form-control"
+          [(ngModel)]="formOTPMsisdn.mobile"
+        >
           <option value="">-- Chọn số điện thoại nhận OTP --</option>
-        <option value="{{ item.msisdn }}" *ngFor="let item of listSucessMsisdn">
-        {{ item.msisdn }}</option>
-        
+          <option
+            value="{{ item.msisdn }}"
+            *ngFor="let item of listSucessMsisdn"
+          >
+            {{ item.msisdn }}
+          </option>
         </select>
-        <a (click)="isSentOtp = true"><u><small>Đã nhận được OTP</small></u></a>
+        <a (click)="isSentOtp = true"
+          ><u><small>Đã nhận được OTP</small></u></a
+        >
       </div>
 
       <div class="col-12" *ngIf="isSentOtp">
         <label for="">Mã OTP</label>
-        <input mask="000000" class="form-control" [(ngModel)]="formOTPMsisdn.otp"/>
+        <input
+          mask="000000"
+          class="form-control"
+          [(ngModel)]="formOTPMsisdn.otp"
+        />
       </div>
 
       <div class="col-12 mt-2">
