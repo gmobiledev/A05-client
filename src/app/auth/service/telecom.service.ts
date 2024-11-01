@@ -29,6 +29,11 @@ export class TelecomServivce {
   beforeSumitChangeSim(body = {}) {
     return this._http.post<any>(`${environment.apiTelecomUrl}/task/msisdn`, body);
   }
+
+  exportExcelReport(dto: any): Observable<any> {
+    return this._http.post(`${environment.apiTelecomUrl}/task/export-excel-task-report`, dto, { observe: 'response', responseType: 'blob' });
+  }
+  
   onSubmitChangeSim(id: number, body = {}) {
     return this._http.post<any>(`${environment.apiTelecomUrl}/task/msisdn/card-sim/${id}`, body);
   }

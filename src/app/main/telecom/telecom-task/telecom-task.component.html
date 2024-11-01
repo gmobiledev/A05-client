@@ -185,6 +185,14 @@
                     </select>
                   </div>
                 </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <input type="text" placeholder="Khoảng thời gian" [ngModelOptions]="{standalone: true}"
+                      ngxDaterangepickerMd [(ngModel)]="dateRange" [ranges]="ranges"
+                      [locale]="{applyLabel: 'Chọn',format: 'DD/MM/YYYY'}" [showCustomRangeLabel]="true"
+                      [alwaysShowCalendars]="true" name="daterange" class="form-control" />
+                  </div>
+                </div>
               </div>
               <div class="row mt-2">
                 <div class="col-md-2">
@@ -192,6 +200,11 @@
                     <button type="submit" class="btn btn-block btn-info">
                       Lọc kết quả <span [data-feather]="'search'"></span>
                     </button>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <button type="button" (click)="onSubmitExportExcelReport()" class="btn btn-block btn-success">Xuất excel <span [data-feather]="'file'"></span></button>
                   </div>
                 </div>
               </div>
