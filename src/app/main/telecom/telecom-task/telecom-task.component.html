@@ -187,10 +187,19 @@
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
-                    <input type="text" placeholder="Khoảng thời gian" [ngModelOptions]="{standalone: true}"
-                      ngxDaterangepickerMd [(ngModel)]="dateRange" [ranges]="ranges"
-                      [locale]="{applyLabel: 'Chọn',format: 'DD/MM/YYYY'}" [showCustomRangeLabel]="true"
-                      [alwaysShowCalendars]="true" name="daterange" class="form-control" />
+                    <input
+                      type="text"
+                      placeholder="Khoảng thời gian"
+                      [ngModelOptions]="{ standalone: true }"
+                      ngxDaterangepickerMd
+                      [(ngModel)]="dateRange"
+                      [ranges]="ranges"
+                      [locale]="{ applyLabel: 'Chọn', format: 'DD/MM/YYYY' }"
+                      [showCustomRangeLabel]="true"
+                      [alwaysShowCalendars]="true"
+                      name="daterange"
+                      class="form-control"
+                    />
                   </div>
                 </div>
               </div>
@@ -204,7 +213,13 @@
                 </div>
                 <div class="col-md-2">
                   <div class="form-group">
-                    <button type="button" (click)="onSubmitExportExcelReport()" class="btn btn-block btn-success">Xuất excel <span [data-feather]="'file'"></span></button>
+                    <button
+                      type="button"
+                      (click)="onSubmitExportExcelReport()"
+                      class="btn btn-block btn-success"
+                    >
+                      Xuất excel <span [data-feather]="'file'"></span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -238,6 +253,26 @@
                     <div class="col-sm-9">
                       {{ item.request_time | date : "dd/MM/yyyy H:mm" : "GMT" }}
                     </div>
+                  </div>
+                  <div class="row">
+                    <label class="col-sm-3">Giá số:</label>
+                    <div class="col-sm-9">{{ item?.mobile_fee | number}}</div>
+                  </div>
+                  <div class="row">
+                    <label class="col-sm-3">Phí hòa mạng:</label>
+                    <div class="col-sm-9">{{ item?.registration_fee | number}}</div>
+                  </div>
+                  <div class="row">
+                    <label class="col-sm-3">Giá phôi sim:</label>
+                    <div class="col-sm-9">{{ item?.card_sim_fee | number}}</div>
+                  </div>
+                  <div class="row">
+                    <label class="col-sm-3">Giá gói:</label>
+                    <div class="col-sm-9">{{ item?.charge_amount | number}}</div>
+                  </div>
+                  <div class="row">
+                    <label class="col-sm-3">Tổng:</label>
+                    <div class="col-sm-9">{{item?.mobile_fee + item?.registration_fee + item?.card_sim_fee + item?.charge_amount | number}}</div>
                   </div>
                   <div class="row">
                     <label class="col-sm-3">Trạng thái:</label>
@@ -305,7 +340,7 @@
                         </button>
                         <button
                           *ngIf="item.status == 20"
-                          class="btn btn-outline-primary btn-sm disabled" 
+                          class="btn btn-outline-primary btn-sm disabled"
                         >
                           Thanh toán
                         </button>
