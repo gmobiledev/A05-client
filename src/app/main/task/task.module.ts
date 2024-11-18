@@ -33,6 +33,13 @@ const routes: Routes = [
     component: TaskComponent
   },
   {
+    path: 'kitting-esim',
+    data: {
+      service: ServiceCode.SIM_KITTING_ESIM
+    },
+    component: TaskComponent
+  },
+  {
     path: 'search',
     component: TaskSearchComponent
   },

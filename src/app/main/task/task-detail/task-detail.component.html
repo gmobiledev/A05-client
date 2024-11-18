@@ -16,23 +16,23 @@
                                 <p>Mã đơn: {{ data?.id }}</p>
                                 <p *ngIf="[taskServiceCode.SIM_PROFILE ].includes(data?.service_code)" >Loại sản phẩm: SIM trắng</p>
                                 <p>Số lượng: {{ data?.amount | number }} {{ currency }}</p>
-                                <p *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_BUNDLE,
+                                <p *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_KITTING_ESIM, taskServiceCode.SIM_BUNDLE,
                                  taskServiceCode.ADD_MOBILE_PACKAGE].includes(data?.service_code)" >Thành tiền: {{ price | number }} VND</p>
                                 <!-- <p *ngIf="[taskServiceCode.SIM_PROFILE ].includes(data?.service_code)" >Nhà mạng: {{ getJSONDetail('mno') }}</p> -->
                                 <p *ngIf="[taskServiceCode.SIM_PROFILE ].includes(data?.service_code)" >Số lượng đã upload: {{ getJSONDetail('uploaded') | number }}</p>
                                 
-                                <p *ngIf="[taskServiceCode.SIM_KITTING ].includes(data?.service_code)" >SL thành công: {{ getJSONDetail('kitted') }}</p>
-                                <p *ngIf="[taskServiceCode.SIM_KITTING ].includes(data?.service_code)" >SL thất bại: {{ getJSONDetail('failed') }}</p>
+                                <p *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_KITTING_ESIM ].includes(data?.service_code)" >SL thành công: {{ getJSONDetail('kitted') }}</p>
+                                <p *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_KITTING_ESIM ].includes(data?.service_code)" >SL thất bại: {{ getJSONDetail('failed') }}</p>
 
                                 <p *ngIf="[taskServiceCode.ADD_MOBILE_PACKAGE ].includes(data?.service_code)" >SL thuê bao: {{ listSerial.length }}</p>
                                 <p *ngIf="[taskServiceCode.ADD_MOBILE_PACKAGE, taskServiceCode.SIM_REGISTER ].includes(data?.service_code)" >SL thành công: {{ getJSONDetail('successed') }}</p>
                                 <p *ngIf="[taskServiceCode.ADD_MOBILE_PACKAGE, taskServiceCode.SIM_REGISTER ].includes(data?.service_code)" >SL thất bại: {{ getJSONDetail('failed') }}</p>
 
-                                <p *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_BUNDLE, taskServiceCode.ADD_MOBILE_PACKAGE ].includes(data?.service_code)" >Gói cước: {{ getJSONDetail('package') }}</p>
+                                <p *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_KITTING_ESIM, taskServiceCode.SIM_BUNDLE, taskServiceCode.ADD_MOBILE_PACKAGE ].includes(data?.service_code)" >Gói cước: {{ getJSONDetail('package') }}</p>
                                 <p>Trạng thái: <span [innerHTML]="data?.status | showStatusTask"></span></p>
                             </div>
                             <div class="col-8 border-left">
-                                <ng-container *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_REGISTER, 
+                                <ng-container *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_KITTING_ESIM, taskServiceCode.SIM_REGISTER, 
                                 taskServiceCode.SIM_BUNDLE,
                                 taskServiceCode.ADD_MOBILE_PACKAGE,
                                 taskServiceCode.SIM_PROFILE].includes(data?.service_code)" >
@@ -67,7 +67,7 @@
 
                                             <a (click)="onRetryTask()" class="ml-1 btn btn-outline-warning float-right btn-sm"
                                             ngbTooltip="Thực hiện lại"
-                                            *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_REGISTER,                                 
+                                            *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_KITTING_ESIM, taskServiceCode.SIM_REGISTER,                                 
                                 taskServiceCode.ADD_MOBILE_PACKAGE].includes(data?.service_code) "
                                             ><i data-feather="rotate-cw" class="cursor-pointer"></i></a>
                                         </div>
@@ -126,7 +126,7 @@
                                         </ng-template>
                                     </ngx-datatable-column>   
                                     
-                                    <ngx-datatable-column name="Số thuê bao" *ngIf="[taskServiceCode.SIM_KITTING,
+                                    <ngx-datatable-column name="Số thuê bao" *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_KITTING_ESIM,
                                     taskServiceCode.SIM_BUNDLE,
                                     taskServiceCode.SIM_REGISTER].includes(data?.service_code)">
                                         <ng-template let-row="row"  ngx-datatable-cell-template>
@@ -139,7 +139,7 @@
                                             </div>
                                         </ng-template>
                                     </ngx-datatable-column> 
-                                    <ngx-datatable-column name="Serial" *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_BUNDLE, taskServiceCode.SIM_REGISTER].includes(data?.service_code)">
+                                    <ngx-datatable-column name="Serial" *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_KITTING_ESIM, taskServiceCode.SIM_BUNDLE, taskServiceCode.SIM_REGISTER].includes(data?.service_code) && data.status != taskStatus.STATUS_APPROVED">
                                         <ng-template let-row="row"  ngx-datatable-cell-template>
                                             <div class="align-items-center">
                                                 <div class="cell-line-height">
@@ -150,14 +150,14 @@
                                             </div>
                                         </ng-template>
                                     </ngx-datatable-column> 
-                                    <ngx-datatable-column name="Trạng thái" *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_BUNDLE, taskServiceCode.SIM_REGISTER].includes(data?.service_code)">
+                                    <ngx-datatable-column name="Trạng thái" *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_KITTING_ESIM, taskServiceCode.SIM_BUNDLE, taskServiceCode.SIM_REGISTER].includes(data?.service_code)">
                                         <ng-template let-row="row"  ngx-datatable-cell-template>
                                             <div class="align-items-center">
                                                 <div class="cell-line-height">
                                                     <p *ngIf="row.state != 50" class="font-medium-1 font-weight-bold line-height-1 mb-25">
                                                         <span [innerHTML]="row.state | showStatusMsisdn"></span>                                                        
                                                     </p>
-                                                    <select class="form-control" *ngIf="row.state == 50 && data?.service_code == taskServiceCode.SIM_KITTING" (change)="onUpdateStateMsisndRetry($event, row.id)">
+                                                    <select class="form-control" *ngIf="row.state == 50 && (data?.service_code == taskServiceCode.SIM_KITTING || data?.service_code == taskServiceCode.SIM_KITTING_ESIM)" (change)="onUpdateStateMsisndRetry($event, row.id)">
                                                         <option value="{{ row.state }}" ><span [innerHTML]="row.state | showStatusMsisdn"></span></option>
                                                         <option value="-5">Kitting lỗi</option>
                                                     </select>
@@ -166,7 +166,7 @@
                                         </ng-template>
                                     </ngx-datatable-column> 
 
-                                    <ngx-datatable-column name="Note" *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_BUNDLE, taskServiceCode.SIM_REGISTER].includes(data?.service_code)">
+                                    <ngx-datatable-column name="Note" *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_KITTING_ESIM, taskServiceCode.SIM_BUNDLE, taskServiceCode.SIM_REGISTER].includes(data?.service_code)">
                                         <ng-template let-row="row"  ngx-datatable-cell-template>
                                             <div class="align-items-center">
                                                 <div class="cell-line-height">

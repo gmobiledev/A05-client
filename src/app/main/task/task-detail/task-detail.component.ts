@@ -230,7 +230,7 @@ export class TaskDetailComponent implements OnInit {
       temp = this.listSerial.filter(function (d) {
         return d.name.toLowerCase().indexOf(val) !== -1 || !val;
       });
-    } else if (this.data.service_code == ServiceCode.SIM_KITTING || this.data.service_code == ServiceCode.SIM_REGISTER
+    } else if (this.data.service_code == ServiceCode.SIM_KITTING || this.data.service_code == ServiceCode.SIM_KITTING_ESIM || this.data.service_code == ServiceCode.SIM_REGISTER
       || this.data.service_code == ServiceCode.SIM_BUNDLE
     ) {
       temp = this.listSerial.filter(function (d) {
@@ -283,7 +283,7 @@ export class TaskDetailComponent implements OnInit {
     if(this.data.service_code == ServiceCode.SIM_PROFILE) {
       const dataExcel = this.listSerial.map(x => {return {'serial': x.name}})
       this.commonService.exportExcel(dataExcel, 'danh sach.xlsx');
-    } else if(this.data.service_code == ServiceCode.SIM_KITTING || this.data.service_code == ServiceCode.SIM_REGISTER
+    } else if(this.data.service_code == ServiceCode.SIM_KITTING || this.data.service_code == ServiceCode.SIM_KITTING_ESIM || this.data.service_code == ServiceCode.SIM_REGISTER
       || this.data.service_code == ServiceCode.SIM_BUNDLE
     ) {
       this.commonService.exportExcel(this.listSerial, 'danh sach.xlsx');
@@ -329,10 +329,12 @@ export class TaskDetailComponent implements OnInit {
     this.itemBlockUI.start();
     let res = await this.taskService.getTaskDetail(this.id).toPromise();
     this.data = res.data;
+    console.log(this.data);
+    
     this.dataUpdate.amount = res.data.amount;
     this.listSerial = res.data.details.filter(x => x.attribute == 'serial');
     this.listSerialShow = res.data.details.filter(x => x.attribute == 'serial');
-    if(res.data.service_code == ServiceCode.SIM_KITTING || res.data.service_code == ServiceCode.SIM_REGISTER
+    if(res.data.service_code == ServiceCode.SIM_KITTING || res.data.service_code == ServiceCode.SIM_KITTING_ESIM || res.data.service_code == ServiceCode.SIM_REGISTER
       || res.data.service_code == ServiceCode.SIM_BUNDLE
     ) {
       this.listSerial = res.data.msisdns;
@@ -350,7 +352,7 @@ export class TaskDetailComponent implements OnInit {
     }
     this.itemBlockUI.stop();
 
-    if([ServiceCode.SIM_KITTING, ServiceCode.SIM_BUNDLE].includes(res.data.service_code)) {
+    if([ServiceCode.SIM_KITTING, ServiceCode.SIM_KITTING_ESIM, ServiceCode.SIM_BUNDLE].includes(res.data.service_code)) {
       const packgeItems = await this.packageService.getAll({code: this.getJSONDetail('package')}).toPromise();
       this.price = packgeItems.data.packages[0].price * res.data.msisdns.length;
     } else if ([ ServiceCode.ADD_MOBILE_PACKAGE].includes(res.data.service_code)) {
@@ -365,6 +367,11 @@ export class TaskDetailComponent implements OnInit {
     } else if (this.data.service_code == ServiceCode.SIM_KITTING) {
       this.contentHeader.headerTitle = 'Chi tiết đơn kitting';
       this.contentHeader.breadcrumb.links[1].name = 'Danh sách kitting';
+      this.contentHeader.breadcrumb.links[1].link = '/task/kitting';
+      this.currency = '';
+    } else if (this.data.service_code == ServiceCode.SIM_KITTING_ESIM) {
+      this.contentHeader.headerTitle = 'Chi tiết đơn kitting esim';
+      this.contentHeader.breadcrumb.links[1].name = 'Danh sách kitting esim';
       this.contentHeader.breadcrumb.links[1].link = '/task/kitting';
       this.currency = '';
     } else if (this.data.service_code == ServiceCode.SIM_REGISTER) {

@@ -128,8 +128,8 @@
                       <th>Mã đơn</th>                    
                       <th>Ngày tạo</th>
                       <th>{{ formCreateLabel.amount }}</th>
-                      <th *ngIf="[listServiceCode.SIM_PROFILE, listServiceCode.SIM_KITTING].includes(currentService)" >SL hoàn thành</th>
-                      <th *ngIf="[ listServiceCode.SIM_KITTING].includes(currentService)" >Gói cước</th>
+                      <th *ngIf="[listServiceCode.SIM_PROFILE, listServiceCode.SIM_KITTING, listServiceCode.SIM_KITTING_ESIM].includes(currentService)" >SL hoàn thành</th>
+                      <th *ngIf="[ listServiceCode.SIM_KITTING, listServiceCode.SIM_KITTING_ESIM].includes(currentService)" >Gói cước</th>
                       <th *ngIf="[listServiceCode.ADD_DATA_BALANCE].includes(currentService)" >Số Thuê bao</th>
                       <th>Ghi chú</th>
                       <th>Trạng thái</th>
@@ -147,15 +147,15 @@
                       <td>
                         {{ item?.amount | number }}
                       </td>
-                      <td *ngIf="[listServiceCode.SIM_PROFILE, listServiceCode.SIM_KITTING].includes(currentService)" >
+                      <td *ngIf="[listServiceCode.SIM_PROFILE, listServiceCode.SIM_KITTING, listServiceCode.SIM_KITTING_ESIM].includes(currentService)" >
                         <ng-container *ngIf="currentService == listServiceCode.SIM_PROFILE">
                           {{ getJSONDetail(item, 'uploaded') | number }}
                         </ng-container>
-                        <ng-container *ngIf="currentService == listServiceCode.SIM_KITTING">
+                        <ng-container *ngIf="currentService == listServiceCode.SIM_KITTING || currentService == listServiceCode.SIM_KITTING_ESIM">
                           {{ getJSONDetail(item, 'kitted') | number }}
                         </ng-container>
                       </td>
-                      <td *ngIf="[listServiceCode.SIM_KITTING].includes(currentService)" >
+                      <td *ngIf="[listServiceCode.SIM_KITTING, listServiceCode.SIM_KITTING_ESIM].includes(currentService)" >
                         {{ getJSONDetail(item, 'package') }}
                       </td>
                       <td *ngIf="[listServiceCode.ADD_DATA_BALANCE].includes(currentService)">
@@ -335,7 +335,7 @@
           <ng-container *ngIf="resFailBulk.list.length < 1">
           <span class="text-danger"> {{ erroMess }} </span>
           <div class="form-group" *ngIf="[listServiceCode.SIM_PROFILE].includes(currentService)">
-            <label>Tiêu dề</label>
+            <label>Tiêu đề</label>
             <input
               type="text"
               name="title"              
@@ -345,7 +345,7 @@
             />
           </div>
   
-          <div class="form-group" *ngIf="![listServiceCode.SIM_KITTING, listServiceCode.SIM_BUNDLE, listServiceCode.SIM_REGISTER].includes(currentService)">
+          <div class="form-group" *ngIf="![listServiceCode.SIM_KITTING, listServiceCode.SIM_KITTING_ESIM, listServiceCode.SIM_BUNDLE, listServiceCode.SIM_REGISTER].includes(currentService)">
             <label>{{ formCreateLabel.amount }}</label>
             <input
               class="form-control"
@@ -362,7 +362,51 @@
             <!-- <label>Chiết khấu : {{ discount }}%</label> -->
             
           </div>
-          <ng-container *ngIf="[listServiceCode.SIM_KITTING, listServiceCode.SIM_BUNDLE].includes(currentService)">
+          <div class="form-group" *ngIf="[listServiceCode.SIM_PROFILE].includes(currentService)">
+            <label>Loại Sim</label>
+            <div class="col-6">
+              
+            <div class="d-flex justify-content-between">
+              <div class="input-radio d-flex justify-content-center align-items-center" style="gap: 5px;">
+                <input
+                  type="radio"
+                  (change)="onItemChange($event.target.value)"
+                  class="cursor-pointer"
+                  name="simvl"
+                  id="simvl"
+                  name="typeSim"
+                  value="simvl"
+                  [(ngModel)]="typeSim"
+                />
+                <label
+                  for="simvl"
+                  class="cursor-pointer"
+                  style="font-size: 13px"
+                  >SIM vật lý</label
+                >
+              </div>
+              <div class="input-radio d-flex justify-content-center align-items-center" style="gap: 5px;">
+                <input
+                  type="radio"
+                  (change)="onItemChange($event.target.value)"
+                  class="cursor-pointer"
+                  name="esim"
+                  id="esim"
+                  name="typeSim"
+                  value="esim"
+                  [(ngModel)]="typeSim"
+                />
+                <label
+                  for="esim"
+                  class="cursor-pointer"
+                  style="font-size: 13px"
+                  >eSim</label
+                >
+              </div>
+            </div>
+            </div>
+          </div>
+          <ng-container *ngIf="[listServiceCode.SIM_KITTING, listServiceCode.SIM_KITTING_ESIM, listServiceCode.SIM_BUNDLE].includes(currentService)">
             <div class="form-group">
               <label for="">Chọn gói cước</label>
               <select name="" id="" class="form-control" [(ngModel)]="dataCreate.package">
@@ -374,8 +418,9 @@
               <input type="file" (change)="onFileChangeExcelSerial($event)" />
               <label>Tải lên file excel</label>
             
-              <a *ngIf="currentService != listServiceCode.SIM_BUNDLE" href="/assets/sim-profile-serial.xlsx" class="ml-2">File mẫu tại đây</a>
+              <a *ngIf="currentService != listServiceCode.SIM_BUNDLE && currentService != listServiceCode.SIM_KITTING_ESIM" href="/assets/sim-profile-serial.xlsx" class="ml-2">File mẫu tại đây</a>
               <a *ngIf="currentService == listServiceCode.SIM_BUNDLE" href="/assets/sim-bundle.xlsx" class="ml-2">File mẫu tại đây</a>
+              <a *ngIf="currentService == listServiceCode.SIM_KITTING_ESIM" href="/assets/sim-kitting-esim.xlsx" class="ml-2">File mẫu tại đây</a>
             </div>
           </ng-container>
 
@@ -409,7 +454,7 @@
             </div>
           </ng-container>
           
-          <div class="form-group" *ngIf="[listServiceCode.SIM_KITTING, listServiceCode.ADD_MOBILE_PACKAGE, listServiceCode.SIM_REGISTER].includes(currentService)">
+          <div class="form-group" *ngIf="[listServiceCode.SIM_KITTING, listServiceCode.SIM_KITTING_ESIM, listServiceCode.ADD_MOBILE_PACKAGE, listServiceCode.SIM_REGISTER].includes(currentService)">
             <div class="form-group">
               <label for="">Chọn mức độ ưu tiên</label>
               <select [(ngModel)]="dataCreate.priority" class="form-control">

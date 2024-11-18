@@ -88,7 +88,7 @@ export const menu: CoreMenu[] = [
         icon: 'book',
         role: [ServiceCode.SIM_PROFILE, ServiceCode.SIM_KITTING, ServiceCode.SIM_REGISTER, ServiceCode.SIM_BUNDLE],
         badge: {
-          title: '4',
+          title: '5',
           translate: '',
           classes: 'badge-light-warning badge-pill'
         },
@@ -110,6 +110,15 @@ export const menu: CoreMenu[] = [
             role: [ServiceCode.SIM_KITTING],
             icon: 'circle',
             url: 'task/kitting'
+          },
+          {
+            id: 'changeSim',
+            title: 'KITTING Esim',
+            translate: '',
+            type: 'item',
+            role: [ServiceCode.SIM_KITTING],
+            icon: 'circle',
+            url: 'task/kitting-esim'
           },
           {
             id: 'changeSim',

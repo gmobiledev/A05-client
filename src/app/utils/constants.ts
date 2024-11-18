@@ -49,6 +49,7 @@ export enum ServiceCode {
     MerchantKitting = 'MerchantKitting',
     ĐKTTTB = 'ĐKTTTB',
     SIM_KITTING = "SIM_KITTING",
+    SIM_KITTING_ESIM = "SIM_KITTING_ESIM",
     SIM_REGISTER = "SIM_REGISTER" ,
     ADD_MONEY_BALANCE = "ADD_MONEY_BALANCE",
     ADD_DATA_BALANCE = "ADD_DATA_BALANCE",
@@ -73,6 +74,14 @@ export enum TaskStatus {
     STATUS_SUCCESS_PART = 100,
     STATUS_FAIL = -100
 }
+
+export enum SimType {
+    PHYSICAL = 'simvl', // sim vật lý
+    ESIM = 'esim', // esim
+    GSIM = 3,
+    DUAL_SIM = 4,
+    ESIM_DUAL_SIM = 5,
+  }
 
 export enum MsisdnStatus {
     STATUS_PROCESSED_MNO_SUCCESS = 1, //đã đấu nối

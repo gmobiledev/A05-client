@@ -5,7 +5,7 @@ import { TelecomServivce, UserService } from 'app/auth/service';
 import { AddBalanceServiceDto } from 'app/auth/service/dto/add-balance-service.dto';
 import { PackagesService } from 'app/auth/service/packages.service';
 import { TaskService } from 'app/auth/service/task.service';
-import { Priority, ServiceCode, TaskStatus } from 'app/utils/constants';
+import { Priority, ServiceCode, SimType, TaskStatus } from 'app/utils/constants';
 import { SweetAlertService } from 'app/utils/sweet-alert.service';
 import dayjs from 'dayjs';
 dayjs.locale('vi')
@@ -112,6 +112,7 @@ export class TaskComponent implements OnInit {
   }
   isDoneData: boolean = false;
   priority = Priority;
+  typeSim = "simvl";
 
   constructor(
     private readonly taskService: TaskService,
@@ -124,8 +125,11 @@ export class TaskComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log(this.route);
     const data = this.route.snapshot.data;  
     this.currentService = data && data.service ? data.service : ServiceCode.AIRTIME_TOPUP;
+   
+    
     if(this.currentService == ServiceCode.SIM_PROFILE) {
       this.contentHeader.headerTitle = 'Danh sách đơn profile SIM';
       this.contentHeader.breadcrumb.links[1].name = 'Danh sách đơn profile SIM';
@@ -134,7 +138,11 @@ export class TaskComponent implements OnInit {
       this.contentHeader.headerTitle = 'Danh sách kitting';
       this.contentHeader.breadcrumb.links[1].name = 'Danh sách kitting';
       this.formCreateLabel.amount = 'Số lượng';
-    } else if(this.currentService == ServiceCode.SIM_REGISTER) {
+    } else if(this.currentService == ServiceCode.SIM_KITTING_ESIM) {
+      this.contentHeader.headerTitle = 'Danh sách kitting esim';
+      this.contentHeader.breadcrumb.links[1].name = 'Danh sách kitting esim';
+      this.formCreateLabel.amount = 'Số lượng';
+    }else if(this.currentService == ServiceCode.SIM_REGISTER) {
       this.contentHeader.headerTitle = 'Danh sách yêu cầu ĐKTTTB';
       this.contentHeader.breadcrumb.links[1].name = 'Danh sách yêu cầu ĐKTTTB';
       this.formCreateLabel.amount = 'Số lượng';
@@ -174,6 +182,10 @@ export class TaskComponent implements OnInit {
     
   }
 
+  onItemChange(value) {
+    this.typeSim = value;
+  }
+  
   modalOpen(modal, item = null) {
     if (item) {
       this.selectedItem = item;
@@ -293,6 +305,14 @@ export class TaskComponent implements OnInit {
       if ((await this.alertService.showConfirm("Bạn có đồng ý tạo đơn?")).value) {
         this.onCreateKitting();
       }
+    } else if (this.currentService == ServiceCode.SIM_KITTING_ESIM) {
+      if(!this.fileExcel) {
+        this.alertService.showMess("Vui lòng tải file để Kitting Esim");
+        return;
+      }
+      if ((await this.alertService.showConfirm("Bạn có đồng ý tạo đơn?")).value) {
+        this.onCreateKittingEsim();
+      }
     } else if (this.currentService == ServiceCode.SIM_REGISTER) {
       if(!this.fileExcel) {
         this.alertService.showMess("Vui lòng tải file để Kitting");
@@ -318,7 +338,8 @@ export class TaskComponent implements OnInit {
       return;
     }
     let dataPost = {
-      amount: this.dataCreate.amount
+      amount: this.dataCreate.amount,
+      sim_type: this.typeSim == "simvl" ? SimType.PHYSICAL : SimType.ESIM
     }
     this.taskService.orderSIMProfile(dataPost).subscribe(res => {
       this.alertService.showSuccess(res.message);
@@ -349,6 +370,30 @@ export class TaskComponent implements OnInit {
     formData.append("package", this.dataCreate.package);
     formData.append("priority", this.dataCreate.priority);
     this.taskService.createKitting(formData).subscribe(res => {
+      if(!res.status) {
+        // this.alertService.showMess(res.message);
+        if(this.resFailBulk.list && this.resFailBulk.list.length > 0) {
+          this.resFailBulk.message = res.message;
+          this.resFailBulk.list = res.data.list.map(x => {return { name: x }});
+        } else {
+          this.alertService.showMess(res.message);
+        }
+        return;
+      }
+      this.alertService.showSuccess(res.message);
+      this.modalClose();
+      this.router.navigate(['/task', res.data.task.id]);
+    }, error => {
+      this.alertService.showMess(error);
+    })
+  }
+
+  onCreateKittingEsim() {
+    let formData = new FormData();
+    formData.append("files", this.fileExcel);
+    formData.append("package", this.dataCreate.package);
+    formData.append("priority", this.dataCreate.priority);
+    this.taskService.createKittingEsim(formData).subscribe(res => {
       if(!res.status) {
         // this.alertService.showMess(res.message);
         if(this.resFailBulk.list && this.resFailBulk.list.length > 0) {
