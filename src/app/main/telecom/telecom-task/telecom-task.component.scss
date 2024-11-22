@@ -1,12 +1,12 @@
 .card-task {
-    border: 1px solid #b8c2cc;
-    padding: 10px;
-    height: 90%;
-    margin:10px;
-
+  border: 1px solid #b8c2cc;
+  padding: 10px;
+  height: 90%;
+  margin: 10px;
 }
 
 .disabled {
-    outline: 0.5;
-    cursor: no-drop;
-  }
+  outline: 0.5;
+  cursor: no-drop;
+  pointer-events: none;
+}

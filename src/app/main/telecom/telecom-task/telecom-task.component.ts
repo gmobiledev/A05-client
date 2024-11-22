@@ -75,6 +75,7 @@ export class TelecomTaskComponent implements OnInit {
   public mnos: any = [];
   public fileContract;
   public customer_id;
+  notData = false;
 
   public searchForm: any = {
     // mobile: '',
@@ -288,7 +289,7 @@ export class TelecomTaskComponent implements OnInit {
     this.telecomService.exportExcelReport(this.list).subscribe(
       (res) => {
         console.log(res);
-        
+
         const newBlob = new Blob([res.body], { type: res.body.type });
         let url = window.URL.createObjectURL(newBlob);
         let a = document.createElement("a");
@@ -481,6 +482,7 @@ export class TelecomTaskComponent implements OnInit {
 
     this.telecomService.getAllTask(this.searchForm).subscribe((res) => {
       if (res.data.tasks.length > 0) {
+        this.notData = true;
         Array.prototype.push.apply(this.list, res.data.tasks);
       }
       this.totalItems = res.data.count;

@@ -217,6 +217,7 @@
                       type="button"
                       (click)="onSubmitExportExcelReport()"
                       class="btn btn-block btn-success"
+                      [class.disabled]="!notData"
                     >
                       Xuất excel <span [data-feather]="'file'"></span>
                     </button>
