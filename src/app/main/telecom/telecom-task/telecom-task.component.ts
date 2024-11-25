@@ -484,6 +484,11 @@ export class TelecomTaskComponent implements OnInit {
       if (res.data.tasks.length > 0) {
         this.notData = true;
         Array.prototype.push.apply(this.list, res.data.tasks);
+        this.list.sort((x, y) => {
+          const timeX = new Date(x.request_time).getTime();
+          const timeY = new Date(y.request_time).getTime();
+          return timeY - timeX; // Sắp xếp theo giảm dần
+        });
       }
       this.totalItems = res.data.count;
     });
