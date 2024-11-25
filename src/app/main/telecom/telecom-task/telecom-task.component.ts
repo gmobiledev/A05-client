@@ -252,8 +252,6 @@ export class TelecomTaskComponent implements OnInit {
   }
 
   onSubmitExportExcelReport() {
-    console.log(this.list);
-
     let tzoffset = new Date().getTimezoneOffset() * 60000;
 
     const daterangeString =
@@ -285,8 +283,14 @@ export class TelecomTaskComponent implements OnInit {
         return;
       }
     }
-
-    this.telecomService.exportExcelReport(this.list).subscribe(
+    const data = {
+      keysearch: this.searchForm.keysearch,
+      status: this.searchForm.status,
+      action: this.searchForm.action,
+      date_range: this.searchForm.date_range,
+    };
+    
+    this.telecomService.exportExcelReport(data).subscribe(
       (res) => {
         console.log(res);
 
@@ -489,8 +493,8 @@ export class TelecomTaskComponent implements OnInit {
           const timeY = new Date(y.request_time).getTime();
           return timeY - timeX; // Sắp xếp theo giảm dần
         });
+        this.totalItems = res.data.count;
       }
-      this.totalItems = res.data.count;
     });
     // this.telecomService.getSummary().subscribe(res => {
     //   this.summaryTask = res.data;
