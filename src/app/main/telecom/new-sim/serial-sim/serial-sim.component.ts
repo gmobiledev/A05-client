@@ -104,11 +104,11 @@ export class SerialSimComponent implements OnInit {
         return;
       }
     }    
-    if (this.currentTask.sub_action != TelecomTaskSubAction.BUY_ESIM &&  (!this.serialSim || !this.imageFront)) {
+    if (this.currentTask?.sub_action != TelecomTaskSubAction.BUY_ESIM &&  (!this.serialSim || !this.imageFront)) {
       this.alertService.showError("Vui lòng nhập serial SIM và tải ảnh SIM")
       return;
     }
-    if((this.enableScanCode && this.isScanSuccess) || this.serialSim || this.currentTask.sub_action == TelecomTaskSubAction.BUY_ESIM) {
+    if((this.enableScanCode && this.isScanSuccess) || this.serialSim || this.currentTask?.sub_action == TelecomTaskSubAction.BUY_ESIM) {
       this.submitData();
     }    
   }
@@ -155,7 +155,9 @@ export class SerialSimComponent implements OnInit {
         return;
       }
       localStorage.removeItem(ObjectLocalStorage.CURRENT_SELECT_MOBILE);
-      if(this.currentTask.sub_action != TelecomTaskSubAction.BUY_ESIM) {
+      console.log('currentTask', this.currentTask);
+      
+      if(this.currentTask?.sub_action != TelecomTaskSubAction.BUY_ESIM) {
         this.nextStep.emit({ title: "Đơn hàng", validate_step: true, reload_data: true, load_cart: true });
       } else {
         this.nextStep.emit({ title: "Đơn hàng", validate_step: true, reload_data: true, load_cart: true, step: 4 });
@@ -305,20 +307,28 @@ export class SerialSimComponent implements OnInit {
   }
 
   ngOnChanges(): void {
-    if(this.selectedPackage) {
+    if(this.selectedPackage && this.selectedPackage != 'skip') {
+      console.log(123123);
+      
       if (!navigator.mediaDevices || !(typeof navigator.mediaDevices.getUserMedia === 'function')) {
         this.errorMessage = 'getUserMedia is not supported';
         return;
       }
       this.initFormData();
+      console.log('enableScanCode', this.enableScanCode);
+      
       if(this.enableScanCode) {
         this.initCamera();
       }      
       this.currentTask = JSON.parse(localStorage.getItem(ObjectLocalStorage.CURRENT_TASK));
-      if( this.currentTask.sub_action == TelecomTaskSubAction.BUY_ESIM) {
+      if( this.currentTask?.sub_action == TelecomTaskSubAction.BUY_ESIM) {
         this.submitData();
       }
-    }    
+    }
+    if(this.selectedPackage == 'skip'){
+      localStorage.removeItem(ObjectLocalStorage.CURRENT_SELECT_MOBILE);
+        this.nextStep.emit({ title: "Đơn hàng", validate_step: true, reload_data: true, load_cart: true, step: 4 });
+    }
   }
 
   private dataURLtoFile(dataurl, filename) {

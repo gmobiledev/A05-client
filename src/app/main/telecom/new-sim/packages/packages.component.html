@@ -1,29 +1,46 @@
 <div id="table-striped">
-    <div class="col-12 mt-2">
-        <div class="row">
-            <div class="col-md-4 col-sm-12 col-xs-12" *ngFor="let item of list">
-                <div class="card" (click)="onSelectItem(item)" [ngClass]="{'selected': currentSelectedPackage == item.id}">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-8">
-                                <h5>{{ item.name }}</h5>
-                                <p class="m-0 p-0">{{ item.short_desc }} </p>
-                            </div>
-                            <div class="col-4">
-                                {{ item.price }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
+  <div class="col-12 mt-2">
+    <div class="row">
+      <div class="col-md-4 col-sm-12 col-xs-12" *ngFor="let item of list">
+        <div
+          class="card"
+          (click)="onSelectItem(item)"
+          [ngClass]="{ selected: currentSelectedPackage == item.id }"
+        >
+          <div class="card-body">
+            <div class="row">
+              <div class="col-8">
+                <h5>{{ item.name }}</h5>
+                <p class="m-0 p-0">{{ item.short_desc }}</p>
+              </div>
+              <div class="col-4">
+                {{ item.price }}
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-    <div class="col-12">
-        <button (click)="onNextStep()" type="button" class="btn btn-block btn-primary btn-next"
-            rippleEffect>
-            <span class="align-middle">Tiếp tục</span>
-            <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
-        </button>
+  </div>
+  <div class="col-12">
+    <div style="text-align: end">
+      <button
+        type="button"
+        (click)="onNextStep('skip')"
+        class="btn btn-outline-primary mb-1"
+        rippleEffect
+      >
+        <span class="align-middle">Bỏ qua</span>
+      </button>
     </div>
+    <button
+      (click)="onNextStep('next')"
+      type="button"
+      class="btn btn-block btn-primary btn-next"
+      rippleEffect
+    >
+      <span class="align-middle">Tiếp tục</span>
+      <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+    </button>
+  </div>
 </div>

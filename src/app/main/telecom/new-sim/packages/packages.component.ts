@@ -21,12 +21,17 @@ export class PackagesComponent implements OnInit {
     private alertService: SweetAlertService
   ) { }
 
-  onNextStep() {
-    if(!this.currentPackage) {
+  onNextStep(text) {
+    if(!this.currentPackage && text == 'next') {
       this.alertService.showError("Vui lòng chọn gói cước");
       return;
+      
     }
-    this.nextStep.emit({ title: "Serial SIM", package: this.currentPackage, validate_step: true });
+    if(text == 'skip'){
+      this.currentPackage = 'skip';
+      localStorage.setItem('skip', 'skip');
+    }
+    this.nextStep.emit({ title: "Serial SIM", package: this.currentPackage, validate_step: true});
   }
 
   onSelectItem(item) {

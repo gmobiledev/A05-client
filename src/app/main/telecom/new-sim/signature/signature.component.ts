@@ -95,7 +95,7 @@ export class SignatureComponent implements OnInit {
       }
       this.isSubmitSignature = true;
       const qrEsim = localStorage.getItem(ObjectLocalStorage.ESIMQR);
-            
+      localStorage.removeItem('skip');      
       localStorage.removeItem(ObjectLocalStorage.CURRENT_PEOPLE_INFO_NEW_SIM);
       localStorage.removeItem(ObjectLocalStorage.CURRENT_TASK);
       localStorage.removeItem(ObjectLocalStorage.CURRENT_SELECT_MOBILE);
