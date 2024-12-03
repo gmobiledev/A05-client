@@ -59,6 +59,7 @@ export class TaskDetailComponent implements OnInit {
   basicSelectedOption = 25;
   currency = 'VND';
   price = 0;
+  sim_type;
   dataUpdate = {
     amount: 0
   }
@@ -178,7 +179,8 @@ export class TaskDetailComponent implements OnInit {
     if ((await this.alertService.showConfirm('Bạn có đồng ý cập nhật đơn này?')).value) {
       this.submitted = true;
       let dataPost = {
-        amount: this.dataUpdate.amount
+        amount: this.dataUpdate.amount,
+        sim_type: this.sim_type
       }
       this.taskService.updateSimProfile(this.id, dataPost).subscribe(res => {
         this.submitted = false;
@@ -330,7 +332,7 @@ export class TaskDetailComponent implements OnInit {
     let res = await this.taskService.getTaskDetail(this.id).toPromise();
     this.data = res.data;
     console.log(this.data);
-    
+    this.sim_type = this.data?.detail ? JSON.parse(this.data?.detail).sim_type : '';
     this.dataUpdate.amount = res.data.amount;
     this.listSerial = res.data.details.filter(x => x.attribute == 'serial');
     this.listSerialShow = res.data.details.filter(x => x.attribute == 'serial');
