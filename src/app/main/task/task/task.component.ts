@@ -391,7 +391,7 @@ export class TaskComponent implements OnInit {
         if (res.status == 1) {
           this.alertService.showSuccess(res.message);
           this.modalClose();
-          this.router.navigate(["/task", res.data.id]);
+          this.router.navigate(["/task", res.data.task.id]);
         } else {
           this.alertService.showMess(res.message);
           this.modalClose();

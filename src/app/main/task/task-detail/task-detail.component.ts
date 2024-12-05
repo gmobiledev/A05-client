@@ -6,7 +6,7 @@ import { UserService } from 'app/auth/service';
 import { PackagesService } from 'app/auth/service/packages.service';
 import { TaskService } from 'app/auth/service/task.service';
 import { CommonService } from 'app/utils/common.service';
-import { MsisdnStatus, ServiceCode, TaskStatus } from 'app/utils/constants';
+import { MsisdnStatus, ServiceCode, SimType, TaskStatus } from 'app/utils/constants';
 import { SweetAlertService } from 'app/utils/sweet-alert.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
@@ -55,6 +55,7 @@ export class TaskDetailComponent implements OnInit {
   modalRef;
   listSerial;
   listSerialShow;
+  simType = SimType;
   submitted: boolean = false;
   basicSelectedOption = 25;
   currency = 'VND';

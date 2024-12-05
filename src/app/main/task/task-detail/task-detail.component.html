@@ -14,7 +14,7 @@
                             <div class="col-4">
                                 <p>Ngày tạo: {{ data?.created_at | formatDate }}</p>
                                 <p>Mã đơn: {{ data?.id }}</p>
-                                <p *ngIf="[taskServiceCode.SIM_PROFILE ].includes(data?.service_code)" >Loại sản phẩm: SIM trắng</p>
+                                <p *ngIf="[taskServiceCode.SIM_PROFILE ].includes(data?.service_code)" >Loại sản phẩm: SIM {{sim_type == simType.PHYSICAL ? 'vật lí' : 'esim'}}</p>
                                 <p>Số lượng: {{ data?.amount | number }} {{ currency }}</p>
                                 <p *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_KITTING_ESIM, taskServiceCode.SIM_BUNDLE,
                                  taskServiceCode.ADD_MOBILE_PACKAGE].includes(data?.service_code)" >Thành tiền: {{ price | number }} VND</p>
