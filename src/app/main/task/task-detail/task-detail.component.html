@@ -256,7 +256,8 @@
                 <input type="file" (change)="onFileChangeExcelSerial($event)" />
                 <label>Tải lên file excel</label>
 
-                <a href="/assets/sim-profile-serial.xlsx" class="ml-2">File mẫu tại đây</a>
+                <a href="/assets/sim-profile-serial.xlsx" *ngIf="sim_type == simType.PHYSICAL" class="ml-2">File mẫu tại đây</a>
+                <a href="/assets/sim-profile-serial-esim.xlsx" *ngIf="sim_type == simType.ESIM" class="ml-2">File mẫu tại đây</a>
             </div>
         </ng-container>
 

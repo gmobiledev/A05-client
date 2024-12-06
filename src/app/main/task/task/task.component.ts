@@ -587,7 +587,7 @@ export class TaskComponent implements OnInit {
     this.userService
       .getListCustomerOrganization(this.searchCustomer)
       .subscribe((res) => {
-        this.listCustomer = res.data.items;
+        this.listCustomer = res.data.data;
       });
   }
 
@@ -610,7 +610,7 @@ export class TaskComponent implements OnInit {
       .getListCustomerOrganization(this.searchCustomer)
       .subscribe((res) => {
         this.isLoadingCustomer = false;
-        this.listCustomer = res.data.items;
+        this.listCustomer = res.data.data;
       });
   }
 
@@ -620,8 +620,8 @@ export class TaskComponent implements OnInit {
       .getListCustomerOrganization(this.searchCustomer)
       .subscribe((res) => {
         this.isLoadingCustomer = false;
-        if (res.data.items.length > 0) {
-          Array.prototype.push.apply(this.listCustomer, res.data.items);
+        if (res.data.data.length > 0) {
+          Array.prototype.push.apply(this.listCustomer, res.data.data);
         } else {
           this.isDoneData = true;
         }
