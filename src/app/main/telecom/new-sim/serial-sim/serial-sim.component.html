@@ -1,61 +1,95 @@
 <div class="col-12" *blockUI="'section-block'">
-    <div class="" >
+  <div class="">
     <div class="row mt-1" *ngIf="!enableScanCode">
-        <div class="col-12">
+      <div class="col-12">
         <div class="image-upload" *ngIf="!imageFront">
-            <label for="file-input">
-            <img src="/assets/images/icons/sim-card.png" class="img-fluid" alt="">
+          <label for="file-input">
+            <img
+              src="/assets/images/icons/sim-card.png"
+              class="img-fluid"
+              alt=""
+            />
             <h6 class="text-center">Ảnh phôi sim</h6>
-            </label>
-            <input id="file-input" type="file" (change)="onSelectFile($event)" />
+          </label>
+          <input id="file-input" type="file" (change)="onSelectFile($event)" />
         </div>
-        
-        <div class="image-preview" *ngIf="imageFront">
-            <img [src]="'data:image/png;base64,'+imageFront" alt="" class="img-fluid img-margin-bottom" >
 
-            <button (click)="onReUpload()" type="button" class="btn btn-outline-primary btn-next"
-                rippleEffect>
-                <span class="align-middle ">Tải lại</span>
-                
-            </button>
+        <div class="image-preview" *ngIf="imageFront">
+          <img
+            [src]="'data:image/png;base64,' + imageFront"
+            alt=""
+            class="img-fluid img-margin-bottom"
+          />
+
+          <button
+            (click)="onReUpload()"
+            type="button"
+            class="btn btn-outline-primary btn-next"
+            rippleEffect
+          >
+            <span class="align-middle">Tải lại</span>
+          </button>
         </div>
-    </div>
+      </div>
     </div>
 
     <div class="row mt-1" *ngIf="enableScanCode">
-        <div class="col-12">            
-            <div>
-                <video id="video-scan" *ngIf="!isPhotoTaken && !isCropImage" width="100%" autoplay></video>
-            </div>
-            <div class="form-group" *ngIf="isPhotoTaken">
-                
-                <image-cropper
-                *ngIf="isPhotoTaken && !isCropImage "
-                [imageBase64]="imgSource"
-                [maintainAspectRatio]="true"
-                [aspectRatio]="4 / 2"
-                format="png"
-                (imageCropped)="imageCropped($event)"
-                (imageLoaded)="imageLoaded()"
-                (cropperReady)="cropperReady()"
-                (loadImageFailed)="loadImageFailed()"
-                ></image-cropper>
-                <img *ngIf="isPhotoTaken && isCropImage" [src]="imgBarCode" alt="" #imgToScan id="img-to-scan" class="img-fluid">
-            </div>
-        </div>   
-        <canvas style="display: none;" id="canvas" height="1800" width="1800" ></canvas>
-        <img [src]="imageSim" class="img-fluid" alt="">     
-    </div>  
+      <div class="col-12">
+        <div>
+          <video
+            id="video-scan"
+            *ngIf="!isPhotoTaken && !isCropImage"
+            width="100%"
+            autoplay
+          ></video>
+        </div>
+        <div class="form-group" *ngIf="isPhotoTaken">
+          <image-cropper
+            *ngIf="isPhotoTaken && !isCropImage"
+            [imageBase64]="imgSource"
+            [maintainAspectRatio]="true"
+            [aspectRatio]="4 / 2"
+            format="png"
+            (imageCropped)="imageCropped($event)"
+            (imageLoaded)="imageLoaded()"
+            (cropperReady)="cropperReady()"
+            (loadImageFailed)="loadImageFailed()"
+          ></image-cropper>
+          <img
+            *ngIf="isPhotoTaken && isCropImage"
+            [src]="imgBarCode"
+            alt=""
+            #imgToScan
+            id="img-to-scan"
+            class="img-fluid"
+          />
+        </div>
+      </div>
+      <canvas
+        style="display: none"
+        id="canvas"
+        height="1800"
+        width="1800"
+      ></canvas>
+      <img [src]="imageSim" class="img-fluid" alt="" />
+    </div>
 
     <div class="row mt-1">
-        <div class="col-12">
-            <div class="form-group">
-                <label for="">Nhập số serial và bấm tiếp tục nếu không quét được serial</label>
-                <input type="tel" class="form-control" [(ngModel)]="serialSim" mask="00000000000000000000">
-            </div>
-        </div>        
+      <div class="col-12">
+        <div class="form-group">
+          <label for=""
+            >Nhập số serial và bấm tiếp tục nếu không quét được serial</label
+          >
+          <input
+            type="tel"
+            class="form-control"
+            [(ngModel)]="serialSim"
+            mask="00000000000000000000"
+          />
+        </div>
+      </div>
     </div>
-         
+
     <!-- <nouislider
     [min]="zoomMin"
     [connect]="'upper'"
@@ -80,18 +114,34 @@
     (scanError)="onScanError($event)"
     (scanFailure)="onScanFailure($event)"
     ></zxing-scanner> -->
-
-    
-    </div>
-    
-    <button *ngIf="enableScanCode" (click)="onReScan()" type="button" class="btn btn-outline-primary btn-next"
-        rippleEffect>
-        <span class="align-middle">Quét lại</span>        
+  </div>
+  <div style="text-align: end" *ngIf="currentTask?.msisdns[0]?.is_physical != 1">
+    <button
+      type="button"
+      (click)="onNextStep('skip')"
+      class="btn btn-outline-primary mb-1"
+      rippleEffect
+    >
+      <span class="align-middle">Bỏ qua</span>
     </button>
+  </div>
+  <button
+    *ngIf="enableScanCode"
+    (click)="onReScan()"
+    type="button"
+    class="btn btn-outline-primary btn-next"
+    rippleEffect
+  >
+    <span class="align-middle">Quét lại</span>
+  </button>
 
-    <button (click)="onNextStep()" type="button" class="mt-1 btn btn-block btn-primary btn-next"
-        rippleEffect>
-        <span class="align-middle">Tiếp tục</span>
-        <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
-    </button>
+  <button
+    (click)="onNextStep()"
+    type="button"
+    class="mt-1 btn btn-block btn-primary btn-next"
+    rippleEffect
+  >
+    <span class="align-middle">Tiếp tục</span>
+    <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+  </button>
 </div>

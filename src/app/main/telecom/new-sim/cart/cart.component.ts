@@ -36,7 +36,7 @@ export class CartComponent implements OnInit {
 
   async onNextStep() {
     console.log(this.taskDetail);
-    if (localStorage.getItem("skip")) {
+    if ((localStorage.getItem("skip") || this.taskDetail?.msisdns[0]?.is_gsim == 1) && this.taskDetail?.msisdns[0]?.is_physical != 1) {
       this.nextStep.emit({ title: "Chụp ảnh giấy tờ", validate_step: true });
     } else {
       const listUncompleteMsisdn = this.taskDetail.msisdns.filter((item) => {

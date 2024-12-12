@@ -1,28 +1,37 @@
 <div class="row" id="table-striped">
-    <div class="col-12">
-      
-      <div class="card">
-        <!-- <div class="card-header"><h4 class="card-title">Mua số</h4></div> -->
-        <div class="card-body">
-          <form>
+  <div class="col-12">
+    <div class="card">
+      <!-- <div class="card-header"><h4 class="card-title">Mua số</h4></div> -->
+      <div class="card-body">
+        <form>
           <div class="row">
             <div class="col-6">
               <div class="form-group">
-                <input type="tel" (change)="onSubmitSearch()" name="keysearch" 
-                
-                [(ngModel)]="paramsSearch.keysearch" class="form-control" placeholder="Ví dụ 099*88">
+                <input
+                  type="tel"
+                  (change)="onSubmitSearch()"
+                  name="keysearch"
+                  [(ngModel)]="paramsSearch.keysearch"
+                  class="form-control"
+                  placeholder="Ví dụ 099*88"
+                />
               </div>
             </div>
             <div class="col-6">
               <div class="form-group">
-                <select class="form-control" name="brand" [(ngModel)]="paramsSearch.brand" (change)="onSubmitSearch()">
+                <select
+                  class="form-control"
+                  name="brand"
+                  [(ngModel)]="paramsSearch.brand"
+                  (change)="onSubmitSearch()"
+                >
                   <option value="">Chọn nhà mạng</option>
                   <option value="VNM">Vietnammobile</option>
                   <option value="VMS">Mobifone</option>
-                </select>                
+                </select>
               </div>
             </div>
-            
+
             <!-- <div class="col-md-2">
               <div class="form-group">
                 <button type="submit" class="btn btn-block btn-info">Lọc kết quả <span [data-feather]="'search'"></span></button>
@@ -30,38 +39,92 @@
             </div> -->
           </div>
         </form>
-        <div >
-            <table class="table table-striped text-nowrap"  *blockUI="'section-block'">
-                <thead>
-                  <tr>
+        <div>
+          <table
+            class="table table-striped text-nowrap"
+            *blockUI="'section-block'"
+          >
+            <thead>
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
 
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                   
-                    <th></th>
-                    
-                  </tr>
-                </thead>
-                <tbody *ngIf="list">
-                  <tr *ngFor="let item of list;index as i" #listNumber>
-                    <td>
-                      <div [innerHTML]="item.brand | showIconMno"></div>
-                    </td>
-                    <td>{{ item?.name }}</td>
-                    <td>{{ item?.price | number  }}</td>                    
-                    <td>
-                        <a class="btn-pick-number" (click)="onSelectSim($event, item)">
-                          <button type="button" class="btn btn-warning" rippleEffect>Chọn số</button>
-                          </a>                        
-                    </td>
-                    
-                  </tr>
-                </tbody>
-              </table>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody *ngIf="list">
+              <tr *ngFor="let item of list; index as i" #listNumber>
+                <td>
+                  <div [innerHTML]="item.brand | showIconMno"></div>
+                </td>
+                <td>{{ item?.name }}</td>
+                <td>{{ item?.price | number }}</td>
+                <td>
+                  <a
+                    class="btn-pick-number"
+                    (click)="onSelectSim($event, item)"
+                  >
+                    <button type="button" class="btn btn-warning" rippleEffect>
+                      Chọn số
+                    </button>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        </div>
-        
       </div>
     </div>
   </div>
+</div>
+
+<ng-template #modalItem let-modal>
+  <!-- <div class="modal-header">
+      <h5 class="modal-title" id="myModalLabel160">Bạn muốn chọn loại SIM nào</h5>
+    </div> -->
+  <div class="modal-body" tabindex="0" ngbAutofocus>
+    <div class="form-group mt-2">
+      <h2
+        class="swal2-title"
+        id="swal2-title"
+        style="display: flex; justify-content: center"
+      >
+        Bạn muốn chọn loại SIM nào
+      </h2>
+      <div class="row pt-1">
+        <div class="col-4">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            (click)="selectSimType('simVatLi')"
+            rippleEffect
+          >
+            SIM vật lý
+          </button>
+        </div>
+        <div class="col-4">
+          <button
+            type="submit"
+            class="btn"
+            style="background-color: rgb(228, 39, 40); color: #ffffff;"
+            (click)="selectSimType('esim')"
+            rippleEffect
+          >
+            Esim
+          </button>
+        </div>
+        <div class="col-4">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            (click)="selectSimType('gsim')"
+            rippleEffect
+          >
+            Gsim
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

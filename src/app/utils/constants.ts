@@ -78,6 +78,7 @@ export enum TaskStatus {
 export enum SimType {
     PHYSICAL = 1, // sim vật lý
     ESIM = 2, // esim
+    GSIM = 3 // gsim
   }
 
 export enum MsisdnStatus {
