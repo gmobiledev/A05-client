@@ -88,26 +88,29 @@ export class LoginComponent implements OnInit {
 
   async onSubmit() {
     this.submitted = true;
-    if(this.loginForm.invalid) {
+    if (this.loginForm.invalid) {
       this.submitted = false;
       return;
     }
-    if(!this.trustDevice && !this.isReceiveOtp) {
+    if (!this.trustDevice && !this.isReceiveOtp) {
       let data: VerifyMobileDto = {
         mobile: this.f.username.value
       }
-      
+
       let resVerify;
       let dataOtp: OtpDto;
       let resOtp;
-      
-      
+
+
       try {
         resVerify = await this._authenticationService.verifyMobile(data);
-        if(!resVerify.status) {
+        if (!resVerify.status) {
           this.error = resVerify.message;
           return;
         }
+        if (resVerify.data.type == 1)
+          this.trustDevice = true
+
       } catch (error) {
         this.error = error;
         return;
@@ -120,14 +123,14 @@ export class LoginComponent implements OnInit {
       }
       try {
         resOtp = await this._authenticationService.sendOtp(dataOtp);
-        if(!resOtp.status) {
+        if (!resOtp.status) {
           this.error = resOtp.message;
           return;
         }
         this.isReceiveOtp = true;
         this.loginForm.controls['otp'].setValidators([Validators.required]);
         return;
-        
+
       } catch (error) {
         this.error = error;
         return;
@@ -136,7 +139,7 @@ export class LoginComponent implements OnInit {
       this.error = '';
     }
 
-    if(this.isReceiveOtp && !this.trustDevice) {      
+    if (this.isReceiveOtp && !this.trustDevice) {
       let resVerifyOtp;
       let dataVerifyOtp: VerifyMobileOtpDto = {
         mobile: this.f.username.value,
@@ -151,7 +154,7 @@ export class LoginComponent implements OnInit {
       }
       try {
         resVerifyOtp = await this._authenticationService.verifyOtp(dataVerifyOtp);
-        if(!resVerifyOtp.status) {
+        if (!resVerifyOtp.status) {
           this.error = resVerifyOtp.message;
           return;
         }
@@ -164,11 +167,11 @@ export class LoginComponent implements OnInit {
       this.loginForm.controls['password'].setValidators([Validators.required]);
       this.error = '';
       localStorage.setItem("id_d", this.uuid);
-      this.trustDevice = true;      
+      this.trustDevice = true;
       return;
     }
 
-    if(this.trustDevice) {
+    if (this.trustDevice) {
       if (this.loginForm.invalid) {
         return;
       }
@@ -184,8 +187,8 @@ export class LoginComponent implements OnInit {
         uuid: this.uuid,
         version: '',
         app_version: 10
-      }      
-  
+      }
+
       // Login
       this.loading = true;
       this._authenticationService
@@ -195,7 +198,7 @@ export class LoginComponent implements OnInit {
           data => {
             console.log('===data===');
             console.log(data);
-            if(data.two_step_verify && data.two_step_verify != undefined) {
+            if (data.two_step_verify && data.two_step_verify != undefined) {
               this.trustDevice = false;
               this.isReceiveOtp = false;
               localStorage.removeItem(ObjectLocalStorage.CURRENT_USER)
@@ -211,7 +214,7 @@ export class LoginComponent implements OnInit {
             this.loading = false;
           }
         );
-    }    
+    }
   }
 
   onCompletedInputPassword(code) {
@@ -239,7 +242,7 @@ export class LoginComponent implements OnInit {
     console.log(currentUsername);
     this.trustDevice = localStorage.getItem("id_d") ? true : false;
     this.loginForm = this._formBuilder.group({
-      username: [ currentUsername ? currentUsername : ( currentUser ? currentUser.phone : '')],
+      username: [currentUsername ? currentUsername : (currentUser ? currentUser.phone : '')],
       password: [''],
       otp: ['']
     });
