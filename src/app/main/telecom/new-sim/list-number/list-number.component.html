@@ -26,8 +26,9 @@
                   (change)="onSubmitSearch()"
                 >
                   <option value="">Chọn nhà mạng</option>
-                  <option value="VNM">Vietnammobile</option>
+                  <option value="VNP">Vinaphone</option>
                   <option value="VMS">Mobifone</option>
+                  <option value="GSIM">Gsim</option>
                 </select>
               </div>
             </div>
@@ -92,8 +93,8 @@
       >
         Bạn muốn chọn loại SIM nào
       </h2>
-      <div class="row pt-1">
-        <div class="col-4">
+      <div class="row pt-1" style="justify-content:center">
+        <div class="col-4" *ngIf="item.brand == 'VNP' || item.brand == 'VMS'">
           <button
             type="submit"
             class="btn btn-primary"
@@ -103,7 +104,7 @@
             SIM vật lý
           </button>
         </div>
-        <div class="col-4">
+        <div class="col-4" *ngIf="item.brand == 'VNP'">
           <button
             type="submit"
             class="btn"
@@ -114,7 +115,7 @@
             Esim
           </button>
         </div>
-        <div class="col-4">
+        <div class="col-4" *ngIf="item.brand == 'GSIM'">
           <button
             type="submit"
             class="btn btn-primary"

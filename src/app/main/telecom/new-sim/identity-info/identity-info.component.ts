@@ -109,6 +109,7 @@ export class IdentityInfoComponent implements OnInit, AfterViewInit {
   setDataPeople() {
     const dataPeopleRaw = localStorage.getItem(ObjectLocalStorage.CURRENT_PEOPLE_INFO_NEW_SIM);
     const dataPeopleRecord: any = dataPeopleRaw ? JSON.parse(dataPeopleRaw) : null;
+console.log('dataPeopleRecord' , dataPeopleRecord);
 
     if (dataPeopleRecord) {
       this.dataPeople = {

@@ -20,6 +20,7 @@ export class CardEkycDto {
     task_id: number;
     card_front: string;
     card_back: string;
+    documentType: any;
     isOcr: number
 }
 

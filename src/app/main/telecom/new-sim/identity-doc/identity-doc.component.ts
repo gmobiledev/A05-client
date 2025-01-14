@@ -15,7 +15,7 @@ export class IdentityDocComponent implements OnInit {
 
   @Output() nextStep = new EventEmitter<any>();
   @Input() currentTaskId;
-
+  identificationType;
   public imageFront;
   public imageBack;
 
@@ -33,10 +33,15 @@ export class IdentityDocComponent implements OnInit {
       this.alertService.showError("Vui lòng chụp hoặc tải ảnh giấy tờ");
       return;
     }
+    if (!this.identificationType) {
+      this.alertService.showError("Vui lòng chọn loại giấy tờ");
+      return;
+    }
     let data = new CardEkycDto();
     data.card_back = this.imageBack.replace('data:image/png;base64,', '');
     data.card_front = this.imageFront.replace('data:image/png;base64,', '');
     data.task_id = this.currentTaskId;
+    data.documentType = this.identificationType == 'CCCD' ? 5 : '';
     data.isOcr = 1;
     this.sectionBlockUI.start();
     this.telecomService.taskCardEkyc(data).subscribe(res => {
