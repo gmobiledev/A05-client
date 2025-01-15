@@ -15,7 +15,7 @@ export class IdentityDocComponent implements OnInit {
 
   @Output() nextStep = new EventEmitter<any>();
   @Input() currentTaskId;
-  identificationType;
+  identificationType = '';
   public imageFront;
   public imageBack;
 

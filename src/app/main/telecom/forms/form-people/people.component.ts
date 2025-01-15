@@ -60,6 +60,37 @@ export class PeopleComponent implements OnInit, OnChanges {
     console.log('people.component', this.people);
 
     console.log('formPeople', this.formPeople);
+    this.getData();
+
+    console.log(2222, this.formPeople);
+
+  }
+
+  ngOnChanges(changes: any) {
+    // this.formPeople?.reset();
+    // changes.prop contains the old and the new value...
+    if (changes?.people && this.formPeople) {
+      console.log("onchange people component")
+      // this.fillFromData();
+      this.getData();
+    };
+    if (changes?.csubmitted && changes?.csubmitted?.currentValue > 0) {
+      console.log("ngOnChangesPeople", this.formPeople);
+      console.log('invalid', this.formPeople?.invalid);
+      if (!this.formPeople && this.formPeople?.invalid) {
+        console.log(123123);
+
+        this.submitted = true;
+        return;
+      }
+      console.log(9882);
+
+      this.outPeople.emit(this.formatPeople(this.formPeople.value))
+    }
+
+  }
+
+  getData(){
     try {
 
       // this.formPeople.controls['name'].setValue(this.people.name)
@@ -82,32 +113,6 @@ export class PeopleComponent implements OnInit, OnChanges {
     } catch (error) {
       console.log("people.component error patchValue", error)
     }
-
-    console.log(2222, this.formPeople);
-
-  }
-
-  ngOnChanges(changes: any) {
-    // this.formPeople?.reset();
-    // changes.prop contains the old and the new value...
-    if (changes?.people && this.formPeople) {
-      console.log("onchange people component")
-      // this.fillFromData();
-    };
-    if (changes?.csubmitted && changes?.csubmitted?.currentValue > 0) {
-      console.log("ngOnChangesPeople", this.formPeople);
-      console.log('invalid', this.formPeople?.invalid);
-      if (!this.formPeople && this.formPeople?.invalid) {
-        console.log(123123);
-
-        this.submitted = true;
-        return;
-      }
-      console.log(9882);
-
-      this.outPeople.emit(this.formatPeople(this.formPeople.value))
-    }
-
   }
 
   ngAfterContentInit() {
