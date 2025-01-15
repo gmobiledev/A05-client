@@ -56,11 +56,11 @@ export class PeopleComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.task_id = JSON.parse(localStorage.getItem(ObjectLocalStorage.CURRENT_TASK))?.id;
     this.getProvinces();
-    this.getCountries();
+    // this.getCountries();
     console.log('people.component', this.people);
 
     console.log('formPeople', this.formPeople);
-    this.getData();
+    // this.getData();
 
     console.log(2222, this.formPeople);
 
@@ -102,13 +102,25 @@ export class PeopleComponent implements OnInit, OnChanges {
         identification_expire_date: this.people.identification_expire_date,
         identification_no: this.people.identification_no,
         identification_place: this.people.identification_place,
-        identification_type: this.people.identification_type,
+        identification_type: this.people.identification_type == 'CC' ? 'CCCD' : this.people.identification_type,
         name: this.people.name,
         residence_address: this.people.residence_address,
         residence_commune: this.people.residence_commune,
         residence_district: this.people.residence_district,
         residence_province: this.people.residence_province,
       });
+      console.log('formPeople', this.formPeople);
+      if (this.people?.residence_province) {
+        this.onChangeResidenceProvince(this.people.residence_province, true)
+      }
+
+      if (this.people.residence_district) {
+        this.onChangeResidenceDistrict(this.people.residence_district, true)
+      }
+      
+      if (this.people.residence_commune) {
+        this.onChangeResidenceCommune(this.people.residence_commune);
+      }
       // this.fillFromData();
     } catch (error) {
       console.log("people.component error patchValue", error)
@@ -143,6 +155,7 @@ export class PeopleComponent implements OnInit, OnChanges {
       if (this.people.home_province) {
         this.onChangeHomeProvince(this.people.home_province, true)
       }
+      
       if (this.people.residence_commune) {
         this.onChangeResidenceCommune(this.people.residence_commune);
       }
@@ -280,13 +293,13 @@ export class PeopleComponent implements OnInit, OnChanges {
     })
   }
 
-  getCountries() {
-    this.adminSerivce.getContries().subscribe((res: any) => {
-      if (res.status == 1) {
-        this.countries = res.data
-      }
-    })
-  }
+  // getCountries() {
+  //   this.adminSerivce.getContries().subscribe((res: any) => {
+  //     if (res.status == 1) {
+  //       this.countries = res.data
+  //     }
+  //   })
+  // }
 
   onReUpload(img) {
     switch (img) {
