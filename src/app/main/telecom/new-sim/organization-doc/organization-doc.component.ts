@@ -175,6 +175,7 @@ export class OrganizationDocComponent implements OnInit {
     data.card_back = this.organizationData?.identification_back_file;
     data.card_front = this.organizationData?.identification_front_file;
     data.task_id = this.currentTaskId;
+    data.documentType = this.formOgzOcr.value.identification_type == 'CCCD' ? 5 : '';
     data.isOcr = 1;
     this.telecomService.taskCardEkyc(data).subscribe(res => {
       // console.log(res);

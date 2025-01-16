@@ -8,7 +8,9 @@ export class ShowIconMnoPipe implements PipeTransform {
         html = '<img class="img-icon-mno"  src="/assets/images/icons/'+value+'.webp">'
     } else if (value == 'VMS') {
         html = '<img class="img-icon-mno"  src="/assets/images/icons/'+value+'.webp">'
-    } 
+    }  else if (value == 'GSIM') {
+      html = '<img class="img-icon-mno"  src="/assets/images/logo/logo.png">'
+  } 
     return html;
   }
 }

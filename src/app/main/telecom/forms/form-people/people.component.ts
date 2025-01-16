@@ -56,32 +56,11 @@ export class PeopleComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.task_id = JSON.parse(localStorage.getItem(ObjectLocalStorage.CURRENT_TASK))?.id;
     this.getProvinces();
-    this.getCountries();
+    // this.getCountries();
     console.log('people.component', this.people);
 
     console.log('formPeople', this.formPeople);
-    try {
-
-      // this.formPeople.controls['name'].setValue(this.people.name)
-      this.formPeople.patchValue({
-        birth: this.people.birth,
-        gender: this.people.gender,
-        home_address: this.people.home_address,
-        identification_date: this.people.identification_date,
-        identification_expire_date: this.people.identification_expire_date,
-        identification_no: this.people.identification_no,
-        identification_place: this.people.identification_place,
-        identification_type: this.people.identification_type,
-        name: this.people.name,
-        residence_address: this.people.residence_address,
-        residence_commune: this.people.residence_commune,
-        residence_district: this.people.residence_district,
-        residence_province: this.people.residence_province,
-      });
-      // this.fillFromData();
-    } catch (error) {
-      console.log("people.component error patchValue", error)
-    }
+    // this.getData();
 
     console.log(2222, this.formPeople);
 
@@ -93,6 +72,7 @@ export class PeopleComponent implements OnInit, OnChanges {
     if (changes?.people && this.formPeople) {
       console.log("onchange people component")
       // this.fillFromData();
+      this.getData();
     };
     if (changes?.csubmitted && changes?.csubmitted?.currentValue > 0) {
       console.log("ngOnChangesPeople", this.formPeople);
@@ -108,6 +88,43 @@ export class PeopleComponent implements OnInit, OnChanges {
       this.outPeople.emit(this.formatPeople(this.formPeople.value))
     }
 
+  }
+
+  getData(){
+    try {
+
+      // this.formPeople.controls['name'].setValue(this.people.name)
+      this.formPeople.patchValue({
+        birth: this.people.birth,
+        gender: this.people.gender,
+        home_address: this.people.home_address,
+        identification_date: this.people.identification_date,
+        identification_expire_date: this.people.identification_expire_date,
+        identification_no: this.people.identification_no,
+        identification_place: this.people.identification_place,
+        identification_type: this.people.identification_type == 'CC' ? 'CCCD' : this.people.identification_type,
+        name: this.people.name,
+        residence_address: this.people.residence_address,
+        residence_commune: this.people.residence_commune,
+        residence_district: this.people.residence_district,
+        residence_province: this.people.residence_province,
+      });
+      console.log('formPeople', this.formPeople);
+      if (this.people?.residence_province) {
+        this.onChangeResidenceProvince(this.people.residence_province, true)
+      }
+
+      if (this.people.residence_district) {
+        this.onChangeResidenceDistrict(this.people.residence_district, true)
+      }
+      
+      if (this.people.residence_commune) {
+        this.onChangeResidenceCommune(this.people.residence_commune);
+      }
+      // this.fillFromData();
+    } catch (error) {
+      console.log("people.component error patchValue", error)
+    }
   }
 
   ngAfterContentInit() {
@@ -138,6 +155,7 @@ export class PeopleComponent implements OnInit, OnChanges {
       if (this.people.home_province) {
         this.onChangeHomeProvince(this.people.home_province, true)
       }
+      
       if (this.people.residence_commune) {
         this.onChangeResidenceCommune(this.people.residence_commune);
       }
@@ -275,13 +293,13 @@ export class PeopleComponent implements OnInit, OnChanges {
     })
   }
 
-  getCountries() {
-    this.adminSerivce.getContries().subscribe((res: any) => {
-      if (res.status == 1) {
-        this.countries = res.data
-      }
-    })
-  }
+  // getCountries() {
+  //   this.adminSerivce.getContries().subscribe((res: any) => {
+  //     if (res.status == 1) {
+  //       this.countries = res.data
+  //     }
+  //   })
+  // }
 
   onReUpload(img) {
     switch (img) {

@@ -112,12 +112,23 @@ export class ListNumberComponent implements OnInit {
         this.alertService.showError(res.message);
         return;
       }
+      let detail;
+      if (res.data.detail) {
+        detail = JSON.parse(res.data.detail);
+      }
+      console.log(detail);
+      
+      if (detail?.kitted == 1) {
+        localStorage.setItem('skip', 'skip');
+        this.nextStep.emit({ title: "Serial SIM", package: 'skip', validate_step: true, step:3});
+      } else {
+        this.nextStep.emit({
+          title: "Chọn gói cước",
+          validate_step: true,
+          mobile: item.name,
+        });
+      }
 
-      this.nextStep.emit({
-        title: "Chọn gói cước",
-        validate_step: true,
-        mobile: item.name,
-      });
       this.lockMobile.emit({
         current_task: res.data,
         selected_telco: item.brand,

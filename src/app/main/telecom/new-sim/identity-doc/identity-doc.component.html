@@ -6,6 +6,23 @@
                 <a ngbNavLink><span [data-feather]="'user'"></span> Cá Nhân</a>
                 <ng-template ngbNavContent>
                     <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <label for="license_no" class="col-md-3 col-form-label">Loại giấy tờ</label>
+                                <div class="col-md-9">
+                                    <select [(ngModel)]="identificationType" id="identification_type" class="form-control">
+                                        <option disabled selected value="">--Chọn loại giấy tờ --</option>
+                                        <option value="CCCD">CCCD</option>
+                                        <option value="CCCD_CHIP">CCCD CHIP</option>
+                                        <option value="CMND">CMND</option>
+                                        <option value="PASSPOST">Hộ Chiếu</option>
+                                    </select>
+                                    <div *ngIf="submitted && f.identification_type.errors" class="invalid-feedback">
+                                        <div *ngIf="f.identification_type.errors.required">Vui lòng nhập trường này</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <div class="image-upload" *ngIf="!imageFront">
                                 <label for="file-front-input">

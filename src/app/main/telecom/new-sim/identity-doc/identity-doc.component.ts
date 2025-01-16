@@ -15,7 +15,7 @@ export class IdentityDocComponent implements OnInit {
 
   @Output() nextStep = new EventEmitter<any>();
   @Input() currentTaskId;
-
+  identificationType = '';
   public imageFront;
   public imageBack;
 
@@ -33,10 +33,15 @@ export class IdentityDocComponent implements OnInit {
       this.alertService.showError("Vui lòng chụp hoặc tải ảnh giấy tờ");
       return;
     }
+    if (!this.identificationType) {
+      this.alertService.showError("Vui lòng chọn loại giấy tờ");
+      return;
+    }
     let data = new CardEkycDto();
     data.card_back = this.imageBack.replace('data:image/png;base64,', '');
     data.card_front = this.imageFront.replace('data:image/png;base64,', '');
     data.task_id = this.currentTaskId;
+    data.documentType = this.identificationType == 'CCCD' ? 5 : '';
     data.isOcr = 1;
     this.sectionBlockUI.start();
     this.telecomService.taskCardEkyc(data).subscribe(res => {
@@ -49,9 +54,10 @@ export class IdentityDocComponent implements OnInit {
       if(res.data) {
         localStorage.removeItem(ObjectLocalStorage.CURRENT_PEOPLE_INFO_NEW_SIM);
         localStorage.setItem(ObjectLocalStorage.CURRENT_PEOPLE_INFO_NEW_SIM, JSON.stringify(res.data));
-      }      
+        
       this.nextStep.emit({ title: "Xác nhận thông tin", validate_step: true, get_data_people: true, identification_front_file: data.card_front,
-      identification_back_file: data.card_back });
+        identification_back_file: data.card_back });
+      }      
     }, error => {
       this.alertService.showError(error);
       this.sectionBlockUI.stop();
