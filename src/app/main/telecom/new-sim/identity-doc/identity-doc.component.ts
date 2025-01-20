@@ -45,19 +45,21 @@ export class IdentityDocComponent implements OnInit {
     data.isOcr = 1;
     this.sectionBlockUI.start();
     this.telecomService.taskCardEkyc(data).subscribe(res => {
-      if (!res.status) {
-        this.sectionBlockUI.stop();
-        this.alertService.showError(res.message);
-        return;
+      if (JSON.stringify(res.data) === '{}' || JSON.stringify(res.data) === null) {
+        this.alertService.showMess(res.message);
       }
+      // if (!res.status) {
+      //   this.sectionBlockUI.stop();
+      //   this.alertService.showError(res.message);
+      //   return;
+      // }
       this.sectionBlockUI.stop();
       if(res.data) {
         localStorage.removeItem(ObjectLocalStorage.CURRENT_PEOPLE_INFO_NEW_SIM);
         localStorage.setItem(ObjectLocalStorage.CURRENT_PEOPLE_INFO_NEW_SIM, JSON.stringify(res.data));
-        
+      }
       this.nextStep.emit({ title: "Xác nhận thông tin", validate_step: true, get_data_people: true, identification_front_file: data.card_front,
-        identification_back_file: data.card_back });
-      }      
+        identification_back_file: data.card_back });     
     }, error => {
       this.alertService.showError(error);
       this.sectionBlockUI.stop();

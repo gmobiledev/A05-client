@@ -180,41 +180,17 @@ export class OrganizationDocComponent implements OnInit {
     this.telecomService.taskCardEkyc(data).subscribe(res => {
       // console.log(res);
 
-      if (!res.status) {
-        this.sectionBlockUI.stop();
-        this.alertService.showError(res.message);
-        return;
-      }
+      // if (!res.status) {
+      //   this.sectionBlockUI.stop();
+      //   this.alertService.showError(res.message);
+      //   return;
+      // }
       if (res.data) {
         localStorage.removeItem(ObjectLocalStorage.CURRENT_PEOPLE_INFO_NEW_SIM);
         localStorage.setItem(ObjectLocalStorage.CURRENT_PEOPLE_INFO_NEW_SIM, JSON.stringify(res.data));
         //goi api ocr
-        this.telecomService.createNewCustomerOCR(this.organizationData).subscribe(res => {
-          // console.log(res);
-
-          if (!res.status) {
-            this.alertService.showError(res.message);
-            return;
-          }
-          // console.log("OCR", res);
-          this.sectionBlockUI.stop();
-          this.currentTask.customer = res.data.customer
-          this.currentTask.customer.organization = res.data.organization || {}
-          this.currentTask.customer.organization.people = res.data.people
-          this.currentTask.customer.people = res.data.people
-          this.currentTask.people = res.data.people
-          this.currentTask.customer.organization.id = this.currentTask.customer.organization_id
-
-          this.gsubService.taskSub.next(this.currentTask);
-
-          localStorage.setItem(ObjectLocalStorage.CURRENT_TASK, JSON.stringify(this.currentTask));
-          this.nextStep.emit({ title: "Xác nhận thông tin", validate_step: true, personal: false, get_data_people: true });
-        }, error => {
-          this.alertService.showError(error);
-          this.sectionBlockUI.stop();
-          return;
-        })
-      }
+      } 
+      this.newCustomerOCR(res);
       // this.nextStep.emit({
       //   title: "Xác nhận thông tin", validate_step: true, get_data_people: true, identification_front_file: data.card_front,
       //   identification_back_file: data.card_back
@@ -224,8 +200,34 @@ export class OrganizationDocComponent implements OnInit {
       this.sectionBlockUI.stop();
       return;
     });
+  }
 
+  newCustomerOCR(dataCardEkyc?){
+    this.telecomService.createNewCustomerOCR(this.organizationData).subscribe(res => {
+      if (!res.status) {
+        this.alertService.showError(res.message);
+        return;
+      }
+      if (JSON.stringify(dataCardEkyc.data) === '{}' || JSON.stringify(dataCardEkyc.data) === null) {
+        this.alertService.showMess(res.message);
+      }
+      this.sectionBlockUI.stop();
+      this.currentTask.customer = res.data.customer
+      this.currentTask.customer.organization = res.data.organization || {}
+      this.currentTask.customer.organization.people = res.data.people
+      this.currentTask.customer.people = res.data.people
+      this.currentTask.people = res.data.people
+      this.currentTask.customer.organization.id = this.currentTask.customer.organization_id
 
+      this.gsubService.taskSub.next(this.currentTask);
+
+      localStorage.setItem(ObjectLocalStorage.CURRENT_TASK, JSON.stringify(this.currentTask));
+      this.nextStep.emit({ title: "Xác nhận thông tin", validate_step: true, personal: false, get_data_people: true });
+    }, error => {
+      this.alertService.showError(error);
+      this.sectionBlockUI.stop();
+      return;
+    })
   }
 
   get f() {
