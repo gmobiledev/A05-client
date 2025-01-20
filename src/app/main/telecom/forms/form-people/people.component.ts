@@ -202,10 +202,12 @@ export class PeopleComponent implements OnInit, OnChanges {
 
   callCardEkyc() {
     //goi api card-ekyc
+
     let data = new CardEkycDto();
     data.card_back = this.formPeople?.value?.identification_back_file;
     data.card_front = this.formPeople?.value?.identification_front_file;
     data.task_id = this.task_id;
+    data.documentType = this.formPeople?.value.identification_type == 'CCCD' ? 5 : '';
     data.isOcr = 1;
     this.sectionBlockUI.start();
     this.telecomService.taskCardEkyc(data).subscribe(res => {
@@ -226,7 +228,7 @@ export class PeopleComponent implements OnInit, OnChanges {
           identification_expire_date: res.data.doe,
           identification_no: res.data.id,
           identification_place: res.data.issue_loc,
-          identification_type: res.data.type,
+          identification_type: res.data.type == 'CC' ? 'CCCD' : res.data.type,
           name: res.data.name,
           residence_address: res.data.address,
           residence_commune: parseInt(res.data?.address_entities?.ward_code),
