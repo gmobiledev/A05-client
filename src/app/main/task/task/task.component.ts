@@ -60,10 +60,10 @@ export class TaskComponent implements OnInit {
     take: 15,
     skip: 0,
     code: "",
-    service_code: "",
+    service_code: "all",
     date_range: "",
     topup: "",
-    ignore_details: 1,
+    ignore_details: 1
   };
   selectTopup = [
     {
@@ -182,7 +182,10 @@ export class TaskComponent implements OnInit {
       this.contentHeader.breadcrumb.links[1].name = "Danh sách bundle";
       this.formCreateLabel.amount = "Số lượng";
     }
-    this.searchForm.service_code = this.currentService;
+    if(this.currentService != ServiceCode.ADD_MONEY_BALANCE){
+
+      this.searchForm.service_code = this.currentService;
+    }
     this.route.queryParams.subscribe((params) => {
       this.searchForm.code =
         params["code"] && params["code"] != undefined ? params["code"] : "";

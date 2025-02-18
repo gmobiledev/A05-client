@@ -119,6 +119,20 @@
                     </div>
                   </div>
 
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <select
+                        class="form-control"
+                        name="service_code"
+                        [(ngModel)]="searchForm.service_code"
+                      >
+                        <option value="all">Chọn dịch vụ</option>
+                        <option value="ADD_MONEY_BALANCE">ADD_MONEY_BALANCE</option>
+                        <option value="PACKAGE_BALANCE">PACKAGE_BALANCE</option>
+                      </select>
+                    </div>
+                  </div>
+
                   <!-- <div class="col-md-3" *ngIf="[listServiceCode.ADD_DATA_BALANCE, listServiceCode.ADD_MONEY_BALANCE].includes(currentService)">
                     <div class="form-group">
                       <select
@@ -148,6 +162,7 @@
                       <th>STT</th>  
                       <th>Mã đơn</th>                    
                       <th>Ngày tạo</th>
+                      <th>Dịch vụ</th>
                       <th>{{ formCreateLabel.amount }}</th>
                       <th *ngIf="[listServiceCode.SIM_PROFILE, listServiceCode.SIM_KITTING, listServiceCode.SIM_KITTING_ESIM].includes(currentService)" >SL hoàn thành</th>
                       <th *ngIf="[ listServiceCode.SIM_KITTING, listServiceCode.SIM_KITTING_ESIM].includes(currentService)" >Gói cước</th>
@@ -164,7 +179,7 @@
                       <td>
                         {{ item?.created_at | formatDate }}
                       </td>
-                       
+                      <td>{{ item.service_code }}</td>
                       <td>
                         {{ item?.amount | number }}
                       </td>
