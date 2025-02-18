@@ -4,9 +4,9 @@
       <div class="row" *ngIf="[listServiceCode.ADD_DATA_BALANCE, listServiceCode.ADD_MONEY_BALANCE].includes(currentService)">
         <div class="col-12">
           <div class="card">
-            <div class="card-body">
-              <h2>
-                <p>Số dư:</p>
+            <div class="card-body d-flex">
+              <h2 class="col-3">
+                <p>Số dư chính:</p>
                 <div>
                   <b>
                     <span *ngIf="showBalance == true">{{
@@ -21,7 +21,28 @@
                         'icon-eye-off': showBalance,
                         'icon-eye': !showBalance
                       }"
-                      (click)="toggleBalanceTextType()"
+                      (click)="toggleBalanceTextType('ADD_MONEY_BALANCE')"
+                    ></i
+                  ></span>
+                </div>
+              </h2>
+              <h2 class="col-3">
+                <p>Số dư gói:</p>
+                <div>
+                  <b>
+                    <span *ngIf="showPackageBalance == true">{{
+                      packageBalance | number
+                    }}</span>
+                    <span *ngIf="showPackageBalance == false">**********</span>
+                  </b>
+                  <span
+                    ><i
+                      class="feather m-1"
+                      [ngClass]="{
+                        'icon-eye-off': showPackageBalance,
+                        'icon-eye': !showPackageBalance
+                      }"
+                      (click)="toggleBalanceTextType('PACKAGE_BALANCE')"
                     ></i
                   ></span>
                 </div>
@@ -361,6 +382,14 @@
             />
             <!-- <label>Chiết khấu : {{ discount }}%</label> -->
             
+          </div>
+          <div class="form-group" *ngIf="![listServiceCode.SIM_KITTING, listServiceCode.SIM_KITTING_ESIM, listServiceCode.SIM_BUNDLE, listServiceCode.SIM_REGISTER].includes(currentService)">
+            <label>Tên dịch vụ</label>
+            <select name="service" id="" placeholder="Chọn kiểu dịch vụ" class="form-control" [(ngModel)]="dataCreate.service">
+              <option value="">Chọn dịch vụ</option>
+              <option value="ADD_MONEY_BALANCE">Hạn mức chính</option>
+              <option value="PACKAGE_BALANCE">Hạn mức thanh toán gói cước</option>
+            </select>
           </div>
           <div class="form-group" *ngIf="[listServiceCode.SIM_PROFILE].includes(currentService)">
             <label>Loại Sim</label>

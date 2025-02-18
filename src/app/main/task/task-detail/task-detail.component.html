@@ -181,7 +181,7 @@
                                 </ngx-datatable>
                             </ng-container>
 
-                            <ng-container *ngIf="[taskServiceCode.ADD_DATA_BALANCE, taskServiceCode.ADD_MONEY_BALANCE].includes(data?.service_code)" >
+                            <ng-container *ngIf="[taskServiceCode.ADD_DATA_BALANCE, taskServiceCode.ADD_MONEY_BALANCE, taskServiceCode.PACKAGE_BALANCE].includes(data?.service_code)" >
                                 <div class="border rounded-lg card p-1 text-lg-center">
                                     <h4 class="card-title">Quét mã qua ứng dụng ngân hàng/ ví điện tử</h4>
                                 
@@ -222,7 +222,7 @@
                             </div>
 
                             <div class="col-12 text-center" *ngIf="
-                            [taskServiceCode.ADD_MONEY_BALANCE, taskServiceCode.ADD_DATA_BALANCE].includes(data?.service_code) && 
+                            [taskServiceCode.ADD_MONEY_BALANCE, taskServiceCode.PACKAGE_BALANCE, taskServiceCode.ADD_DATA_BALANCE].includes(data?.service_code) && 
                             data?.status == taskStatus.STATUS_WAITING_PAYMENT" >
                                 <button class="btn btn-danger  mb-2 mr-2" (click)="onCancelTask()">
                                     <i data-feather="cancel" class="text-white cursor-pointer"></i> Hủy đơn
