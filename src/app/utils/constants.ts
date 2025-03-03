@@ -55,6 +55,7 @@ export enum ServiceCode {
     ADD_DATA_BALANCE = "ADD_DATA_BALANCE",
     ADD_MOBILE_PACKAGE = "ADD_MOBILE_PACKAGE",
     SIM_BUNDLE = "SIM_BUNDLE",
+    PACKAGE_BALANCE = "PACKAGE_BALANCE",
 }
 
 export enum TaskStatus {

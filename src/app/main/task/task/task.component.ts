@@ -60,10 +60,10 @@ export class TaskComponent implements OnInit {
     take: 15,
     skip: 0,
     code: "",
-    service_code: "",
+    service_code: "all",
     date_range: "",
     topup: "",
-    ignore_details: 1,
+    ignore_details: 1
   };
   selectTopup = [
     {
@@ -88,6 +88,8 @@ export class TaskComponent implements OnInit {
   };
   showBalance: boolean = false;
   balance = 0;
+  showPackageBalance: boolean = false;
+  packageBalance = 0;
   formCreateLabel = {
     amount: "Số lượng",
   };
@@ -97,6 +99,7 @@ export class TaskComponent implements OnInit {
     package: "",
     customer_id: "",
     priority: Priority.NORMAL + "",
+    service: "",
   };
   btnCreate = "Tạo đơn hàng";
   btnFormPayment = "Tạo đơn";
@@ -133,11 +136,9 @@ export class TaskComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.route);
     const data = this.route.snapshot.data;
     this.currentService =
       data && data.service ? data.service : ServiceCode.AIRTIME_TOPUP;
-
     if (this.currentService == ServiceCode.SIM_PROFILE) {
       this.contentHeader.headerTitle = "Danh sách đơn profile SIM";
       this.contentHeader.breadcrumb.links[1].name = "Danh sách đơn profile SIM";
@@ -181,7 +182,10 @@ export class TaskComponent implements OnInit {
       this.contentHeader.breadcrumb.links[1].name = "Danh sách bundle";
       this.formCreateLabel.amount = "Số lượng";
     }
-    this.searchForm.service_code = this.currentService;
+    if(this.currentService != ServiceCode.ADD_MONEY_BALANCE){
+
+      this.searchForm.service_code = this.currentService;
+    }
     this.route.queryParams.subscribe((params) => {
       this.searchForm.code =
         params["code"] && params["code"] != undefined ? params["code"] : "";
@@ -254,6 +258,7 @@ export class TaskComponent implements OnInit {
       package: "",
       customer_id: "",
       priority: "",
+      service: "",
     };
   }
 
@@ -327,6 +332,10 @@ export class TaskComponent implements OnInit {
     ) {
       if (!this.dataCreate.amount) {
         this.alertService.showMess("Vui lòng nhập số lượng");
+        return;
+      }
+      if (!this.dataCreate.service) {
+        this.alertService.showMess("Vui lòng chọn tên dịch vụ");
         return;
       }
       if (
@@ -406,7 +415,7 @@ export class TaskComponent implements OnInit {
   onCreateBalanceService() {
     let dataPost = new AddBalanceServiceDto();
     dataPost.amount = this.dataCreate.amount;
-    dataPost.type = this.currentService;
+    dataPost.type = this.dataCreate.service;
 
     this.taskService.addBalance(dataPost).subscribe(
       (res) => {
@@ -544,17 +553,27 @@ export class TaskComponent implements OnInit {
     }
   }
 
-  toggleBalanceTextType() {
-    this.userService.showBanalace(this.currentService).subscribe(
-      (res) => {
-        this.balance = res.data.Balance;
-        this.showBalance = !this.showBalance;
-      },
-      (error) => {
-        console.log("ERRRR");
-        console.log(error);
-      }
-    );
+  toggleBalanceTextType(name) {
+    if (name == "PACKAGE_BALANCE") {
+      this.showPackageBalance = !this.showPackageBalance;
+    } else if(name == "ADD_MONEY_BALANCE"){
+      this.showBalance = !this.showBalance;
+    }
+    if (this.showBalance == true || this.showPackageBalance == true) {
+      this.userService.showBanalace(name).subscribe(
+        (res) => {
+          if(name == "PACKAGE_BALANCE"){
+            this.packageBalance = res.data.Balance;
+          } else if(name == "ADD_MONEY_BALANCE"){
+            this.balance = res.data.Balance;
+          }
+        },
+        (error) => {
+          console.log("ERRRR");
+          console.log(error);
+        }
+      );
+    }
   }
 
   getJSONDetail(item, key) {
@@ -587,9 +606,9 @@ export class TaskComponent implements OnInit {
     this.userService
       .getListCustomerOrganization(this.searchCustomer)
       .subscribe((res) => {
-        if(res.data.items){
+        if (res.data.items) {
           this.listCustomer = res.data.items;
-        } else{
+        } else {
           this.listCustomer = res.data.data;
         }
       });
@@ -614,9 +633,9 @@ export class TaskComponent implements OnInit {
       .getListCustomerOrganization(this.searchCustomer)
       .subscribe((res) => {
         this.isLoadingCustomer = false;
-        if(res.data.items){
+        if (res.data.items) {
           this.listCustomer = res.data.items;
-        } else{
+        } else {
           this.listCustomer = res.data.data;
         }
       });
@@ -629,12 +648,11 @@ export class TaskComponent implements OnInit {
       .subscribe((res) => {
         this.isLoadingCustomer = false;
         if (res.data.data.length > 0) {
-          if(res.data.items){
+          if (res.data.items) {
             Array.prototype.push.apply(this.listCustomer, res.data.items);
-          } else{
+          } else {
             Array.prototype.push.apply(this.listCustomer, res.data.data);
           }
-          
         } else {
           this.isDoneData = true;
         }
