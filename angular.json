@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "g99": {
+    "A05-client": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -34,7 +34,7 @@
               "highlight.js",
               "ng2-flatpickr"
             ],
-            "outputPath": "dist/g99",
+            "outputPath": "dist/A05-client",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -143,28 +143,28 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "g99:build"
+            "browserTarget": "A05-client:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "g99:build:production"
+              "browserTarget": "A05-client:build:production"
             },
             "hmr": {
               "hmr": true,
-              "browserTarget": "g99:build:hmr"
+              "browserTarget": "A05-client:build:hmr"
             },
             "uat": {
-              "browserTarget": "g99:build:uat"
+              "browserTarget": "A05-client:build:uat"
             },
             "test": {
-              "browserTarget": "g99:build:test"
+              "browserTarget": "A05-client:build:test"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "g99:build"
+            "browserTarget": "A05-client:build"
           }
         },
         "test": {
@@ -188,7 +188,7 @@
         }
       }
     },
-    "g99-e2e": {
+    "A05-client-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -197,11 +197,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "g99:serve"
+            "devServerTarget": "A05-client:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "g99:serve:production"
+              "devServerTarget": "A05-client:serve:production"
             }
           }
         },
@@ -215,7 +215,7 @@
       }
     }
   },
-  "defaultProject": "g99",
+  "defaultProject": "A05-client",
   "cli": {
     "analytics": false
   }
