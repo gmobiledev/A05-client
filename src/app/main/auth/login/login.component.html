@@ -5,12 +5,15 @@
     <!-- Login v1 -->
     <div class="card mb-0">
       <div class="card-body">
-        <a href="javascript:void(0);" class="brand-logo">
+        <div class="d-flex justify-content-center">
+          <img alt="brand-logo" style="width: 70px;" src="assets/images/logo/logo.png">
+        </div>
+        <!-- <a href="javascript:void(0);" class="brand-logo">
           <img src="{{ coreConfig.app.appLogoImage }}" alt="brand-logo" height="28" />
-          <h2 class="brand-text text-primary ml-1">G99</h2>
-        </a>
+          <h2 class="brand-text text-primary ml-1">A05</h2>
+        </a> -->
 
-        <h4 class="card-title mb-1">Welcome to G99! 👋</h4>
+        <h4 class="card-title mb-1">Xin chào !</h4>
         <p class="card-text mb-2">Đăng nhập để sử dụng các dịch vụ</p>
         <ngb-alert [type]="'danger'" [dismissible]="false" *ngIf="error">
           <div class="alert-body">

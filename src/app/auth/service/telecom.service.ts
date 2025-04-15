@@ -46,6 +46,10 @@ export class TelecomServivce {
     return this._http.post<any>(`${environment.apiTelecomUrl}/task/add`, data).toPromise();
   }
 
+  postReceiverSms(data) {
+    return this._http.post<any>(`${environment.apiTelecomUrl}/smsc/receiver-sms`, data);
+  }
+
   taskDetail(id) {
     return this._http.get<any>(`${environment.apiTelecomUrl}/task/${id}`);
   }

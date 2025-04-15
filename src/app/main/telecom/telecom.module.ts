@@ -43,6 +43,7 @@ import { OrganizationComponent } from './new-sim/organization/organization.compo
 import { GSubService } from 'app/auth/service/gsub.service';
 import { UpdateSubscriptionComponent } from './update-subscription/update-subscription.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { SmsHistoryComponent } from './sms-history/sms-history.component';
 
 const routes: Routes = [
   {
@@ -66,7 +67,10 @@ const routes: Routes = [
     path: 'update',
     component: UpdateSubscriptionComponent
   },
-
+  {
+    path: 'sms-history',
+    component: SmsHistoryComponent
+  },
 
 ];
 
@@ -91,7 +95,8 @@ const routes: Routes = [
     PeopleComponent,
     FormOrganirationComponent,
     OrganizationComponent,
-    UpdateSubscriptionComponent
+    UpdateSubscriptionComponent,
+    SmsHistoryComponent
   ],
   imports: [
     CommonModule,

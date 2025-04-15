@@ -17,7 +17,7 @@ import { CoreConfig } from '@core/types';
 export const coreConfig: CoreConfig = {
   app: {
     appName     : '',                                        // App Name
-    appTitle    : 'G99 - Customer', // App Title
+    appTitle    : 'A05', // App Title
     appLogoImage: 'assets/images/logo/logo.png',                  // App Logo
     appLanguage : 'vi',                                           // App Default Language (en, fr, de, pt etc..)
   },

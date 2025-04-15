@@ -1,17 +1,10 @@
 export const environment = {
     production: true,
     hmr: false,
-<<<<<<< HEAD
-    apiUrl: 'https://sandbox-api.g99.vn/api',
-    apiGipUrl: 'https://sandbox-api.g99.vn/gip/api',
-    apiCoreUrl: 'https://sandbox-api.g99.vn/api',
-    apiTelecomUrl: 'https://sandbox-api.g99.vn/telecom/api',
-=======
     apiUrl: 'https://uat-api.g99.vn/api',
     apiGipUrl: 'https://uat-api.g99.vn/gip',
     apiCoreUrl: 'https://uat-api.g99.vn/api',
     apiTelecomUrl: 'https://uat-api.g99.vn/telecom/api',
->>>>>>> 985293f7528406ec22140af0677fa9590268a618
     FCM_VAPID_PUBLIC_KEY: 'BD1zjiNqZGojPvrF2BBbUNe_zv_tq9q4ftHSlCJlxTugdNZpMbV7r_e6YjKIpToTWt_PVoJQwFisoEk-HI2ASEo',
     firebaseConfig: {
       apiKey: "AIzaSyC8R9fJFmjp0JtpRUQl3hrIhzGtiDc_sl8",
