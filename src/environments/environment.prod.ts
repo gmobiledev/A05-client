@@ -4,7 +4,7 @@ export const environment = {
   apiUrl: 'https://a05-api.g99.vn/api',
   apiGipUrl: 'https://a05-api.g99.vn/gip/api',
   apiCoreUrl: 'https://a05-api.g99.vn/api',
-  apiTelecomUrl: 'https://api.g99.vn/telecom/api',
+  apiTelecomUrl: 'https://a05-api.g99.vn/telecom/api',
   FCM_VAPID_PUBLIC_KEY: 'BD1zjiNqZGojPvrF2BBbUNe_zv_tq9q4ftHSlCJlxTugdNZpMbV7r_e6YjKIpToTWt_PVoJQwFisoEk-HI2ASEo',
   firebaseConfig: {
     apiKey: "AIzaSyC8R9fJFmjp0JtpRUQl3hrIhzGtiDc_sl8",
