@@ -521,6 +521,7 @@ export class TaskComponent implements OnInit {
     formData.append("files", this.fileExcel);
     formData.append("customer_id", this.dataCreate.customer_id);
     formData.append("priority", this.dataCreate.priority);
+    formData.append("package", this.dataCreate.package);
 
     this.taskService.createSimRegister(formData).subscribe(
       (res) => {

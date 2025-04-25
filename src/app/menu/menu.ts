@@ -5,15 +5,15 @@ import { ServiceCode } from 'app/utils/constants';
 
 export const menu: CoreMenu[] = [
   // Dashboard
-  {
-    id: 'reports',
-    title: 'Trang chủ',
-    translate: 'Trang chủ',
-    type: 'item',
-    // role: ['Admin'], //? To hide collapsible based on user role
-    icon: 'home',
-    url: 'dashboard/home',
-  },
+  // {
+  //   id: 'reports',
+  //   title: 'Trang chủ',
+  //   translate: 'Trang chủ',
+  //   type: 'item',
+  //   role: ['Admin'], //? To hide collapsible based on user role
+  //   icon: 'home',
+  //   url: 'dashboard/home',
+  // },
   // {
   //   id: 'reports',
   //   title: 'Tra cứu',
@@ -39,7 +39,7 @@ export const menu: CoreMenu[] = [
         icon: 'book',
         // role: ['TELECOM'],
         badge: {
-          title: '5',
+          title: '4',
           translate: '',
           classes: 'badge-light-success badge-pill'
         },
@@ -70,15 +70,15 @@ export const menu: CoreMenu[] = [
             exactMatch: true,
             url: 'telecom'
           },
-          {
-            id: 'changeSim',
-            title: 'Đơn KITTING',
-            translate: '',
-            type: 'item',
-            // role: [ServiceCode.SIM_KITTING],
-            icon: 'circle',
-            url: 'task/kitting'
-          },
+          // {
+          //   id: 'changeSim',
+          //   title: 'Đơn KITTING',
+          //   translate: '',
+          //   type: 'item',
+          //   role: [ServiceCode.SIM_KITTING],
+          //   icon: 'circle',
+          //   url: 'task/kitting'
+          // },
           {
             id: 'changeSim',
             title: 'Đơn ĐKTTTB',

@@ -470,11 +470,21 @@
 
           <ng-container *ngIf="[listServiceCode.SIM_REGISTER].includes(currentService)">
             <div class="form-group">
+              <label for="">Chọn gói cước</label>
+              <select name="" id="" class="form-control" [(ngModel)]="dataCreate.package">
+                <option value="{{ item.code }}" *ngFor="let item of listPackage">{{ item.code }}</option>
+              </select>
+            </div>
+            <div class="form-group">
               <label for="">Chọn doanh nghiệp</label>
               <ng-select  [(ngModel)]="dataCreate.customer_id" [editableSearchTerm]="true"
                 (search)="onSearch($event)"
                 (scroll)="onScroll($event)"
                 (scrollToEnd)="onScrollToEnd()"
+                placeholder="Chọn doanh nghiệp"
+                [clearable]="false"
+  bindLabel="name"
+  bindValue="id"
                 [loading]="isLoadingCustomer">
                 <ng-template ng-loadingspinner-tmp>
                   <div class="lds-ellipsis">
