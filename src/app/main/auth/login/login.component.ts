@@ -206,7 +206,7 @@ export class LoginComponent implements OnInit {
               return;
             }
             localStorage.setItem(ObjectLocalStorage.CURRENT_USERNAME_LOGIN, this.f.username.value);
-            this._router.navigate([this.returnUrl]);
+            this._router.navigate(["task/sim-register"]);
           },
           error => {
             console.log(error);
