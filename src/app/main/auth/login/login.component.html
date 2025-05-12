@@ -1,132 +1,62 @@
-
-
 <div class="auth-wrapper auth-v1 px-2">
   <div class="auth-inner py-2">
-    <!-- Login v1 -->
     <div class="card mb-0">
       <div class="card-body">
         <div class="d-flex justify-content-center">
           <img alt="brand-logo" style="width: 70px;" src="assets/images/logo/logo.png">
         </div>
-        <!-- <a href="javascript:void(0);" class="brand-logo">
-          <img src="{{ coreConfig.app.appLogoImage }}" alt="brand-logo" height="28" />
-          <h2 class="brand-text text-primary ml-1">A05</h2>
-        </a> -->
 
         <h4 class="card-title mb-1">Xin chào !</h4>
         <p class="card-text mb-2">Đăng nhập để sử dụng các dịch vụ</p>
+
         <ngb-alert [type]="'danger'" [dismissible]="false" *ngIf="error">
-          <div class="alert-body">
-            <p>{{ error }}</p>
-          </div>
+          <div class="alert-body"><p>{{ error }}</p></div>
         </ngb-alert>
+
         <form class="auth-login-form mt-2" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-          <div *ngIf="!isReceiveOtp || trustDevice">
-          <div class="form-group">
-            <label for="login-email" class="form-label">Số Điện Thoại</label>
-            <input
-              type="tel"
-              formControlName="username"
-              class="form-control"
-              placeholder="Nhập Số Điện Thoại"
-             
-              tabindex="1"
-              autofocus
-              [ngClass]="{ 'is-invalid': submitted && f.username.errors }"
-            />
-            <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-              <div *ngIf="f.username.errors.required">Vui lòng nhập Số Điện Thoại để đăng nhập</div>
+          <!-- Số điện thoại + mật khẩu chỉ hiện ở bước đầu -->
+          <div *ngIf="!isReceiveOtp">
+            <!-- Số điện thoại -->
+            <div class="form-group">
+              <label class="form-label">Số Điện Thoại</label>
+              <input type="tel" formControlName="username" class="form-control" placeholder="Nhập Số Điện Thoại"
+                [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+              <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                <div *ngIf="f.username.errors.required">Vui lòng nhập số điện thoại</div>
+              </div>
+            </div>
+
+            <!-- Mật khẩu -->
+            <div class="form-group">
+              <label class="form-label">Mật khẩu</label>
+              <code-input [isCodeHidden]="true" [isCharsCode]="false" [codeLength]="6" (codeCompleted)="onCompletedInputPassword($event)">
+              </code-input>
+              <div *ngIf="submitted && f.password.errors" class="invalid-feedback d-block">
+                <div *ngIf="f.password.errors.required">Vui lòng nhập mật khẩu</div>
+                <div *ngIf="f.password.errors.minlength">Mật khẩu tối thiểu 6 ký tự</div>
+              </div>
             </div>
           </div>
 
-          
-        </div>
-          <div class="form-group" *ngIf="isReceiveOtp && !trustDevice">
-            <label for="login-email" class="form-label">OTP</label>
-
-            <code-input [isCodeHidden]="false"
-            [isCharsCode]="false"
-              [codeLength]="6"
-              (codeCompleted)="onCompletedInputOtp($event)"></code-input>
-
-            <!-- <input
-              type="text"
-              formControlName="otp"
-              class="form-control"
-              placeholder="Nhập OTP gửi về SĐT của bạn"
-             
-              tabindex="1"
-              autofocus
-              [ngClass]="{ 'is-invalid': submitted && f.otp.errors }"
-            /> -->
-            <div *ngIf="submitted && f.otp.errors" class="invalid-feedback">
-              <div *ngIf="f.otp.errors.required">Vui lòng nhập OTP để đăng nhập</div>
+          <!-- Chỉ hiển thị OTP khi đã gửi -->
+          <div class="form-group" *ngIf="isReceiveOtp">
+            <label class="form-label">OTP</label>
+            <code-input [isCodeHidden]="false" [isCharsCode]="false" [codeLength]="6" (codeCompleted)="onCompletedInputOtp($event)">
+            </code-input>
+            <div *ngIf="submitted && f.otp.errors" class="invalid-feedback d-block">
+              <div *ngIf="f.otp.errors.required">Vui lòng nhập mã OTP</div>
             </div>
           </div>
 
-          <div class="form-group" *ngIf="trustDevice">
-            <div class="d-flex justify-content-between">
-              <label for="login-password">Mật khẩu</label>              
-            </div>
-            <div class="">
-              <!-- <input
-                [type]="passwordTextType ? 'text' : 'password'"
-                formControlName="password"
-                class="form-control form-control-merge"
-                tabindex="2"
-                placeholder="·········"
-                aria-describedby="login-password"
-                [ngClass]="{ 'is-invalid error': submitted && f.password.errors }"
-              /> -->
-
-              <code-input [isCodeHidden]="true"
-              [isCharsCode]="false"
-              [codeLength]="6"
-              (codeCompleted)="onCompletedInputPassword($event)"></code-input>
-
-              <!-- <div class="input-group-append">
-                <span class="input-group-text cursor-pointer"
-                  ><i
-                    class="feather font-small-4"
-                    [ngClass]="{
-                      'icon-eye-off': passwordTextType,
-                      'icon-eye': !passwordTextType
-                    }"
-                    (click)="togglePasswordTextType()"
-                  ></i
-                ></span>
-              </div> -->
-            </div>
-            <div
-              *ngIf="submitted && f.password.errors"
-              class="invalid-feedback"
-              [ngClass]="{ 'd-block': submitted && f.password.errors }"
-            >
-              <div *ngIf="f.password.errors.required">Vui lòng nhập mật khẩu</div>
-            </div>
-          </div>
-
-          <!-- <div class="form-group">
-            <div class="custom-control custom-checkbox">
-              <input class="custom-control-input" type="checkbox" id="remember-me" tabindex="3" />
-              <label class="custom-control-label" for="remember-me"> Ghi nhớ </label>
-            </div>
-          </div> -->
           <div class="text-right mb-1">
-            <a routerLink="/auth/forgot-password">
-              <small>Quên mật khẩu?</small>
-            </a>
+            <a routerLink="/auth/forgot-password"><small>Quên mật khẩu?</small></a>
           </div>
-          
-          <button class="btn btn-primary btn-block" tabindex="4" rippleEffect>
-           <span *ngIf="isReceiveOtp && !trustDevice">Tiếp tục</span>
-           <span *ngIf="trustDevice">Đăng nhập</span>
-           <span *ngIf="!isReceiveOtp && !trustDevice">Tiếp tục</span>
+
+          <button class="btn btn-primary btn-block" type="submit">
+            {{ isReceiveOtp ? 'Đăng nhập' : 'Tiếp tục' }}
           </button>
         </form>
       </div>
     </div>
-    <!-- /Login v1 -->
   </div>
 </div>
-
