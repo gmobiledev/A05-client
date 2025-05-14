@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { TelecomServivce, UserService } from "app/auth/service";
@@ -22,6 +23,16 @@ dayjs.locale("vi");
   encapsulation: ViewEncapsulation.None,
 })
 export class TaskComponent implements OnInit {
+  registerForm: FormGroup;
+  entryList: any[] = [];
+  tempEntry: any = {
+    serial: '',
+    code: '',
+    name: '',
+    phone: '',
+    email: '',
+    unit: ''
+  };
   public contentHeader: any = {
     headerTitle: "Danh sách",
     actionButton: true,
@@ -101,8 +112,8 @@ export class TaskComponent implements OnInit {
     priority: Priority.NORMAL + "",
     service: "",
   };
-  btnCreate = "Tạo đơn hàng";
-  btnFormPayment = "Tạo đơn";
+  btnCreate = "Đăng ký SIM mới";
+  btnFormPayment = "Tạo mới";
   selectedItem;
   currentService;
   listServiceCode = ServiceCode;
@@ -127,6 +138,7 @@ export class TaskComponent implements OnInit {
 
   constructor(
     private readonly taskService: TaskService,
+    private fb: FormBuilder,
     private readonly packageService: PackagesService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
@@ -136,6 +148,12 @@ export class TaskComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.registerForm = this.fb.group({
+      customer_id: [null, Validators.required],
+      package: [null, Validators.required],
+      priority: [this.priority.NORMAL],
+      note: ['']
+    });
     const data = this.route.snapshot.data;
     this.currentService =
       data && data.service ? data.service : ServiceCode.AIRTIME_TOPUP;
@@ -206,6 +224,12 @@ export class TaskComponent implements OnInit {
   }
 
   modalOpen(modal, item = null) {
+    if (this.currentService === ServiceCode.SIM_REGISTER) {
+      this.searchCustomer.page = 1;
+      this.userService.getListCustomerOrganization(this.searchCustomer).subscribe(res => {
+        this.listCustomer = res.data.items || res.data.data;
+      });
+    }
     if (item) {
       this.selectedItem = item;
       this.btnFormPayment = "Cập nhật";
@@ -219,7 +243,7 @@ export class TaskComponent implements OnInit {
       // this.dataUpdate.desc = item.desc;
     } else {
       // this.dataUpdate.desc = this.currentUser.phone + ' thanh toan don hang'
-      this.titleModal = "Tạo đơn hàng";
+      this.titleModal = "Đăng ký SIM mới";  
       this.isCreate = true;
     }
 
@@ -237,9 +261,8 @@ export class TaskComponent implements OnInit {
     // })
 
     this.modalRef = this.modalService.open(modal, {
-      centered: true,
-      windowClass: "modal modal-primary",
-      size: "lg",
+      windowClass: 'modal-lg-custom',
+      centered: true
     });
   }
 
@@ -364,14 +387,17 @@ export class TaskComponent implements OnInit {
         this.onCreateKittingEsim();
       }
     } else if (this.currentService == ServiceCode.SIM_REGISTER) {
-      if (!this.fileExcel) {
-        this.alertService.showMess("Vui lòng tải file để Kitting");
+      if (!this.fileExcel && this.entryList.length === 0) {
+        this.alertService.showMess("Vui lòng tải file hoặc nhập danh sách đăng ký");
         return;
       }
-      if (
-        (await this.alertService.showConfirm("Bạn có đồng ý tạo đơn?")).value
-      ) {
-        this.onCreateSimRegister();
+
+      if ((await this.alertService.showConfirm("Bạn có đồng ý tạo đơn?")).value) {
+        if (this.fileExcel) {
+          this.onCreateSimRegister(); // xử lý theo file
+        } else {
+          this.onCreateSimRegisterManual(); // xử lý theo entryList nhập tay
+        }
       }
     } else if (this.currentService == ServiceCode.SIM_BUNDLE) {
       if (!this.fileExcel) {
@@ -384,6 +410,31 @@ export class TaskComponent implements OnInit {
         this.onCreateBundle();
       }
     }
+  }
+
+  onCreateSimRegisterManual() {
+    const data = {
+      customer_id: this.registerForm.value.customer_id,
+      package: this.registerForm.value.package,
+      note: this.registerForm.value.note || '',
+      entries: this.entryList,
+      priority: this.dataCreate.priority
+    };
+
+    this.taskService.createSimRegisterManual(data).subscribe(
+      (res) => {
+        if (!res.status) {
+          this.alertService.showMess(res.message);
+          return;
+        }
+        this.alertService.showSuccess(res.message);
+        this.modalClose();
+        this.router.navigate(["/task", res.data.task.id]);
+      },
+      (error) => {
+        this.alertService.showMess(error);
+      }
+    );
   }
 
   onCreateTaskSimProfile() {
@@ -659,4 +710,41 @@ export class TaskComponent implements OnInit {
         }
       });
   }
+
+addEntry() {
+  if (!this.tempEntry.serial || !this.tempEntry.code || !this.tempEntry.phone || !this.tempEntry.email || !this.tempEntry.name) {
+    this.alertService.showMess("Vui lòng nhập đầy đủ các trường bắt buộc");
+    return;
+  }
+  this.entryList.push({ ...this.tempEntry });
+  this.tempEntry = {
+    serial: '',
+    name: '',
+    code: '',
+    phone: '',
+    email: '',
+    unit: ''
+  };
+}
+
+
+  removeEntry(index: number) {
+    this.entryList.splice(index, 1);
+  }
+
+  onSubmit() {
+    if (this.registerForm.invalid || this.entryList.length === 0) return;
+    const formData = {
+      ...this.registerForm.value,
+      entries: this.entryList
+    };
+    // Call API to submit formData
+    console.log('Submitting form:', formData);
+  }
+
+  onCancel() {
+    this.registerForm.reset({ priority: this.priority.NORMAL });
+    this.entryList = [];
+  }
+
 }

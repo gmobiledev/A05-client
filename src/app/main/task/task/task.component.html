@@ -76,30 +76,12 @@
             <div class="card-body">
               <form (ngSubmit)="onSubmitSearch()">
                 <div class="row">
-                  <div class="col-md-2">
+                  <div class="col-md-4">
                     <div class="form-group">
                       <input class="form-control" [(ngModel)]="searchForm.code" name="code" type="text" placeholder="Mã đơn hàng" />
                     </div>
                   </div>
-                  <div class="col-md-2">
-                    <div class="form-group">
-                      <select
-                        class="form-control"
-                        name="status"
-                        [(ngModel)]="searchForm.status"
-                      >
-                        <option value="">Chọn trạng thái</option>
-                        <option value="1">Thành công</option>
-                        <option value="-1">Hủy</option>
-                        <option value="20">Chờ thanh toán</option>
-                        <option value="30">Chờ KT duyệt</option>
-                        <option value="99">Từ chối</option>
-  
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="col-md-3">
+                  <div class="col-md-4">
                     <div class="form-group">
                       <div class="form-group">
                         <input
@@ -116,6 +98,23 @@
                           class="form-control"
                         />
                       </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <select
+                        class="form-control"
+                        name="status"
+                        [(ngModel)]="searchForm.status"
+                      >
+                        <option value="">Chọn trạng thái</option>
+                        <option value="1">Thành công</option>
+                        <option value="-1">Hủy</option>
+                        <option value="20">Chờ thanh toán</option>
+                        <option value="30">Chờ KT duyệt</option>
+                        <option value="99">Từ chối</option>
+  
+                      </select>
                     </div>
                   </div>
 
@@ -160,7 +159,7 @@
                   <thead>
                     <tr>
                       <th>STT</th>  
-                      <th>Mã đơn</th>                    
+                      <th>Mã lô</th>                    
                       <th>Ngày tạo</th>
                       <th>Dịch vụ</th>
                       <th>{{ formCreateLabel.amount }}</th>
@@ -469,43 +468,127 @@
           </ng-container>
 
           <ng-container *ngIf="[listServiceCode.SIM_REGISTER].includes(currentService)">
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <!-- Chọn doanh nghiệp -->
             <div class="form-group">
-              <label for="">Chọn gói cước</label>
-              <select name="" id="" class="form-control" [(ngModel)]="dataCreate.package">
-                <option value="{{ item.code }}" *ngFor="let item of listPackage">{{ item.code }}</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="">Chọn doanh nghiệp</label>
-              <ng-select  [(ngModel)]="dataCreate.customer_id" [editableSearchTerm]="true"
+              <label>Chọn doanh nghiệp<span class="text-danger">*</span></label>
+              <ng-select
+                formControlName="customer_id"
+                [editableSearchTerm]="true"
                 (search)="onSearch($event)"
                 (scroll)="onScroll($event)"
                 (scrollToEnd)="onScrollToEnd()"
                 placeholder="Chọn doanh nghiệp"
                 [clearable]="false"
-  bindLabel="name"
-  bindValue="id"
-                [loading]="isLoadingCustomer">
+                bindLabel="name"
+                bindValue="id"
+                [loading]="isLoadingCustomer"
+              >
                 <ng-template ng-loadingspinner-tmp>
-                  <div class="lds-ellipsis">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                  </div>
+                  <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
                 </ng-template>
-                <ng-option *ngFor="let p of listCustomer" [value]="p.id">{{
-                  p.name 
-                  }} - {{ p.id_no }}</ng-option>
+                <ng-option *ngFor="let p of listCustomer" [value]="p.id">{{ p.name }} - {{ p.id_no }}</ng-option>
               </ng-select>
             </div>
-            <div class="form-group" >
-              <i class="fa fa-upload" aria-hidden="true"></i>
-              <input type="file" (change)="onFileChangeExcelSerial($event)" />
-              <label>Tải lên file excel</label>
-            
-              <a href="/assets/sim-profile-serial.xlsx" class="ml-2">File mẫu tại đây</a>
+
+            <!-- Gói cước -->
+            <div class="form-group">
+              <label>Chọn gói cước</label>
+              <select class="form-control" formControlName="package">
+                <option value="">Chọn gói cước</option>
+                <option *ngFor="let item of listPackage" [value]="item.code">{{ item.code }}</option>
+              </select>
             </div>
+
+            <!-- Dòng nhập TTTB -->
+            <label>Danh sách đăng ký TTTB</label>
+            <div class="form-row row">
+              <div class="form-group col-sm-6 col-md-4 col-lg-2">
+                <label>Serial SIM<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" placeholder="Nhập Serial SIM" [(ngModel)]="tempEntry.serial" name="serial" [ngModelOptions]="{standalone: true}"/>
+              </div>
+              <div class="form-group col-sm-6 col-md-4 col-lg-2">
+                <label>Mã CBNV<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" placeholder="Nhập Mã CBNV" [(ngModel)]="tempEntry.code" name="code" [ngModelOptions]="{standalone: true}" />
+              </div>
+              <div class="form-group col-sm-6 col-md-4 col-lg-2">
+                <label>Tên CBNV<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" placeholder="Nhập Tên CBNV" [(ngModel)]="tempEntry.name" name="name" [ngModelOptions]="{standalone: true}"/>
+              </div>
+              <div class="form-group col-sm-6 col-md-4 col-lg-2">
+                <label>SĐT liên hệ<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" placeholder="Nhập SĐT liên hệ" [(ngModel)]="tempEntry.phone" name="phone" [ngModelOptions]="{standalone: true}"/>
+              </div>
+              <div class="form-group col-sm-6 col-md-4 col-lg-2">
+                <label>Email<span class="text-danger">*</span></label>
+                <input type="email" class="form-control" placeholder="Nhập Email" [(ngModel)]="tempEntry.email" name="email" [ngModelOptions]="{standalone: true}"/>
+              </div>
+              <div class="form-group col-sm-6 col-md-4 col-lg-2">
+                <label>Đơn vị</label>
+                <input type="text" class="form-control" placeholder="Nhập Đơn vị" [(ngModel)]="tempEntry.unit" name="unit" [ngModelOptions]="{standalone: true}"/>
+              </div>
+            </div>
+            <div class="form-group mt-2">
+              <button 
+                type="button" 
+                class="btn btn-success btn-sm" 
+                (click)="addEntry()"
+              >
+                <i data-feather="plus" class="mr-50"></i> Thêm
+              </button>
+            </div>
+
+            <!-- Hiển thị danh sách đã thêm -->
+            <div *ngIf="entryList.length > 0">
+              <table class="table table-bordered table-sm mt-1">
+                <thead class="thead-light">
+                  <tr>
+                    <th>STT</th>
+                    <th>Serial SIM</th>
+                    <th>Mã CBNV</th>
+                    <th>Tên CBNV</th>
+                    <th>SĐT</th>
+                    <th>Email</th>
+                    <th>Đơn vị</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let entry of entryList; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ entry.serial }}</td>
+                    <td>{{ entry.code }}</td>
+                    <td>{{ entry.name }}</td>
+                    <td>{{ entry.phone }}</td>
+                    <td>{{ entry.email }}</td>
+                    <td>{{ entry.unit }}</td>
+                    <td>
+                      <button type="button" class="btn btn-sm btn-danger" (click)="removeEntry(i)">X</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Import file -->
+            <div class="form-group mt-2">
+              <div class="d-flex align-items-center flex-wrap">
+                <label class="mb-0 mr-2" style="white-space: nowrap;">Hoặc import file:</label>
+                <input type="file" class="form-control-file mr-2" (change)="onFileChangeExcelSerial($event)" style="width: auto;" />
+                <span class="text-muted mr-3">{{ fileLabel }}</span>
+
+                <a href="/assets/new-sim-profile.xlsx" class="text-success d-flex align-items-center" target="_blank">
+                  <i class="fa fa-download mr-1"></i> Tải file mẫu
+                </a>
+              </div>
+            </div>
+
+            <!-- Ghi chú -->
+            <div class="form-group">
+              <label>Ghi chú</label>
+              <textarea class="form-control" formControlName="note" placeholder="Nhập nội dung ghi chú" rows="2"></textarea>
+            </div>
+          </form>
           </ng-container>
           
           <div class="form-group" *ngIf="[listServiceCode.SIM_KITTING, listServiceCode.SIM_KITTING_ESIM, listServiceCode.ADD_MOBILE_PACKAGE, listServiceCode.SIM_REGISTER].includes(currentService)">

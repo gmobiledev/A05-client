@@ -40,7 +40,7 @@
 
           <!-- Chỉ hiển thị OTP khi đã gửi -->
           <div class="form-group" *ngIf="isReceiveOtp">
-            <label class="form-label">OTP</label>
+            <label class="form-label">Nhập OTP</label>
             <code-input [isCodeHidden]="false" [isCharsCode]="false" [codeLength]="6" (codeCompleted)="onCompletedInputOtp($event)">
             </code-input>
             <div *ngIf="submitted && f.otp.errors" class="invalid-feedback d-block">

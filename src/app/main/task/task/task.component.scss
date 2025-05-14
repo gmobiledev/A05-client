@@ -8,6 +8,12 @@
     margin-right: 10px;
   }
   
+  .modal-lg-custom {
+  .modal-dialog {
+    max-width: 1000px;
+  }
+}
+
   .lds-ellipsis div {
     position: absolute;
     top: 14px;
