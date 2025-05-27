@@ -504,29 +504,34 @@
             <label>Danh sách đăng ký TTTB</label>
             <div class="form-row row">
               <div class="form-group col-sm-6 col-md-4 col-lg-2">
-                <label>Serial SIM<span class="text-danger">*</span></label>
                 <input type="text" class="form-control" placeholder="Nhập Serial SIM" [(ngModel)]="tempEntry.serial" name="serial" [ngModelOptions]="{standalone: true}"/>
               </div>
               <div class="form-group col-sm-6 col-md-4 col-lg-2">
-                <label>Mã CBNV<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" placeholder="Nhập Mã CBNV" [(ngModel)]="tempEntry.code" name="code" [ngModelOptions]="{standalone: true}" />
+                <input type="text" class="form-control" placeholder="Nhập Mã CBNV" [(ngModel)]="tempEntry.unit_code" name="unit_code" [ngModelOptions]="{standalone: true}" />
               </div>
               <div class="form-group col-sm-6 col-md-4 col-lg-2">
-                <label>Tên CBNV<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" placeholder="Nhập Tên CBNV" [(ngModel)]="tempEntry.name" name="name" [ngModelOptions]="{standalone: true}"/>
+                <input type="text" class="form-control" placeholder="Nhập Tên CBNV" [(ngModel)]="tempEntry.full_name" name="full_name" [ngModelOptions]="{standalone: true}"/>
               </div>
               <div class="form-group col-sm-6 col-md-4 col-lg-2">
-                <label>SĐT liên hệ<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" placeholder="Nhập SĐT liên hệ" [(ngModel)]="tempEntry.phone" name="phone" [ngModelOptions]="{standalone: true}"/>
+                <input type="text" class="form-control" placeholder="Nhập SĐT liên hệ" [(ngModel)]="tempEntry.mobile" name="mobile" [ngModelOptions]="{standalone: true}"/>
               </div>
               <div class="form-group col-sm-6 col-md-4 col-lg-2">
-                <label>Email<span class="text-danger">*</span></label>
                 <input type="email" class="form-control" placeholder="Nhập Email" [(ngModel)]="tempEntry.email" name="email" [ngModelOptions]="{standalone: true}"/>
               </div>
               <div class="form-group col-sm-6 col-md-4 col-lg-2">
-                <label>Đơn vị</label>
-                <input type="text" class="form-control" placeholder="Nhập Đơn vị" [(ngModel)]="tempEntry.unit" name="unit" [ngModelOptions]="{standalone: true}"/>
+                <ng-select
+                  [items]="listUnit"
+                  bindLabel="name"
+                  bindValue="id"
+                  [(ngModel)]="tempEntry.unit_id"
+                  name="unit_id"
+                  placeholder="Chọn đơn vị"
+                  [ngModelOptions]="{ standalone: true }"
+                  [clearable]="false"
+                >
+                </ng-select>
               </div>
+
             </div>
             <div class="form-group mt-2">
               <button 
@@ -540,34 +545,36 @@
 
             <!-- Hiển thị danh sách đã thêm -->
             <div *ngIf="entryList.length > 0">
-              <table class="table table-bordered table-sm mt-1">
-                <thead class="thead-light">
-                  <tr>
-                    <th>STT</th>
-                    <th>Serial SIM</th>
-                    <th>Mã CBNV</th>
-                    <th>Tên CBNV</th>
-                    <th>SĐT</th>
-                    <th>Email</th>
-                    <th>Đơn vị</th>
-                    <th>Thao tác</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let entry of entryList; let i = index">
-                    <td>{{ i + 1 }}</td>
-                    <td>{{ entry.serial }}</td>
-                    <td>{{ entry.code }}</td>
-                    <td>{{ entry.name }}</td>
-                    <td>{{ entry.phone }}</td>
-                    <td>{{ entry.email }}</td>
-                    <td>{{ entry.unit }}</td>
-                    <td>
-                      <button type="button" class="btn btn-sm btn-danger" (click)="removeEntry(i)">X</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="table-responsive">
+                <table class="table table-bordered table-sm table-striped">
+                  <thead class="thead-light">
+                    <tr>
+                      <th>Serial</th>
+                      <th>Mã CBNV</th>
+                      <th>Tên CBNV</th>
+                      <th>SĐT</th>
+                      <th>Email</th>
+                      <th>Đơn vị</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let entry of entryList; let i = index">
+                      <td>{{ entry.serial }}</td>
+                      <td>{{ entry.unit_code }}</td>
+                      <td>{{ entry.full_name }}</td>
+                      <td>{{ entry.mobile }}</td>
+                      <td>{{ entry.email }}</td>
+                      <td>{{ entry.unit_name }}</td>
+                      <td>
+                        <button type="button" class="btn btn-sm btn-danger" (click)="removeEntry(i)">
+                          X
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             <!-- Import file -->
@@ -577,7 +584,7 @@
                 <input type="file" class="form-control-file mr-2" (change)="onFileChangeExcelSerial($event)" style="width: auto;" />
                 <span class="text-muted mr-3">{{ fileLabel }}</span>
 
-                <a href="/assets/new-sim-profile.xlsx" class="text-success d-flex align-items-center" target="_blank">
+                <a href="/assets/sim-profile-serial.xlsx" class="text-success d-flex align-items-center" target="_blank">
                   <i class="fa fa-download mr-1"></i> Tải file mẫu
                 </a>
               </div>
@@ -591,15 +598,6 @@
           </form>
           </ng-container>
           
-          <div class="form-group" *ngIf="[listServiceCode.SIM_KITTING, listServiceCode.SIM_KITTING_ESIM, listServiceCode.ADD_MOBILE_PACKAGE, listServiceCode.SIM_REGISTER].includes(currentService)">
-            <div class="form-group">
-              <label for="">Chọn mức độ ưu tiên</label>
-              <select [(ngModel)]="dataCreate.priority" class="form-control">
-                <option value="{{ priority.NORMAL }}" >Bình thường</option>
-                <option value="{{ priority.HIGHT }}">Ưu tiên</option>
-              </select>
-            </div>
-          </div>
           <!-- <div class="form-group">
             <label>Nội dụng đơn hàng</label>
             <input

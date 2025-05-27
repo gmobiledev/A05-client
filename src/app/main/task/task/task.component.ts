@@ -6,6 +6,8 @@ import { TelecomServivce, UserService } from "app/auth/service";
 import { AddBalanceServiceDto } from "app/auth/service/dto/add-balance-service.dto";
 import { PackagesService } from "app/auth/service/packages.service";
 import { TaskService } from "app/auth/service/task.service";
+import { UnitService } from "app/auth/service/unit.service";
+
 import {
   Priority,
   ServiceCode,
@@ -23,13 +25,14 @@ dayjs.locale("vi");
   encapsulation: ViewEncapsulation.None,
 })
 export class TaskComponent implements OnInit {
+  listUnit: any[] = [];
   registerForm: FormGroup;
   entryList: any[] = [];
   tempEntry: any = {
     serial: '',
-    code: '',
-    name: '',
-    phone: '',
+    unit_code: '',
+    full_name: '',
+    mobile: '',
     email: '',
     unit: ''
   };
@@ -144,7 +147,8 @@ export class TaskComponent implements OnInit {
     private readonly router: Router,
     private readonly alertService: SweetAlertService,
     private readonly modalService: NgbModal,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly unitService: UnitService
   ) {}
 
   ngOnInit(): void {
@@ -217,6 +221,10 @@ export class TaskComponent implements OnInit {
           : "";
       this.getData();
     });
+    this.unitService.getAllUnits().subscribe(res => {
+      this.listUnit = res.data || res;
+    });
+
   }
 
   onItemChange(value) {
@@ -391,13 +399,8 @@ export class TaskComponent implements OnInit {
         this.alertService.showMess("Vui lòng tải file hoặc nhập danh sách đăng ký");
         return;
       }
-
       if ((await this.alertService.showConfirm("Bạn có đồng ý tạo đơn?")).value) {
-        if (this.fileExcel) {
-          this.onCreateSimRegister(); // xử lý theo file
-        } else {
-          this.onCreateSimRegisterManual(); // xử lý theo entryList nhập tay
-        }
+        this.onCreateSimRegister();
       }
     } else if (this.currentService == ServiceCode.SIM_BUNDLE) {
       if (!this.fileExcel) {
@@ -410,31 +413,6 @@ export class TaskComponent implements OnInit {
         this.onCreateBundle();
       }
     }
-  }
-
-  onCreateSimRegisterManual() {
-    const data = {
-      customer_id: this.registerForm.value.customer_id,
-      package: this.registerForm.value.package,
-      note: this.registerForm.value.note || '',
-      entries: this.entryList,
-      priority: this.dataCreate.priority
-    };
-
-    this.taskService.createSimRegisterManual(data).subscribe(
-      (res) => {
-        if (!res.status) {
-          this.alertService.showMess(res.message);
-          return;
-        }
-        this.alertService.showSuccess(res.message);
-        this.modalClose();
-        this.router.navigate(["/task", res.data.task.id]);
-      },
-      (error) => {
-        this.alertService.showMess(error);
-      }
-    );
   }
 
   onCreateTaskSimProfile() {
@@ -568,11 +546,19 @@ export class TaskComponent implements OnInit {
   }
 
   onCreateSimRegister() {
-    let formData = new FormData();
-    formData.append("files", this.fileExcel);
-    formData.append("customer_id", this.dataCreate.customer_id);
-    formData.append("priority", this.dataCreate.priority);
-    formData.append("package", this.dataCreate.package);
+    const formData = new FormData();
+    formData.append("customer_id", this.registerForm.value.customer_id);
+    const packageValue = this.registerForm.value.package;
+    if (packageValue !== null && packageValue !== undefined && packageValue !== '') {
+      formData.append("package", packageValue);
+    }
+    formData.append("note", this.registerForm.value.note || '');
+
+    if (this.fileExcel) {
+      formData.append("files", this.fileExcel);
+    } else {
+      formData.append("entries", JSON.stringify(this.entryList));
+    }
 
     this.taskService.createSimRegister(formData).subscribe(
       (res) => {
@@ -711,21 +697,26 @@ export class TaskComponent implements OnInit {
       });
   }
 
-addEntry() {
-  if (!this.tempEntry.serial || !this.tempEntry.code || !this.tempEntry.phone || !this.tempEntry.email || !this.tempEntry.name) {
-    this.alertService.showMess("Vui lòng nhập đầy đủ các trường bắt buộc");
-    return;
+  addEntry() {
+    if (!this.tempEntry.serial || !this.tempEntry.unit_code || !this.tempEntry.mobile || !this.tempEntry.email || !this.tempEntry.full_name) {
+      this.alertService.showMess("Vui lòng nhập đầy đủ các trường bắt buộc");
+      return;
+    }
+    const selectedUnit = this.listUnit.find(u => u.id === this.tempEntry.unit_id);
+    this.entryList.push({ ...this.tempEntry,
+      unit_id: selectedUnit?.id,
+      unit_code: selectedUnit?.code,
+      unit_name: selectedUnit?.name
+     });
+    this.tempEntry = {
+      serial: '',
+      full_name: '',
+      unit_code: '',
+      mobile: '',
+      email: '',
+      unit_id: null
+    };
   }
-  this.entryList.push({ ...this.tempEntry });
-  this.tempEntry = {
-    serial: '',
-    name: '',
-    code: '',
-    phone: '',
-    email: '',
-    unit: ''
-  };
-}
 
 
   removeEntry(index: number) {

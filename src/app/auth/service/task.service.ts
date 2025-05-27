@@ -85,9 +85,6 @@ export class TaskService {
     return this._http.post<any>(`${environment.apiUrl}/task/create-sim-register-order`, data);
   }
 
-  createSimRegisterManual(data) {
-    return this._http.post<any>(`${environment.apiUrl}/task/create-sim-register-order`, data);
-  }
   updateSimProfile(id, data) {
     return this._http.put<any>(`${environment.apiUrl}/task/sim-profile/${id}`, data);
   }
