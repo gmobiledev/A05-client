@@ -27,7 +27,7 @@ export const menu: CoreMenu[] = [
   {
     id: 'transaction-management',
     type: 'section',
-    title: 'Dịch vụ',
+    title: '',
     translate: '',
     icon: 'package',
     children: [
@@ -107,6 +107,28 @@ export const menu: CoreMenu[] = [
           // },
         ]
       },
+      {
+        id: 'category-management',
+        title: 'Danh mục',
+        translate: '',
+        type: 'collapsible',
+        icon: 'folder',
+        badge: {
+          title: '1',
+          translate: '',
+          classes: 'badge-light-primary badge-pill'
+        },
+        children: [
+          {
+            id: 'unit-list',
+            title: 'Danh sách đơn vị',
+            translate: '',
+            type: 'item',
+            icon: 'circle',
+            url: 'units'
+          },
+        ]
+      }
       // {
       //   id: 'dashboard',
       //   title: 'Sim Du lịch',

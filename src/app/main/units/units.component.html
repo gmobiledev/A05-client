@@ -1,0 +1,125 @@
+<div class="card mt-3">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h4 class="card-title mb-0 font-weight-bold">Danh sách đơn vị</h4>
+      <button class="btn btn-success" (click)="openModal(unitModal)">
+        <i class="fa fa-plus mr-1"></i> Thêm đơn vị
+      </button>
+    </div>
+
+    <form (ngSubmit)="onSearch()">
+      <div class="row align-items-end mb-2">
+        <div class="col-md-4">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Tìm theo tên đơn vị"
+            [(ngModel)]="searchKeyword"
+            name="searchKeyword"
+          />
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-info btn-block">
+            <i class="fa fa-search"></i> Lọc kết quả
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <div class="table-responsive mt-2">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Thứ tự</th>
+            <th>Mã đơn vị</th>
+            <th>Tên đơn vị</th>
+            <th>Mô tả</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let unit of filteredUnits">
+            <td>{{ unit.id }}</td>
+            <td>{{ unit.code }}</td>
+            <td>{{ unit.name }}</td>
+            <td>{{ unit.description }}</td>
+            <td>
+                <button class="btn btn-sm btn-info mr-1" (click)="editUnit(unit, unitModal)">Sửa</button>
+                <button class="btn btn-sm btn-danger" (click)="openConfirmModal(unit, confirmModal)">
+                Xóa
+                </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<ng-template #unitModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">{{ isEditing ? 'Cập nhật đơn vị' : 'Thêm đơn vị' }}</h5>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="unitForm" (ngSubmit)="onSubmit(modal)">
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Mã đơn vị</label>
+        <input type="text" class="form-control" formControlName="code" />
+      </div>
+      <div class="form-group">
+        <label>Tên đơn vị</label>
+        <input type="text" class="form-control" formControlName="name" />
+      </div>
+      <div class="form-group">
+        <label>Mô tả</label>
+        <input type="text" class="form-control" formControlName="description" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss()">Đóng</button>
+      <button type="submit" class="btn btn-primary" [disabled]="unitForm.invalid">Lưu</button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #confirmModal let-modal>
+  <div class="modal-body text-center py-4 px-3">
+
+    <!-- Icon -->
+    <div class="mb-3">
+      <div
+        class="d-inline-flex justify-content-center align-items-center"
+        style="width: 48px; height: 48px; background-color: #f8d7da; border-radius: 50%;"
+      >
+        <i class="fa fa-info text-danger" style="font-size: 24px;"></i>
+      </div>
+    </div>
+
+    <h5 class="text-dark font-weight-bold mb-2" style="font-size: 1.5rem;">
+      Xóa đơn vị
+    </h5>
+
+    <p class="text-dark font-weight-bold mb-2">Bạn có chắc chắn muốn xóa Đơn vị:</p>
+    <p class="text-danger font-weight-bold mb-2" style="font-size: 1.1rem;">
+      "{{ unitToDelete?.name }}"
+    </p>
+
+    <div class="d-flex justify-content-center gap-2">
+    <button
+        class="btn px-4 rounded-pill text-white mr-2"
+        style="background-color: #00c8ff;"
+        (click)="onConfirmDelete(modal)"
+        >
+        Đồng ý
+    </button>
+    <button class="btn btn-secondary px-4 rounded-pill" (click)="modal.dismiss()">Hủy</button>
+    </div>
+
+  </div>
+</ng-template>
+
+
+

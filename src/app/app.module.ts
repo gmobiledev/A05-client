@@ -79,6 +79,12 @@ const appRoutes: Routes = [
   },
 
   {
+    path: 'units',
+    loadChildren: () => import('./main/units/units.module').then(m => m.UnitsModule),
+    canActivate: [AuthGuard]
+  },
+
+  {
     path: 'gip',
     loadChildren: () => import('./main/gip/gip.module').then(m => m.GIPModule),
     canActivate: [AuthGuard]
