@@ -11,13 +11,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BlockUIModule } from 'ng-block-ui';
 import { NgxMaskModule } from 'ngx-mask';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
+import { UnitNodeComponent } from './unit-node/unit-node.component';
 
 const routes: Routes = [
   { path: '', component: UnitsComponent },
 ];
 
 @NgModule({
-  declarations: [UnitsComponent],
+  declarations: [UnitsComponent, UnitNodeComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),

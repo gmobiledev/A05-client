@@ -2,9 +2,6 @@
   <div class="card-body">
     <div class="d-flex justify-content-between align-items-center mb-2">
       <h4 class="card-title mb-0 font-weight-bold">Danh sách đơn vị</h4>
-      <button class="btn btn-success" (click)="openModal(unitModal)">
-        <i class="fa fa-plus mr-1"></i> Thêm đơn vị
-      </button>
     </div>
 
     <form (ngSubmit)="onSearch()">
@@ -25,34 +22,25 @@
         </div>
       </div>
     </form>
-
-    <div class="table-responsive mt-2">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Thứ tự</th>
-            <th>Mã đơn vị</th>
-            <th>Tên đơn vị</th>
-            <th>Mô tả</th>
-            <th>Thao tác</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let unit of filteredUnits">
-            <td>{{ unit.id }}</td>
-            <td>{{ unit.code }}</td>
-            <td>{{ unit.name }}</td>
-            <td>{{ unit.description }}</td>
-            <td>
-                <button class="btn btn-sm btn-info mr-1" (click)="editUnit(unit, unitModal)">Sửa</button>
-                <button class="btn btn-sm btn-danger" (click)="openConfirmModal(unit, confirmModal)">
-                Xóa
-                </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  </div>
+</div>
+<div class="card mt-3">
+  <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+      <h4 class="card-title mb-0 font-weight-bold">Sơ đồ cơ cấu tổ chức dạng cây</h4>
+      <button class="btn btn-success" (click)="openModal(unitModal)">
+        <i class="fa fa-plus mr-1"></i> Thêm đơn vị gốc
+      </button>
     </div>
+    <ul class="list-group">
+      <app-unit-node
+        *ngFor="let unit of treeUnits"
+        [node]="unit"
+        (editUnitEvent)="editUnit($event, unitModal)"
+        (deleteUnitEvent)="openConfirmModal($event, confirmModal)"
+        (addChildEvent)="openModal(unitModal, $event)"
+      ></app-unit-node>
+    </ul>
   </div>
 </div>
 
@@ -87,8 +75,6 @@
 
 <ng-template #confirmModal let-modal>
   <div class="modal-body text-center py-4 px-3">
-
-    <!-- Icon -->
     <div class="mb-3">
       <div
         class="d-inline-flex justify-content-center align-items-center"
@@ -97,29 +83,14 @@
         <i class="fa fa-info text-danger" style="font-size: 24px;"></i>
       </div>
     </div>
-
-    <h5 class="text-dark font-weight-bold mb-2" style="font-size: 1.5rem;">
-      Xóa đơn vị
-    </h5>
-
+    <h5 class="text-dark font-weight-bold mb-2">Xóa đơn vị</h5>
     <p class="text-dark font-weight-bold mb-2">Bạn có chắc chắn muốn xóa Đơn vị:</p>
-    <p class="text-danger font-weight-bold mb-2" style="font-size: 1.1rem;">
-      "{{ unitToDelete?.name }}"
-    </p>
-
+    <p class="text-danger font-weight-bold mb-2" style="font-size: 1.1rem;">"{{ unitToDelete?.name }}"</p>
     <div class="d-flex justify-content-center gap-2">
-    <button
-        class="btn px-4 rounded-pill text-white mr-2"
-        style="background-color: #00c8ff;"
-        (click)="onConfirmDelete(modal)"
-        >
+      <button class="btn px-4 rounded-pill text-white mr-2" style="background-color: #00c8ff;" (click)="onConfirmDelete(modal)">
         Đồng ý
-    </button>
-    <button class="btn btn-secondary px-4 rounded-pill" (click)="modal.dismiss()">Hủy</button>
+      </button>
+      <button class="btn btn-secondary px-4 rounded-pill" (click)="modal.dismiss()">Hủy</button>
     </div>
-
   </div>
 </ng-template>
-
-
-

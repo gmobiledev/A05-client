@@ -12,7 +12,7 @@ export class UnitService {
   constructor(private _http: HttpClient) { }
 
     getAllUnits(params: any = null) {
-    return this._http.get<any>(`${environment.apiUrl}/unit`, { params });
+    return this._http.get<any>(`${environment.apiUrl}/unit`);
   }
 
     getUnitById(id: number) {
