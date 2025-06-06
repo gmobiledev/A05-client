@@ -507,7 +507,7 @@
                 <input type="text" class="form-control" placeholder="Nhập Serial SIM" [(ngModel)]="tempEntry.serial" name="serial" [ngModelOptions]="{standalone: true}"/>
               </div>
               <div class="form-group col-sm-6 col-md-4 col-lg-2">
-                <input type="text" class="form-control" placeholder="Nhập Mã CBNV" [(ngModel)]="tempEntry.unit_code" name="unit_code" [ngModelOptions]="{standalone: true}" />
+                <input type="text" class="form-control" placeholder="Nhập Mã CBNV" [(ngModel)]="tempEntry.user_code" name="user_code" [ngModelOptions]="{standalone: true}" />
               </div>
               <div class="form-group col-sm-6 col-md-4 col-lg-2">
                 <input type="text" class="form-control" placeholder="Nhập Tên CBNV" [(ngModel)]="tempEntry.full_name" name="full_name" [ngModelOptions]="{standalone: true}"/>
@@ -561,7 +561,7 @@
                   <tbody>
                     <tr *ngFor="let entry of entryList; let i = index">
                       <td>{{ entry.serial }}</td>
-                      <td>{{ entry.unit_code }}</td>
+                      <td>{{ entry.user_code }}</td>
                       <td>{{ entry.full_name }}</td>
                       <td>{{ entry.mobile }}</td>
                       <td>{{ entry.email }}</td>

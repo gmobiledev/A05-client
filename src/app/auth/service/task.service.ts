@@ -104,4 +104,21 @@ export class TaskService {
   updateStateRetry(id, data = null) {
     return this._http.patch<any>(`${environment.apiUrl}/task/update-state-retry/${id}`, data);
   }
+
+  getAssignedNumbers(params) {
+    return this._http.get<any>(`${environment.apiUrl}/task/a05/assigned-numbers`, { params: params });
+  }
+
+  updateUser(data) {
+    return this._http.post<any>(`${environment.apiUrl}/task/a05/update-user-msisdn`, data);
+  }
+
+  exportAssignedNumbersExcel(params: any): Observable<any> {
+    return this._http.get(`${environment.apiUrl}/task/a05/export-assigned-numbers`, {
+      params,
+      observe: 'response',
+      responseType: 'blob'
+    });
+  }
+
 }

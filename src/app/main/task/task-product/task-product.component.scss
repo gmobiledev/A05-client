@@ -1,0 +1,115 @@
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.custom-tooltip {
+  position: absolute;
+  top: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  padding: 3px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 1000;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.05s ease-in-out;
+}
+
+.tooltip-wrapper:hover .custom-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.table-responsive,
+tbody,
+tr,
+td,
+.overflow-auto {
+  overflow: visible !important;
+  position: relative;
+}
+::ng-deep .custom-ng-select .ng-select-container {
+  height: 38px;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  background-color: #fff;
+  font-size: 1rem;          
+  font-family: inherit;
+  color: #495057;         
+  padding: 0 0.75rem;
+  display: flex;
+  align-items: center;
+  line-height: 1.5;
+}
+
+::ng-deep .custom-ng-select .ng-select-container .ng-placeholder {
+  font-size: 1rem;
+  color: #6c757d;
+}
+
+::ng-deep .custom-ng-select .ng-select-container.ng-has-value .ng-placeholder {
+  display: none;
+}
+
+::ng-deep .custom-ng-select .ng-value {
+  font-size: 1rem;
+  color: #495057;
+  line-height: 1.5;
+}
+
+::ng-deep .custom-ng-select .ng-arrow-wrapper {
+  margin-left: auto;
+  padding-left: 8px;
+  display: flex;
+  align-items: center;
+  color: #6c757d;
+}
+
+::ng-deep .custom-ng-select .ng-arrow-wrapper::after {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  border-top: 0.3em solid;
+  border-right: 0.3em solid transparent;
+  border-bottom: 0;
+  border-left: 0.3em solid transparent;
+}
+
+/* Dropdown list */
+::ng-deep .custom-ng-select .ng-dropdown-panel {
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  z-index: 9999;
+  font-size: 0.875rem;
+}
+
+::ng-deep .custom-ng-select .ng-dropdown-panel .ng-option {
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #212529; /* <-- Chữ đậm rõ, giống Bootstrap */
+  font-size: 1rem;
+  font-weight: 400; /* Không mỏng quá */
+  background-color: #fff; /* Đảm bảo nền trắng rõ ràng */
+}
+
+::ng-deep .custom-ng-select .ng-dropdown-panel .ng-option:hover {
+  background-color: #f8f9fa;
+  color: #000; /* <-- rõ nét hơn khi hover */
+  font-weight: 500;
+}
+
+::ng-deep .custom-ng-select .ng-dropdown-panel .ng-option-selected {
+  background-color: #e9ecef;
+  font-weight: 600;
+  color: #000;
+}
+

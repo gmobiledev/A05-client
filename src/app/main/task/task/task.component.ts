@@ -30,7 +30,7 @@ export class TaskComponent implements OnInit {
   entryList: any[] = [];
   tempEntry: any = {
     serial: '',
-    unit_code: '',
+    user_code: '',
     full_name: '',
     mobile: '',
     email: '',
@@ -698,20 +698,20 @@ export class TaskComponent implements OnInit {
   }
 
   addEntry() {
-    if (!this.tempEntry.serial || !this.tempEntry.unit_code || !this.tempEntry.mobile || !this.tempEntry.email || !this.tempEntry.full_name) {
+    if (!this.tempEntry.serial || !this.tempEntry.user_code || !this.tempEntry.mobile || !this.tempEntry.email || !this.tempEntry.full_name) {
       this.alertService.showMess("Vui lòng nhập đầy đủ các trường bắt buộc");
       return;
     }
     const selectedUnit = this.listUnit.find(u => u.id === this.tempEntry.unit_id);
     this.entryList.push({ ...this.tempEntry,
       unit_id: selectedUnit?.id,
-      unit_code: selectedUnit?.code,
+      user_code: selectedUnit?.code,
       unit_name: selectedUnit?.name
      });
     this.tempEntry = {
       serial: '',
       full_name: '',
-      unit_code: '',
+      user_code: '',
       mobile: '',
       email: '',
       unit_id: null

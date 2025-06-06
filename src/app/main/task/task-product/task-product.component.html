@@ -1,0 +1,183 @@
+<div class="card mt-3">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h4 class="card-title mb-0 font-weight-bold">Danh sách số đã đấu nối</h4>
+    </div>
+
+    <form (ngSubmit)="onSubmitSearch()" class="row">
+      <div class="col-md-4 mb-2">
+        <input class="form-control" [(ngModel)]="searchForm.search" name="search" placeholder="Nhập số/serial sim" />
+      </div>
+      <div class="col-md-4 mb-2">
+        <input
+          class="form-control"
+          [(ngModel)]="searchForm.channelName"
+          name="channelName"
+          placeholder="Nhập tên kho"
+        />
+      </div>
+      <div class="col-md-4 mb-2">
+        <input class="form-control" [(ngModel)]="searchForm.assignedUser" name="assignedUser" placeholder="Tên người được giao" />
+      </div>
+
+      <div class="col-md-4 mb-2">
+        <input
+          type="text"
+          placeholder="Khoảng thời gian"
+          [ngModelOptions]="{ standalone: true }"
+          ngxDaterangepickerMd
+          [(ngModel)]="dateRange"
+          [ranges]="ranges"
+          [locale]="{ applyLabel: 'Chọn', format: 'DD/MM/YYYY' }"
+          [showCustomRangeLabel]="true"
+          [alwaysShowCalendars]="true"
+          name="date_range"
+          class="form-control"
+        />
+      </div>
+      
+      <div class="col-md-12 d-flex mt-1">
+        <button type="submit" class="btn btn-info mr-1">
+          <i data-feather="search" class="mr-50"></i> Lọc kết quả
+        </button>
+        <button type="button" class="btn btn-success" (click)="exportExcel()">
+          <i data-feather="file" class="mr-50"></i> Xuất excel
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="table-responsive mt-2">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Kho</th>
+          <th>Số điện thoại</th>
+          <th>Serial SIM</th>
+          <th>Thời gian giao</th>
+          <th>Người được giao</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of list; index as i">
+          <td>{{ (searchForm.page - 1) * searchForm.take + (i + 1) }}</td>
+          <td>{{ item.channel_name }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.serial || '-' }}</td>
+          <td>{{ item.updated_at | date: 'dd/MM/yyyy HH:mm' }}</td>
+          <td>{{ item.full_name }}</td>
+          <td>
+            <button class="tooltip-wrapper btn p-0 border-0 bg-transparent" (click)="openUpdateSimModal(modalUpdateSim, item)" >
+              <i data-feather="edit" class="text-primary cursor-pointer"></i>
+              <span class="custom-tooltip">Cập nhật người nhận SIM</span>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="list.length === 0">
+          <td colspan="7" class="text-center text-muted">Không có dữ liệu</td>
+        </tr>
+      </tbody>
+    </table>
+
+<ng-template #modalUpdateSim let-modal>
+  <div class="modal-header text-center d-block">
+    <h3 class="modal-title font-weight-bold text-center w-100 mb-0">
+      Cập nhật người sử dụng SIM
+    </h3>
+        <p class="text-muted mt-1">[{{ updateSimForm.phone }}]</p>
+    <button type="button" class="close position-absolute" style="top: 15px; right: 20px" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <form (ngSubmit)="onSubmitUpdateSim()" #formUpdate="ngForm">
+    <div class="modal-body">
+      <div class="form-row row">
+        <div class="form-group col-md-6">
+          <label>Mã CBNV <span class="text-danger">*</span></label>
+          <input class="form-control" name="code" [(ngModel)]="updateSimForm.code" required />
+        </div>
+        <div class="form-group col-md-6">
+          <label>Họ tên CBNV <span class="text-danger">*</span></label>
+          <input class="form-control" name="name" [(ngModel)]="updateSimForm.name" required />
+        </div>
+      </div>
+
+      <div class="form-row row">
+        <div class="form-group col-md-6">
+          <label>Số điện thoại <span class="text-danger">*</span></label>
+          <input class="form-control" name="phone"  required />
+        </div>
+        <div class="form-group col-md-6">
+          <label>Email <span class="text-danger">*</span></label>
+          <input class="form-control" name="email" [(ngModel)]="updateSimForm.email" required />
+        </div>
+      </div>
+      <div class="form-row row">
+        <div class="form-group col-md-6">
+          <label>Đơn vị <span class="text-danger">*</span></label>
+            <ng-select
+              class="custom-ng-select w-100"
+              [items]="listUnit"
+              bindLabel="name"
+              bindValue="id"
+              [(ngModel)]="updateSimForm.unit_id"
+              name="unit_id"
+              placeholder="Chọn đơn vị"
+              [searchable]="false"
+              [clearable]="false"
+              [dropdownPosition]="'auto'"
+              [ngModelOptions]="{ standalone: true }">
+            </ng-select>
+        </div>
+        <div class="form-group col-md-6">
+          <label>Ghi chú</label>
+          <input class="form-control" name="note" [(ngModel)]="updateSimForm.note" />
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer text-center d-block justify-content-between">
+      <button type="submit" class="btn btn-success">Cập nhật</button>
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Hủy</button>
+    </div>
+  </form>
+</ng-template>
+
+<ngb-pagination
+  class="d-flex justify-content-end pr-3 pt-2"
+  [collectionSize]="totalPage"
+  [(page)]="searchForm.page"
+  [pageSize]="searchForm.take"
+  [boundaryLinks]="true"
+  (pageChange)="loadPage($event)"
+>
+  <ng-template ngbPaginationPages let-page let-pages="pages">
+    <li class="ngb-custom-pages-item" *ngIf="pages.length > 0">
+      <div class="mb-3 d-flex flex-nowrap px-2">
+        <label for="paginationInput" class="col-form-label me-2 ms-1">Trang</label>
+        <input
+          #i
+          type="text"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          class="form-control custom-pages-input"
+          id="paginationInput"
+          [value]="searchForm.page"
+          (keyup.enter)="loadPage(i.value)"
+          (blur)="loadPage(i.value)"
+          (input)="formatInput($any($event).target)"
+          style="width: 2.7rem"
+        />
+        <span class="col-form-label text-nowrap px-2">
+          của {{ pages.length }}
+        </span>
+      </div>
+    </li>
+  </ng-template>
+</ngb-pagination>
+
+  </div>
+</div>

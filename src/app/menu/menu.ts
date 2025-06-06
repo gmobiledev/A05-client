@@ -114,7 +114,7 @@ export const menu: CoreMenu[] = [
         type: 'collapsible',
         icon: 'folder',
         badge: {
-          title: '1',
+          title: '2',
           translate: '',
           classes: 'badge-light-primary badge-pill'
         },
@@ -126,6 +126,14 @@ export const menu: CoreMenu[] = [
             type: 'item',
             icon: 'circle',
             url: 'units'
+          },
+                    {
+            id: 'task-product',
+            title: 'Danh sách số đã đấu nối',
+            translate: '',
+            type: 'item',
+            icon: 'circle',
+            url: 'task/task-product'
           },
         ]
       }
