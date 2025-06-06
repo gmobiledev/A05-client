@@ -1,0 +1,135 @@
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { TaskService } from 'app/auth/service/task.service';
+import { SweetAlertService } from 'app/utils/sweet-alert.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import * as dayjs from 'dayjs';
+import { UnitService } from 'app/auth/service/unit.service';
+
+@Component({
+  selector: 'app-task-user-history',
+  templateUrl: './task-user-history.component.html',
+  styleUrls: ['./task-user-history.component.scss']
+})
+export class TaskUserHistoryComponent implements OnInit {
+
+  public selectedSim: any;
+  public modalRef: any;
+
+  listUnit: any[] = [];
+  list: any[] = [];
+  totalPage = 0;
+
+  searchForm = {
+    phone_or_serial: '',
+    old_user_name: '',
+    new_user_name: '',
+    from_date: '',
+    to_date: '',
+    limit: 10,
+    page: 1
+  };
+
+  dateRange: any;
+  ranges: any = {
+    'Hôm nay': [dayjs(), dayjs()],
+    'Hôm qua': [dayjs().subtract(1, 'day'), dayjs().subtract(1, 'day')],
+    '7 ngày qua': [dayjs().subtract(6, 'day'), dayjs()],
+    'Tháng này': [dayjs().startOf('month'), dayjs().endOf('month')],
+    'Tháng trước': [
+      dayjs().subtract(1, 'month').startOf('month'),
+      dayjs().subtract(1, 'month').endOf('month')
+    ]
+  };
+
+  constructor(
+    private readonly taskService: TaskService,
+    private readonly alertService: SweetAlertService,
+    private readonly modalService: NgbModal,
+    private readonly unitService: UnitService,
+  ) {}
+
+  ngOnInit(): void {
+      this.unitService.getAllUnits().subscribe(res => {
+      this.listUnit = res.data || res;      
+    });
+    this.loadData();
+  }
+
+onSubmitSearch() {
+    if (this.dateRange?.startDate && this.dateRange?.endDate) {
+      const tzoffset = new Date().getTimezoneOffset() * 60000;
+      this.searchForm.from_date = new Date(new Date(this.dateRange.startDate.toISOString()).getTime() - tzoffset)
+        .toISOString().slice(0, 10);
+      this.searchForm.to_date = new Date(new Date(this.dateRange.endDate.toISOString()).getTime() - tzoffset)
+        .toISOString().slice(0, 10);
+    } else {
+      this.searchForm.from_date = '';
+      this.searchForm.to_date = '';
+    }
+
+    this.searchForm.page = 1;
+    this.loadData();
+  }
+
+  loadData() {
+    this.taskService.getSimTransferHistory(this.searchForm).subscribe(res => {
+      const wrapped = res?.data?.data ? res.data : res;
+
+      this.list = wrapped?.data || [];
+      this.totalPage = wrapped?.total || 0;
+    });
+    
+  }
+
+  formatInput(target: any) {
+  target.value = target.value.replace(/[^0-9]/g, '');
+  }
+
+  loadPage(page: any) {
+    const parsed = parseInt(page, 10);
+    if (!isNaN(parsed) && parsed > 0) {
+      this.searchForm.page = parsed;
+      this.loadData();
+    }
+  }
+
+    exportExcel() {
+    const params = {
+      phone_orserial: this.searchForm.phone_or_serial || '',
+      old_user_name: this.searchForm.old_user_name || '',
+      new_user_name: this.searchForm.new_user_name || '',
+      from_date: this.searchForm.from_date || '',
+      to_date: this.searchForm.to_date || '',
+      page: this.searchForm.page || 1,
+      limit: this.searchForm.limit || 10 
+    };
+
+    this.taskService.exportSimTransferHistoryExcel(params).subscribe({
+      next: (response) => {
+        const blob = new Blob([response.body], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        });
+
+        const contentDisposition = response.headers.get('Content-Disposition');
+        let fileName = 'lichsuchuyenchu.xlsx';
+        if (contentDisposition) {
+          const match = contentDisposition.match(/filename="?([^"]+)"?/);
+          if (match?.[1]) fileName = match[1];
+        }
+
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', fileName);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      },
+      error: (err) => {
+        console.error(err);
+        this.alertService.showMess('Xuất Excel thất bại');
+      }
+    });
+  }
+
+}

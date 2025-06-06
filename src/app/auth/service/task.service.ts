@@ -120,5 +120,15 @@ export class TaskService {
       responseType: 'blob'
     });
   }
+   exportSimTransferHistoryExcel(params: any): Observable<any> {
+    return this._http.get(`${environment.apiUrl}/task/a05/export-sim-transfer-history`, {
+      params,
+      observe: 'response',
+      responseType: 'blob'
+    });
+  }
 
+    getSimTransferHistory(params) {
+    return this._http.get<any>(`${environment.apiUrl}/task/a05/sim-transfer-history`, { params: params });
+  }
 }

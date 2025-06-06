@@ -16,6 +16,7 @@ import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import { TaskRechargeComponent } from './task-recharge/task-recharge.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TaskProductComponent } from './task-product/task-product.component';
+import { TaskUserHistoryComponent } from './task-user-history/task-user-history.component';
 
 // routing
 const routes: Routes = [
@@ -47,6 +48,10 @@ const routes: Routes = [
   {
     path: 'task-product',
     component: TaskProductComponent,
+  },
+    {
+    path: 'user-history',
+    component: TaskUserHistoryComponent,
   },
   {
     path: 'recharge',
@@ -106,7 +111,8 @@ const routes: Routes = [
     TaskDetailComponent,
     TaskSearchComponent,
     TaskRechargeComponent,
-    TaskProductComponent
+    TaskProductComponent,
+    TaskUserHistoryComponent
   ],
   imports: [
     CommonModule,
