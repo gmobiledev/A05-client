@@ -19,6 +19,7 @@ export class TaskProductComponent implements OnInit {
   listUnit: any[] = [];
   list: any[] = [];
   totalPage = 0;
+  public totalItems: number;
 
   updateSimForm: any = {
     code: '',
@@ -86,22 +87,16 @@ export class TaskProductComponent implements OnInit {
   }
 
   loadData() {
-      console.log('Search form:', this.searchForm); // Kiểm tra ở đây
 
     this.taskService.getAssignedNumbers(this.searchForm).subscribe(res => {
-      if (Array.isArray(res)) {
-        this.list = res;
-        this.totalPage = res.length;
-      } else {
-        this.list = res.data || [];
-        this.totalPage = res.meta?.total || 0;
-      }
+      this.list = res.data || [];
+      this.totalPage = res.length || 0;
+      this.totalItems = res.total
     });
   }
 
   openUpdateSimModal(modalTemplate: any, sim: any) {
     this.selectedSim = sim;
-      console.log('>>> SIM:', sim); // <- thêm dòng này
 
     this.updateSimForm = {
       code: sim.employee_code || '',

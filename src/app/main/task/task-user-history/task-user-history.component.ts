@@ -1,9 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TaskService } from 'app/auth/service/task.service';
 import { SweetAlertService } from 'app/utils/sweet-alert.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as dayjs from 'dayjs';
-import { UnitService } from 'app/auth/service/unit.service';
 
 @Component({
   selector: 'app-task-user-history',
@@ -14,6 +12,7 @@ export class TaskUserHistoryComponent implements OnInit {
 
   public selectedSim: any;
   public modalRef: any;
+  public totalItems: number;
 
   listUnit: any[] = [];
   list: any[] = [];
@@ -25,7 +24,7 @@ export class TaskUserHistoryComponent implements OnInit {
     new_user_name: '',
     from_date: '',
     to_date: '',
-    limit: 10,
+    limit: 20,
     page: 1
   };
 
@@ -44,14 +43,9 @@ export class TaskUserHistoryComponent implements OnInit {
   constructor(
     private readonly taskService: TaskService,
     private readonly alertService: SweetAlertService,
-    private readonly modalService: NgbModal,
-    private readonly unitService: UnitService,
   ) {}
 
   ngOnInit(): void {
-      this.unitService.getAllUnits().subscribe(res => {
-      this.listUnit = res.data || res;      
-    });
     this.loadData();
   }
 
@@ -77,6 +71,7 @@ onSubmitSearch() {
 
       this.list = wrapped?.data || [];
       this.totalPage = wrapped?.total || 0;
+      this.totalItems = wrapped?.total
     });
     
   }
@@ -86,7 +81,7 @@ onSubmitSearch() {
   }
 
   loadPage(page: any) {
-    const parsed = parseInt(page, 10);
+    const parsed = parseInt(page, 20);
     if (!isNaN(parsed) && parsed > 0) {
       this.searchForm.page = parsed;
       this.loadData();
@@ -101,7 +96,7 @@ onSubmitSearch() {
       from_date: this.searchForm.from_date || '',
       to_date: this.searchForm.to_date || '',
       page: this.searchForm.page || 1,
-      limit: this.searchForm.limit || 10 
+      limit: this.searchForm.limit || 20 
     };
 
     this.taskService.exportSimTransferHistoryExcel(params).subscribe({

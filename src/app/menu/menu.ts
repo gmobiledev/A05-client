@@ -116,7 +116,7 @@ export const menu: CoreMenu[] = [
         badge: {
           title: '3',
           translate: '',
-          classes: 'badge-light-primary badge-pill'
+          classes: 'badge-light-success badge-pill'
         },
         children: [
           {
