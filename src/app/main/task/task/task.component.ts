@@ -560,7 +560,7 @@ export class TaskComponent implements OnInit {
       formData.append("entries", JSON.stringify(this.entryList));
     }
 
-    this.taskService.createSimRegister(formData).subscribe(
+    this.taskService.createKitting(formData).subscribe(
       (res) => {
         if (!res.status) {
           this.alertService.showMess(res.message);

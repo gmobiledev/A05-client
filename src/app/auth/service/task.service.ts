@@ -81,10 +81,6 @@ export class TaskService {
     return this._http.post<any>(`${environment.apiUrl}/task/create-kitting-esim-order`, data);
   }
 
-  createSimRegister(data) {
-    return this._http.post<any>(`${environment.apiUrl}/task/create-kitting-order`, data);
-  }
-
   updateSimProfile(id, data) {
     return this._http.put<any>(`${environment.apiUrl}/task/sim-profile/${id}`, data);
   }
