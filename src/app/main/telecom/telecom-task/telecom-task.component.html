@@ -138,7 +138,7 @@
             <h4 class="card-title">{{ contentHeader.headerTitle }}</h4>
           </div>
           <div class="card-body">
-            <form (ngSubmit)="onSubmitSearch()" class="mb-2">
+            <form (ngSubmit)="onSubmitSearch()" class="mb-2">              
               <div class="row">
                 <div class="col-md-4">
                   <div class="form-group">
@@ -225,7 +225,9 @@
                 </div>
               </div>
             </form>
-
+            <div *ngIf="notData && list.length === 0" class="text-center mt-3 text-muted">
+              Không có dữ liệu.
+            </div>
             <div class="row">
               <div class="col-md-12">
                 <span>Tổng số :</span> <b>{{ totalItems }}</b>

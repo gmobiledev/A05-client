@@ -25,13 +25,13 @@
       </button>
     <div *ngIf="showMenu" class="dropdown-menu show position-absolute text-nowrap"
      style="left: auto; right: 100%; top: 0; transform: translateX(-8px); z-index: 1060; min-width: 180px;">
-        <button class="dropdown-item d-flex align-items-center" (click)="editUnit()">
+        <button class="dropdown-item d-flex align-items-center w-100" (click)="editUnit()">
           <i class="fa fa-edit mr-2"></i> <span>Sửa</span>
         </button>
-        <button class="dropdown-item d-flex align-items-center" (click)="addChild()">
+        <button class="dropdown-item d-flex align-items-center w-100" (click)="addChild()">
           <i class="fa fa-plus mr-2"></i> <span>Thêm đơn vị con</span>
         </button>
-        <button class="dropdown-item text-danger d-flex align-items-center" (click)="deleteUnit()">
+        <button class="dropdown-item text-danger d-flex align-items-center w-100" (click)="deleteUnit()">
           <i class="fa fa-trash mr-2"></i> <span>Xóa</span>
         </button>
       </div>

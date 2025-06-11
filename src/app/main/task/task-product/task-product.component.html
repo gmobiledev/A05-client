@@ -1,7 +1,7 @@
 <div class="card mt-3">
   <div class="card-body">
     <div class="d-flex justify-content-between align-items-center mb-2">
-      <h4 class="card-title mb-0 font-weight-bold">Danh sách số đã đấu nối</h4>
+      <h4 class="card-title mb-0 font-weight-bold">Danh sách số đã sử dụng</h4>
     </div>
 
     <form (ngSubmit)="onSubmitSearch()" class="row">
@@ -72,10 +72,20 @@
           <td>{{ item.updated_at | date: 'dd/MM/yyyy HH:mm' }}</td>
           <td>{{ item.full_name }}</td>
           <td>
-            <button class="tooltip-wrapper btn p-0 border-0 bg-transparent" (click)="openUpdateSimModal(modalUpdateSim, item)" >
-              <i data-feather="edit" class="text-primary cursor-pointer"></i>
-              <span class="custom-tooltip">Cập nhật người nhận SIM</span>
-            </button>
+            <div class="row mt-1">
+              <div class="col-md-2">
+                <button class="tooltip-wrapper btn p-0 border-0 bg-transparent" (click)="openUpdateSimModal(modalUpdateSim, item)" >
+                  <i data-feather="edit" class="text-primary cursor-pointer"></i>
+                  <span class="custom-tooltip">Cập nhật người nhận SIM</span>
+                </button>
+            </div>
+            <div class="col-md-2">
+                <button class="tooltip-wrapper btn p-0 border-0 bg-transparent" (click)="openViewSimModal(viewSimModal, item)" >
+                  <i data-feather="eye" class="text-primary cursor-pointer"></i>
+                  <span class="custom-tooltip">Xem chi tiết người nhận SIM</span>
+                </button>
+            </div>
+          </div>
           </td>
         </tr>
         <tr *ngIf="list.length === 0">
@@ -89,8 +99,8 @@
     <h3 class="modal-title font-weight-bold text-center w-100 mb-0">
       Cập nhật người sử dụng SIM
     </h3>
-        <p class="text-muted mt-1">[{{ updateSimForm.phone }}]</p>
-    <button type="button" class="close position-absolute" style="top: 15px; right: 20px" aria-label="Close" (click)="modal.dismiss()">
+        <p class="text-muted mt-1">[{{ selectedSim?.name }}]</p>
+    <button type="button" class="close position-absolute btn btn-danger" style="top: 10px; right: 25px" aria-label="Close" (click)="modal.dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -110,8 +120,8 @@
 
       <div class="form-row row">
         <div class="form-group col-md-6">
-          <label>Số điện thoại <span class="text-danger">*</span></label>
-          <input class="form-control" name="phone"  required />
+          <label>Số điện thoại liện hệ <span class="text-danger">*</span></label>
+          <input class="form-control" name="phone" [(ngModel)]="updateSimForm.phone"  required />
         </div>
         <div class="form-group col-md-6">
           <label>Email <span class="text-danger">*</span></label>
@@ -141,12 +151,82 @@
         </div>
       </div>
     </div>
-
     <div class="modal-footer text-center d-block justify-content-between">
       <button type="submit" class="btn btn-success">Cập nhật</button>
       <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Hủy</button>
     </div>
   </form>
+</ng-template>
+
+    <ng-template #viewSimModal let-modal>
+
+    <div class="modal-header text-center d-block">
+    <h3 class="modal-title font-weight-bold text-center w-100 mb-0">
+      Xem chi tiết người sử dụng SIM
+    </h3>
+        <p class="text-muted mt-1">[{{ selectedSim?.name }}]</p>
+    <button type="button" class="close position-absolute btn btn-danger" style="top: 10px; right: 25px" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" *ngIf="selectedSim">
+    <div class="form-row row">
+      <div class="form-group col-md-6">
+        <label>Mã CBNV:</label>
+        <input class="form-control" [value]="selectedSim.user_code" readonly />
+      </div>
+      <div class="form-group col-md-6">
+        <label>Họ tên CBNV:</label>
+        <input class="form-control" [value]="selectedSim.full_name" readonly />
+      </div>
+    </div>
+
+    <div class="form-row row">
+      <div class="form-group col-md-6">
+        <label>Số điện thoại liên hệ:</label>
+        <input class="form-control" [value]="selectedSim.mobile" readonly />
+      </div>
+      <div class="form-group col-md-6">
+        <label>Email:</label>
+        <input class="form-control" [value]="selectedSim.email" readonly />
+      </div>
+    </div>
+
+    <div class="form-row row">
+      <div class="form-group col-md-6">
+        <label>Đơn vị:</label>
+    <input class="form-control" [value]="getUnitName(selectedSim.unit_id)" readonly />
+      </div>
+      <div class="form-group col-md-6">
+        <label>Ghi chú:</label>
+        <input class="form-control" [value]="selectedSim.note" readonly />
+      </div>
+    </div>
+  </div>
+
+    <div class="modal-footer text-center d-block justify-content-between">
+    <button type="button" class="btn btn-secondary" (click)="modal.close()">Đóng</button>
+  </div>
+</ng-template>
+
+<ng-template #confirmUpdateModal let-modal>
+  <div class="modal-header text-center d-block">
+    <h3 class="modal-title font-weight-bold text-center w-100 mb-0">
+      Xác nhận cập nhật người sử dụng SIM
+    </h3>         <p class="text-muted mt-1">[{{ selectedSim?.name }}]</p>
+
+    <button type="button" class="close position-absolute btn btn-danger" style="top: 10px; right: 25px" aria-label="Close" (click)="modal.dismiss()">
+      &times;
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    Bạn có chắc chắn muốn cập nhật <strong>{{ updateSimForm.name }}</strong> là người sử dụng SIM <strong>{{ selectedSim?.name }}</strong>?
+  </div>
+  
+    <div class="modal-footer text-center d-block justify-content-between">
+    <button type="button" class="btn btn-success" (click)="confirmUpdate(modal)">Đồng ý</button>
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Hủy</button>
+  </div>
 </ng-template>
 
 <ngb-pagination

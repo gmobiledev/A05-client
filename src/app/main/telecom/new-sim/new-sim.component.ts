@@ -300,24 +300,6 @@ export class NewSimComponent implements OnInit, OnDestroy {
       }
     }
 
-    //hien thi thong tin "có giỏ hàng chưa hoàn tất"
-    if (this.currentTask && (this.currentTask.status == 0 || this.currentTask.status == undefined)) {
-      const rTask = await this.telecomService.taskDetail(this.currentTask.id).toPromise();
-      if (rTask.data.status == 0) {
-        if ((await this.alertService.showConfirm("Bạn có giỏ hàng mã " + this.currentTask.id + " chưa hoàn tất", "Vui lòng cập nhật thêm thông tin", "Cập nhật", "Bỏ qua")).value) {
-          this.onToStep({ step: 4 });
-        } else {
-          this.currentTask = null;
-          localStorage.removeItem(ObjectLocalStorage.CURRENT_TASK);
-          localStorage.removeItem(ObjectLocalStorage.CURRENT_PEOPLE_INFO_NEW_SIM);
-        }
-      } else {
-        this.currentTask = null;
-        localStorage.removeItem(ObjectLocalStorage.CURRENT_TASK);
-        localStorage.removeItem(ObjectLocalStorage.CURRENT_PEOPLE_INFO_NEW_SIM);
-      }
-    }
-
     // content header
     this.contentHeader = {
       headerTitle: 'Mua số',

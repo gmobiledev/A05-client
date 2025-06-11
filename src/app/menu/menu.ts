@@ -46,7 +46,7 @@ export const menu: CoreMenu[] = [
         children: [
           {
             id: 'newSim',
-            title: 'Đăng ký TTTB',
+            title: 'Đăng ký Cá nhân',
             translate: '',
             type: 'item',
             icon: 'circle',
@@ -81,7 +81,7 @@ export const menu: CoreMenu[] = [
           // },
           {
             id: 'changeSim',
-            title: 'Đơn ĐKTTTB',
+            title: 'Đăng ký doanh nghiệp (theo lô)',
             translate: '',
             type: 'item',
             icon: 'circle',

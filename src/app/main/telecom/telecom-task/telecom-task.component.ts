@@ -56,6 +56,8 @@ export class TelecomTaskComponent implements OnInit {
     otp: "",
   };
   public totalItems: number;
+  public hasNextPage: boolean = true;
+
   public summaryTask: any;
 
   public isActivedBoxNewInit: boolean = false;
@@ -483,7 +485,7 @@ export class TelecomTaskComponent implements OnInit {
     this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
     if (this.currentUser && this.currentUser.roles) {
     }
-
+ 
     this.telecomService.getAllTask(this.searchForm).subscribe((res) => {
       if (res.data.tasks.length > 0) {
         this.notData = true;
@@ -494,7 +496,11 @@ export class TelecomTaskComponent implements OnInit {
           return timeY - timeX; // Sắp xếp theo giảm dần
         });
         this.totalItems = res.data.count;
-      }
+        this.hasNextPage = res.data.hasNextPage;
+        } else {
+          this.hasNextPage = false;
+             this.totalItems = 0;
+        }
     });
     // this.telecomService.getSummary().subscribe(res => {
     //   this.summaryTask = res.data;

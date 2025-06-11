@@ -4,12 +4,6 @@
             <div class="col-6">
                 <h5>Đơn hàng của bạn:</h5>
             </div>
-            <div class="col-6">
-                <button *ngIf="taskDetail && taskDetail.id" (click)="onCancelTask(taskDetail.id)" type="button" class="btn btn-block btn-outline-primary "
-                rippleEffect>
-                <span class="align-middle ">Hủy đơn</span>            
-            </button>
-            </div>
         </div>
         <div class="pt-2 pb-2" *ngIf="taskDetail && taskDetail.msisdns && taskDetail.msisdns.length > 0">
         <div class="row mb-1" *ngFor="let item of taskDetail.msisdns">
@@ -18,7 +12,7 @@
             </div>
             <div class="col-5" (click)="onEditSerial(item)">
                 <p class="pb-0 mb-0">
-                    {{ item.msisdn }}
+                   <i>Số thuê bao: </i> {{ item.msisdn }}
                 </p>
                 <p class="pb-0 mb-0">
                     <i>Gói cước: </i> {{ item.package }}
@@ -26,17 +20,16 @@
                 <p class="pb-0 mb-0">
                     <i>Serial: </i> {{ item.serial }}
                 </p>
-            </div>
-            <div class="col-5">
-                {{ item.amount | number }}
+                <p class="pb-0 mb-0">
+                <i>Bộ hòa mạng: </i>{{ item.amount | number }}
+                </p>
             </div>
         </div>
         </div>        
         
         <div class="row">
-            <div class="col-12">
-            <h6>Tổng tiền: {{ totalMoney | number  }}</h6>
-            <h6>{{ totalMoney | numberToText }}</h6>
+            <div class="offset-2 col-12">
+            <h6>Tổng tiền: {{ totalMoney | number  }} ({{ totalMoney | numberToText }})</h6>
         </div>
         </div>
 
@@ -86,20 +79,27 @@
             </div>
         </div> -->
 
-        <div class="row">
-    <div class="col-6">
-        <button (click)="onToFirstStep()" type="button" class="btn btn-block btn-outline-primary "
-            rippleEffect>
-            <span class="align-middle ">Mua thêm số</span>            
-        </button>
+<div class="row">
+  <div class="col-12 d-flex justify-content-end">
+    <button
+      *ngIf="taskDetail && taskDetail.id"
+      (click)="onCancelTask(taskDetail.id)"
+      type="button"
+      class="btn btn-outline-primary mr-2"
+      rippleEffect
+    >
+      <span class="align-middle">Hủy đơn</span>
+    </button>
+
+    <button
+      (click)="onNextStep()"
+      type="button"
+      class="btn btn-primary btn-next"
+      rippleEffect
+    >
+      <span class="align-middle">Tiếp tục</span>
+      <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+    </button>
+  </div>
 </div>
-<div class="col-6">
-        <button (click)="onNextStep()" type="button" class="btn btn-block btn-primary btn-next"
-            rippleEffect>
-            <span class="align-middle ">Tiếp tục</span>
-            <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
-        </button>
-    </div>
-    </div>
-</div> 
 </div>

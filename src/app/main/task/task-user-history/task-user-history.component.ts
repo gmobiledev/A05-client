@@ -12,11 +12,11 @@ export class TaskUserHistoryComponent implements OnInit {
 
   public selectedSim: any;
   public modalRef: any;
-  public totalItems: number;
 
   listUnit: any[] = [];
   list: any[] = [];
-  totalPage = 0;
+  totalPages = 0;
+  totalItems: 0;
 
   searchForm = {
     phone_or_serial: '',
@@ -24,7 +24,7 @@ export class TaskUserHistoryComponent implements OnInit {
     new_user_name: '',
     from_date: '',
     to_date: '',
-    limit: 20,
+    limit: 10,
     page: 1
   };
 
@@ -67,11 +67,10 @@ onSubmitSearch() {
 
   loadData() {
     this.taskService.getSimTransferHistory(this.searchForm).subscribe(res => {
-      const wrapped = res?.data?.data ? res.data : res;
-
-      this.list = wrapped?.data || [];
-      this.totalPage = wrapped?.total || 0;
-      this.totalItems = wrapped?.total
+    const wrapped = res?.data?.data ? res.data : res;
+    this.list = wrapped?.data || [];
+    this.totalItems = wrapped?.total || 0;
+    this.totalPages = Math.ceil(this.totalItems / this.searchForm.limit);
     });
     
   }
@@ -81,8 +80,8 @@ onSubmitSearch() {
   }
 
   loadPage(page: any) {
-    const parsed = parseInt(page, 20);
-    if (!isNaN(parsed) && parsed > 0) {
+    const parsed = parseInt(page, 10);
+    if (!isNaN(parsed) && parsed > 0 && parsed <= this.totalPages) {
       this.searchForm.page = parsed;
       this.loadData();
     }
@@ -90,13 +89,13 @@ onSubmitSearch() {
 
     exportExcel() {
     const params = {
-      phone_orserial: this.searchForm.phone_or_serial || '',
+      phone_or_serial: this.searchForm.phone_or_serial || '',
       old_user_name: this.searchForm.old_user_name || '',
       new_user_name: this.searchForm.new_user_name || '',
       from_date: this.searchForm.from_date || '',
       to_date: this.searchForm.to_date || '',
       page: this.searchForm.page || 1,
-      limit: this.searchForm.limit || 20 
+      limit: this.searchForm.limit || 10 
     };
 
     this.taskService.exportSimTransferHistoryExcel(params).subscribe({

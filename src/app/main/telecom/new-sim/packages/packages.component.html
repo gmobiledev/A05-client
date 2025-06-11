@@ -23,11 +23,12 @@
     </div>
   </div>
   <div class="col-12">
+      <div class="d-flex justify-content-end gap-2">
     <div style="text-align: end">
       <button
         type="button"
         (click)="onNextStep('skip')"
-        class="btn btn-outline-primary mb-1"
+        class="btn btn-outline-primary mr-2"
         rippleEffect
       >
         <span class="align-middle">Bỏ qua</span>
@@ -36,11 +37,12 @@
     <button
       (click)="onNextStep('next')"
       type="button"
-      class="btn btn-block btn-primary btn-next"
+      class="btn btn-primary btn-next mb-1"
       rippleEffect
     >
       <span class="align-middle">Tiếp tục</span>
       <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
     </button>
   </div>
+    </div>
 </div>

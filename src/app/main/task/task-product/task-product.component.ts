@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { TaskService } from 'app/auth/service/task.service';
 import { SweetAlertService } from 'app/utils/sweet-alert.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -12,6 +12,7 @@ import { UnitService } from 'app/auth/service/unit.service';
 })
 export class TaskProductComponent implements OnInit {
   @ViewChild('modalUpdateSim') modalUpdateSim: any;
+  @ViewChild('confirmUpdateModal', { static: true }) confirmUpdateModalRef!: TemplateRef<any>;
 
   public selectedSim: any;
   public modalRef: any;
@@ -20,6 +21,7 @@ export class TaskProductComponent implements OnInit {
   list: any[] = [];
   totalPage = 0;
   public totalItems: number;
+  pendingUpdatePayload: any;
 
   updateSimForm: any = {
     code: '',
@@ -27,7 +29,7 @@ export class TaskProductComponent implements OnInit {
     phone: '',
     email: '',
     unit_id: '',
-    note: ''
+    note: '',
   };
 
   searchForm = {
@@ -99,13 +101,29 @@ export class TaskProductComponent implements OnInit {
     this.selectedSim = sim;
 
     this.updateSimForm = {
-      code: sim.employee_code || '',
-      name: sim.full_name || '',
-      phone: sim.name || '',
-      email: sim.email || '',
-      unit_id: sim.unit_id ?? null,
-      note: ''
+      code:  '',
+      name:  '',
+      phone:  '',
+      email:  '',
+      unit_id: null,
+      note: '',
     };
+    this.modalRef = this.modalService.open(modalTemplate, {
+      centered: true,
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false
+    });
+  }
+
+  getUnitName(unit_id: number): string {
+    const unit = this.listUnit.find(u => u.id === unit_id);
+    return unit ? unit.name : 'Chưa có đơn vị';
+  }
+
+  openViewSimModal(modalTemplate: any, sim: any) {
+    this.selectedSim = sim;
+
     this.modalRef = this.modalService.open(modalTemplate, {
       centered: true,
       size: 'lg',
@@ -128,8 +146,17 @@ export class TaskProductComponent implements OnInit {
   }
 
   onSubmitUpdateSim() {
-
-    const payload = {
+    if (
+      !this.updateSimForm.code?.trim() ||
+      !this.updateSimForm.name?.trim() ||
+      !this.updateSimForm.phone?.trim() ||
+      !this.updateSimForm.email?.trim() ||
+      !this.updateSimForm.unit_id
+    ) {
+      this.alertService.showMess('Vui lòng nhập đầy đủ các trường bắt buộc trước khi cập nhật');
+      return; 
+    }
+    this.pendingUpdatePayload = {
       serial: this.selectedSim.serial,
       employeeCode: this.updateSimForm.code,
       fullName: this.updateSimForm.name,
@@ -139,7 +166,19 @@ export class TaskProductComponent implements OnInit {
       note: this.updateSimForm.note
     };
 
-    this.taskService.updateUser(payload).subscribe({
+    // Mở popup xác nhận
+    this.modalService.open(this.confirmUpdateModalRef, {
+      size: 'lg',
+      centered: true,
+      backdrop: 'static',
+      keyboard: false
+    });
+  }
+
+  confirmUpdate(modalRef: any) {
+    modalRef.close();
+
+    this.taskService.updateUser(this.pendingUpdatePayload).subscribe({
       next: () => {
         this.alertService.showMess('Cập nhật người sử dụng SIM thành công');
         this.closeModal();

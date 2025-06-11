@@ -55,6 +55,7 @@
           <th>Thời gian cập nhật</th>
           <th>Người nhận cũ</th>
           <th>Người nhận mới</th>
+          <th>Ghi chú</th>
         </tr>
       </thead>
       <tbody>
@@ -66,6 +67,7 @@
           <td>{{ item.updated_at | date: 'dd/MM/yyyy HH:mm' }}</td>
           <td>{{ item.old_user?.full_name || '-' }}</td>
           <td>{{ item.new_user?.full_name || '-' }}</td>
+          <td>{{ item.note || '-' }}</td>
         </tr>
         <tr *ngIf="list.length === 0">
           <td colspan="7" class="text-center text-muted">Không có dữ liệu</td>
@@ -73,29 +75,30 @@
       </tbody>
     </table>
 
-    <ngb-pagination
+ <ngb-pagination
       class="d-flex justify-content-end pr-3 pt-2"
-      [collectionSize]="totalPage"
+      [collectionSize]="totalItems"
       [(page)]="searchForm.page"
       [pageSize]="searchForm.limit"
       [boundaryLinks]="true"
-      (pageChange)="loadPage($event)">
+      (pageChange)="loadPage($event)"
+    >
       <ng-template ngbPaginationPages let-page let-pages="pages">
         <li class="ngb-custom-pages-item" *ngIf="pages.length > 0">
-          <div class="mb-3 d-flex flex-nowrap px-2">
+          <div class="mb-3 d-flex flex-nowrap px-2 align-items-center">
             <label for="paginationInput" class="col-form-label me-2 ms-1">Trang</label>
             <input
               #i
+              id="paginationInput"
               type="text"
               inputmode="numeric"
               pattern="[0-9]*"
               class="form-control custom-pages-input"
-              id="paginationInput"
               [value]="searchForm.page"
               (keyup.enter)="loadPage(i.value)"
               (blur)="loadPage(i.value)"
-              (input)="formatInput($any($event).target)"
-              style="width: 2.7rem"
+              (input)="formatInput($event.target)"
+              style="width: 3.5rem"
             />
             <span class="col-form-label text-nowrap px-2">của {{ pages.length }}</span>
           </div>

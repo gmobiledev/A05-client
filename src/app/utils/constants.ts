@@ -40,6 +40,7 @@ export enum TaskTelecomStatus {
     STATUS_SUCCESS_PART = 11, // THành công 1 phần
     STATUS_Waiting_For_Payment = 20, // chờ thanh toán 
     STATUS_Waiting_For_Information = 60, // chờ thông tin sim
+    STATUS_NEW_ORDER_ORGANIZATION = 50
 }
 
 export enum ServiceCode {
