@@ -82,7 +82,7 @@ export class TaskService {
   }
 
   createSimRegister(data) {
-    return this._http.post<any>(`${environment.apiUrl}/task/create-sim-register-order`, data);
+    return this._http.post<any>(`${environment.apiUrl}/task/create-kitting-order`, data);
   }
 
   updateSimProfile(id, data) {
