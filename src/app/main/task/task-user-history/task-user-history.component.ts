@@ -17,8 +17,10 @@ export class TaskUserHistoryComponent implements OnInit {
   list: any[] = [];
   totalPages = 0;
   totalItems: 0;
+  length: 0;
 
   searchForm = {
+    channel_name: '',
     phone_or_serial: '',
     old_user_name: '',
     new_user_name: '',
@@ -49,7 +51,7 @@ export class TaskUserHistoryComponent implements OnInit {
     this.loadData();
   }
 
-onSubmitSearch() {
+  onSubmitSearch() {
     if (this.dateRange?.startDate && this.dateRange?.endDate) {
       const tzoffset = new Date().getTimezoneOffset() * 60000;
       this.searchForm.from_date = new Date(new Date(this.dateRange.startDate.toISOString()).getTime() - tzoffset)
@@ -71,6 +73,7 @@ onSubmitSearch() {
     this.list = wrapped?.data || [];
     this.totalItems = wrapped?.total || 0;
     this.totalPages = Math.ceil(this.totalItems / this.searchForm.limit);
+    this.length = wrapped?.length || 0;
     });
     
   }

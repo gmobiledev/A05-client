@@ -16,6 +16,14 @@
       </div>
       <div class="col-md-4 mb-2">
         <input
+          class="form-control"
+          [(ngModel)]="searchForm.channel_name"
+          name="channel_name"
+          placeholder="Nhập tên kho"
+        />
+      </div>
+      <div class="col-md-4 mb-2">
+        <input
           type="text"
           placeholder="Khoảng thời gian"
           [ngModelOptions]="{ standalone: true }"
@@ -49,7 +57,7 @@
       <thead>
         <tr>
           <th>STT</th>
-          <th>Kênh</th>
+          <th>Kho</th>
           <th>Số điện thoại</th>
           <th>Serial SIM</th>
           <th>Thời gian cập nhật</th>
