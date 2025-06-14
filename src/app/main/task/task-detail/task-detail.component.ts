@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { UserService } from 'app/auth/service';
@@ -22,7 +22,7 @@ export class TaskDetailComponent implements OnInit {
   @BlockUI('section-block') itemBlockUI: NgBlockUI;
   
   public contentHeader: any = {
-    headerTitle: 'Chi tiết',
+    headerTitle: 'Chi tiết xác nhận ĐKTTTB',
     actionButton: true,
     breadcrumb: {
       type: '',
@@ -33,12 +33,7 @@ export class TaskDetailComponent implements OnInit {
           link: '/'
         },
         {
-          name: 'Danh sách',
-          isLink: true,
-          link: '/task'
-        },
-        {
-          name: 'Chi tiết',
+          name: 'Chi tiết xác nhận ĐKTTTB',
           isLink: false
         }
       ]
@@ -64,7 +59,7 @@ export class TaskDetailComponent implements OnInit {
   dataUpdate = {
     amount: 0
   }
-
+  test;
   constructor(
     private readonly modalService: NgbModal,
     private readonly taskService: TaskService,
@@ -72,7 +67,9 @@ export class TaskDetailComponent implements OnInit {
     private readonly commonService: CommonService,
     private readonly packageService: PackagesService,
     private readonly route: ActivatedRoute,
-    private alertService: SweetAlertService
+    private alertService: SweetAlertService,
+    private readonly router: Router,
+  
   ) { 
     this.id = this.route.snapshot.paramMap.get('id');
     this.getData();
@@ -88,9 +85,12 @@ export class TaskDetailComponent implements OnInit {
     }
     if ((await this.alertService.showConfirm("Bạn có đồng ý xác nhận đơn?")).value) {
       this.taskService.comfirmTask(dataPost).subscribe(res => {
+        const taskId = res.data.data;
         this.alertService.showSuccess(res.message);
         this.getData();
-        this.modalClose();
+        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this.router.navigate(['/task', taskId]);
+        });
       }, error => {
         this.alertService.showMess(error);
       })
@@ -347,12 +347,6 @@ export class TaskDetailComponent implements OnInit {
       this.listSerialShow = res.data.details.filter(x => x.attribute == 'msisdn');
     }
     this.price = res.data.amount;
-    if(res.data.service_code == ServiceCode.ADD_DATA_BALANCE) {
-      const resService = await this.userService.getService(res.data.service_code).toPromise()
-        let priceItem = resService.data.details.find(x => x.attribute == 'price');
-        this.price = res.data.amount * ( priceItem ? parseInt(priceItem.value) : 3000 );
-      
-    }
     this.itemBlockUI.stop();
 
     if([ServiceCode.SIM_KITTING, ServiceCode.SIM_KITTING_ESIM, ServiceCode.SIM_BUNDLE].includes(res.data.service_code)) {
@@ -362,45 +356,15 @@ export class TaskDetailComponent implements OnInit {
       const packgeItems = await this.packageService.getAll({code: this.getJSONDetail('package')}).toPromise();
       this.price = packgeItems.data.packages[0].price * res.data.details.filter(x => x.attribute == 'msisdn').length;
     }
-    if (this.data.service_code == ServiceCode.SIM_PROFILE) {
-      this.contentHeader.headerTitle = 'Chi tiết đơn profile SIM';
-      this.contentHeader.breadcrumb.links[1].name = 'Danh sách đơn profile SIM';
-      this.contentHeader.breadcrumb.links[1].link = '/task/sim';
-      this.currency = '';
-    } else if (this.data.service_code == ServiceCode.SIM_KITTING) {
+   if (this.data.service_code == ServiceCode.SIM_KITTING) {
       this.contentHeader.headerTitle = 'Chi tiết đơn kitting';
       this.contentHeader.breadcrumb.links[1].name = 'Danh sách kitting';
-      this.contentHeader.breadcrumb.links[1].link = '/task/kitting';
-      this.currency = '';
-    } else if (this.data.service_code == ServiceCode.SIM_KITTING_ESIM) {
-      this.contentHeader.headerTitle = 'Chi tiết đơn kitting esim';
-      this.contentHeader.breadcrumb.links[1].name = 'Danh sách kitting esim';
       this.contentHeader.breadcrumb.links[1].link = '/task/kitting';
       this.currency = '';
     } else if (this.data.service_code == ServiceCode.SIM_REGISTER) {
       this.contentHeader.headerTitle = 'Chi tiết yêu cầu ĐKTTTB';
       this.contentHeader.breadcrumb.links[1].name = 'Danh sách yêu cầu ĐKTTTB';
       this.contentHeader.breadcrumb.links[1].link = '/task/sim-register';
-      this.currency = '';
-    } else if (this.data.service_code == ServiceCode.ADD_DATA_BALANCE) {
-      this.contentHeader.headerTitle = 'Chi tiết đơn nạp Data';
-      this.contentHeader.breadcrumb.links[1].name = 'Danh sách nạp Data';
-      this.contentHeader.breadcrumb.links[1].link = '/task/data';
-      this.currency = 'GB';
-    } else if (this.data.service_code == ServiceCode.ADD_MONEY_BALANCE) {
-      this.contentHeader.headerTitle = 'Chi tiết đơn nạp tiền';
-      this.contentHeader.breadcrumb.links[1].name = 'Danh sách nạp tiền';
-      this.contentHeader.breadcrumb.links[1].link = '/task/balance';
-      this.currency = 'VND';
-    } else if (this.data.service_code == ServiceCode.ADD_MOBILE_PACKAGE) {
-      this.contentHeader.headerTitle = 'Chi tiết đơn nạp data';
-      this.contentHeader.breadcrumb.links[1].name = 'Danh sách nạp data';
-      this.contentHeader.breadcrumb.links[1].link = '/task/add-mobile-package';
-      this.currency = 'GB';
-    } else if (this.data.service_code == ServiceCode.SIM_BUNDLE) {
-      this.contentHeader.headerTitle = 'Chi tiết đơn bundle';
-      this.contentHeader.breadcrumb.links[1].name = 'Danh sách bundle';
-      this.contentHeader.breadcrumb.links[1].link = '/task/sim-bundle';
       this.currency = '';
     }
   }

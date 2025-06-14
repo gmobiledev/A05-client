@@ -73,12 +73,12 @@ export class TaskProductComponent implements OnInit {
   onSubmitSearch() {
     if (this.dateRange?.startDate && this.dateRange?.endDate) {
       const tzoffset = new Date().getTimezoneOffset() * 60000;
-      this.searchForm.fromDate = new Date(
-        new Date(this.dateRange.startDate.toISOString()).getTime() - tzoffset
-      ).toISOString().slice(0, 10);
-      this.searchForm.toDate = new Date(
-        new Date(this.dateRange.endDate.toISOString()).getTime() - tzoffset
-      ).toISOString().slice(0, 10);
+      this.searchForm.fromDate = new Date(new Date(this.dateRange.startDate.toISOString()).getTime() - tzoffset)
+        .toISOString();
+
+      const endDateLocal = new Date(this.dateRange.endDate);
+      endDateLocal.setHours(23, 59, 59, 999);
+      this.searchForm.toDate = new Date(endDateLocal.getTime() - tzoffset).toISOString();
     } else {
       this.searchForm.fromDate = '';
       this.searchForm.toDate = '';

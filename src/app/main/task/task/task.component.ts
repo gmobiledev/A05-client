@@ -161,49 +161,15 @@ export class TaskComponent implements OnInit {
     const data = this.route.snapshot.data;
     this.currentService =
       data && data.service ? data.service : ServiceCode.AIRTIME_TOPUP;
-    if (this.currentService == ServiceCode.SIM_PROFILE) {
-      this.contentHeader.headerTitle = "Danh sách đơn profile SIM";
-      this.contentHeader.breadcrumb.links[1].name = "Danh sách đơn profile SIM";
-      this.formCreateLabel.amount = "Số lượng";
-    } else if (this.currentService == ServiceCode.SIM_KITTING) {
+    if (this.currentService == ServiceCode.SIM_KITTING) {
       this.contentHeader.headerTitle = "Danh sách kitting";
       this.contentHeader.breadcrumb.links[1].name = "Danh sách kitting";
-      this.formCreateLabel.amount = "Số lượng";
-    } else if (this.currentService == ServiceCode.SIM_KITTING_ESIM) {
-      this.contentHeader.headerTitle = "Danh sách kitting esim";
-      this.contentHeader.breadcrumb.links[1].name = "Danh sách kitting esim";
       this.formCreateLabel.amount = "Số lượng";
     } else if (this.currentService == ServiceCode.SIM_REGISTER) {
       this.contentHeader.headerTitle = "Danh sách yêu cầu ĐKTTTB";
       this.contentHeader.breadcrumb.links[1].name = "Danh sách yêu cầu ĐKTTTB";
       this.formCreateLabel.amount = "Số lượng";
-    } else if (this.currentService == ServiceCode.ADD_MONEY_BALANCE) {
-      this.contentHeader.headerTitle = "Danh sách giao dịch";
-      this.contentHeader.breadcrumb.links[1].name = "Danh sách giao dịch";
-      this.formCreateLabel.amount = "Số tiền";
-      this.maxAmount = 10000000000;
-      this.btnCreate = "Nạp tiền";
-    } else if (this.currentService == ServiceCode.ADD_DATA_BALANCE) {
-      this.contentHeader.headerTitle = "Danh sách giao dịch Data";
-      this.contentHeader.breadcrumb.links[1].name = "Danh sách giao dịch Data";
-      this.formCreateLabel.amount = "Số GB";
-      this.maxAmount = 10000000;
-      this.btnCreate = "Mua Data";
-      this.selectTopup = [
-        {
-          value: 0,
-          label: "Mua Data",
-        },
-        {
-          value: 1,
-          label: "Nạp Data",
-        },
-      ];
-    } else if (this.currentService == ServiceCode.SIM_BUNDLE) {
-      this.contentHeader.headerTitle = "Danh sách bundle";
-      this.contentHeader.breadcrumb.links[1].name = "Danh sách bundle";
-      this.formCreateLabel.amount = "Số lượng";
-    }
+    } 
     if(this.currentService != ServiceCode.ADD_MONEY_BALANCE){
 
       this.searchForm.service_code = this.currentService;
@@ -351,30 +317,7 @@ export class TaskComponent implements OnInit {
   }
 
   async onCreateTask() {
-    if (this.currentService == ServiceCode.SIM_PROFILE) {
-      if (
-        (await this.alertService.showConfirm("Bạn có đồng ý tạo đơn?")).value
-      ) {
-        this.onCreateTaskSimProfile();
-      }
-    } else if (
-      this.currentService == ServiceCode.ADD_DATA_BALANCE ||
-      this.currentService == ServiceCode.ADD_MONEY_BALANCE
-    ) {
-      if (!this.dataCreate.amount) {
-        this.alertService.showMess("Vui lòng nhập số lượng");
-        return;
-      }
-      if (!this.dataCreate.service) {
-        this.alertService.showMess("Vui lòng chọn tên dịch vụ");
-        return;
-      }
-      if (
-        (await this.alertService.showConfirm("Bạn có đồng ý tạo đơn?")).value
-      ) {
-        this.onCreateBalanceService();
-      }
-    } else if (this.currentService == ServiceCode.SIM_KITTING) {
+ if (this.currentService == ServiceCode.SIM_KITTING) {
       if (!this.fileExcel) {
         this.alertService.showMess("Vui lòng tải file để Kitting");
         return;
@@ -384,16 +327,6 @@ export class TaskComponent implements OnInit {
       ) {
         this.onCreateKitting();
       }
-    } else if (this.currentService == ServiceCode.SIM_KITTING_ESIM) {
-      if (!this.fileExcel) {
-        this.alertService.showMess("Vui lòng tải file để Kitting Esim");
-        return;
-      }
-      if (
-        (await this.alertService.showConfirm("Bạn có đồng ý tạo đơn?")).value
-      ) {
-        this.onCreateKittingEsim();
-      }
     } else if (this.currentService == ServiceCode.SIM_REGISTER) {
       if (!this.fileExcel && this.entryList.length === 0) {
         this.alertService.showMess("Vui lòng tải file hoặc nhập danh sách đăng ký");
@@ -402,60 +335,7 @@ export class TaskComponent implements OnInit {
       if ((await this.alertService.showConfirm("Bạn có đồng ý tạo đơn?")).value) {
         this.onCreateSimRegister();
       }
-    } else if (this.currentService == ServiceCode.SIM_BUNDLE) {
-      if (!this.fileExcel) {
-        this.alertService.showMess("Vui lòng tải file để Kitting");
-        return;
-      }
-      if (
-        (await this.alertService.showConfirm("Bạn có đồng ý tạo đơn?")).value
-      ) {
-        this.onCreateBundle();
-      }
     }
-  }
-
-  onCreateTaskSimProfile() {
-    if (!this.dataCreate.amount) {
-      this.alertService.showMess("Vui lòng nhập số lượng");
-      return;
-    }
-    let dataPost = {
-      amount: this.dataCreate.amount,
-      sim_type: this.typeSim == "simvl" ? SimType.PHYSICAL : SimType.ESIM,
-    };
-    this.taskService.orderSIMProfile(dataPost).subscribe(
-      (res) => {
-        if (res.status == 1) {
-          this.alertService.showSuccess(res.message);
-          this.modalClose();
-          this.router.navigate(["/task", res.data.task.id]);
-        } else {
-          this.alertService.showMess(res.message);
-          this.modalClose();
-        }
-      },
-      (error) => {
-        this.alertService.showMess(error);
-      }
-    );
-  }
-
-  onCreateBalanceService() {
-    let dataPost = new AddBalanceServiceDto();
-    dataPost.amount = this.dataCreate.amount;
-    dataPost.type = this.dataCreate.service;
-
-    this.taskService.addBalance(dataPost).subscribe(
-      (res) => {
-        this.alertService.showSuccess(res.message);
-        this.modalClose();
-        this.router.navigate(["/task", res.data.task.id]);
-      },
-      (error) => {
-        this.alertService.showMess(error);
-      }
-    );
   }
 
   onCreateKitting() {
@@ -475,64 +355,6 @@ export class TaskComponent implements OnInit {
           } else {
             this.alertService.showMess(res.message);
           }
-          return;
-        }
-        this.alertService.showSuccess(res.message);
-        this.modalClose();
-        this.router.navigate(["/task", res.data.task.id]);
-      },
-      (error) => {
-        this.alertService.showMess(error);
-      }
-    );
-  }
-
-  onCreateKittingEsim() {
-    let formData = new FormData();
-    formData.append("files", this.fileExcel);
-    formData.append("package", this.dataCreate.package);
-    formData.append("priority", this.dataCreate.priority);
-    this.taskService.createKittingEsim(formData).subscribe(
-      (res) => {
-        if (!res.status) {
-          // this.alertService.showMess(res.message);
-          if (this.resFailBulk.list && this.resFailBulk.list.length > 0) {
-            this.resFailBulk.message = res.message;
-            this.resFailBulk.list = res.data.list.map((x) => {
-              return { name: x };
-            });
-          } else {
-            this.alertService.showMess(res.message);
-          }
-          return;
-        }
-        this.alertService.showSuccess(res.message);
-        this.modalClose();
-        this.router.navigate(["/task", res.data.task.id]);
-      },
-      (error) => {
-        this.alertService.showMess(error);
-      }
-    );
-  }
-
-  onCreateBundle() {
-    let formData = new FormData();
-    formData.append("files", this.fileExcel);
-    formData.append("package", this.dataCreate.package);
-    this.taskService.createBundle(formData).subscribe(
-      (res) => {
-        if (!res.status) {
-          // this.alertService.showMess(res.message);
-          if (this.resFailBulk.list && this.resFailBulk.list.length > 0) {
-            this.resFailBulk.message = res.message;
-            this.resFailBulk.list = res.data.list.map((x) => {
-              return { name: x };
-            });
-          } else {
-            this.alertService.showMess(res.message);
-          }
-
           return;
         }
         this.alertService.showSuccess(res.message);
@@ -705,7 +527,6 @@ export class TaskComponent implements OnInit {
     const selectedUnit = this.listUnit.find(u => u.id === this.tempEntry.unit_id);
     this.entryList.push({ ...this.tempEntry,
       unit_id: selectedUnit?.id,
-      user_code: selectedUnit?.code,
       unit_name: selectedUnit?.name
      });
     this.tempEntry = {

@@ -15,9 +15,7 @@
                                 <p>Ngày tạo: {{ data?.created_at | formatDate }}</p>
                                 <p>Mã đơn: {{ data?.id }}</p>
                                 <p *ngIf="[taskServiceCode.SIM_PROFILE ].includes(data?.service_code)" >Loại sản phẩm: SIM {{sim_type == simType.PHYSICAL ? 'vật lí' : 'esim'}}</p>
-                                <p>Số lượng: {{ data?.amount | number }} {{ currency }}</p>
-                                <p *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_KITTING_ESIM, taskServiceCode.SIM_BUNDLE,
-                                 taskServiceCode.ADD_MOBILE_PACKAGE].includes(data?.service_code)" >Thành tiền: {{ price | number }} VND</p>
+                                <p>Số lượng: {{ data?.amount | number }}</p>
                                 <!-- <p *ngIf="[taskServiceCode.SIM_PROFILE ].includes(data?.service_code)" >Nhà mạng: {{ getJSONDetail('mno') }}</p> -->
                                 <p *ngIf="[taskServiceCode.SIM_PROFILE ].includes(data?.service_code)" >Số lượng đã upload: {{ getJSONDetail('uploaded') | number }}</p>
                                 
@@ -28,7 +26,6 @@
                                 <p *ngIf="[taskServiceCode.ADD_MOBILE_PACKAGE, taskServiceCode.SIM_REGISTER ].includes(data?.service_code)" >SL thành công: {{ getJSONDetail('successed') }}</p>
                                 <p *ngIf="[taskServiceCode.ADD_MOBILE_PACKAGE, taskServiceCode.SIM_REGISTER ].includes(data?.service_code)" >SL thất bại: {{ getJSONDetail('failed') }}</p>
 
-                                <p *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_KITTING_ESIM, taskServiceCode.SIM_BUNDLE, taskServiceCode.ADD_MOBILE_PACKAGE ].includes(data?.service_code)" >Gói cước: {{ getJSONDetail('package') }}</p>
                                 <p>Trạng thái: <span [innerHTML]="data?.status | showStatusTask"></span></p>
                             </div>
                             <div class="col-8 border-left">

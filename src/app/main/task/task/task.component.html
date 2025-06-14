@@ -78,7 +78,7 @@
                 <div class="row">
                   <div class="col-md-4">
                     <div class="form-group">
-                      <input class="form-control" [(ngModel)]="searchForm.code" name="code" type="text" placeholder="Mã đơn hàng" />
+                      <input class="form-control" [(ngModel)]="searchForm.code" name="code" type="text" placeholder="Mã lô" />
                     </div>
                   </div>
                   <div class="col-md-4">
@@ -109,10 +109,9 @@
                       >
                         <option value="">Chọn trạng thái</option>
                         <option value="1">Thành công</option>
-                        <option value="-1">Hủy</option>
-                        <option value="20">Chờ thanh toán</option>
-                        <option value="30">Chờ KT duyệt</option>
-                        <option value="99">Từ chối</option>
+                        <option value="-100">Thất bại</option>
+                        <option value="3">Đã duyệt</option>
+                        <option value="100">Thành công 1 phần</option>
   
                       </select>
                     </div>
@@ -161,7 +160,6 @@
                       <th>STT</th>  
                       <th>Mã lô</th>                    
                       <th>Ngày tạo</th>
-                      <th>Dịch vụ</th>
                       <th>{{ formCreateLabel.amount }}</th>
                       <th *ngIf="[listServiceCode.SIM_PROFILE, listServiceCode.SIM_KITTING, listServiceCode.SIM_KITTING_ESIM].includes(currentService)" >SL hoàn thành</th>
                       <th *ngIf="[ listServiceCode.SIM_KITTING, listServiceCode.SIM_KITTING_ESIM].includes(currentService)" >Gói cước</th>
@@ -178,7 +176,6 @@
                       <td>
                         {{ item?.created_at | formatDate }}
                       </td>
-                      <td>{{ item.service_code }}</td>
                       <td>
                         {{ item?.amount | number }}
                       </td>

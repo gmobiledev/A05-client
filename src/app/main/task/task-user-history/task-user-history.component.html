@@ -61,8 +61,14 @@
           <th>Số điện thoại</th>
           <th>Serial SIM</th>
           <th>Thời gian cập nhật</th>
-          <th>Người nhận cũ</th>
-          <th>Người nhận mới</th>
+          <th>Tên người cũ</th>
+          <th>SĐT liên hệ người cũ</th>
+          <th>Email người cũ</th>
+          <th>Đơn vị người cũ</th>
+          <th>Tên người mới</th>
+          <th>SĐT liên hệ người mới</th>
+          <th>Email người mới</th>
+          <th>Đơn vị người mới</th>
           <th>Ghi chú</th>
         </tr>
       </thead>
@@ -74,7 +80,13 @@
           <td>{{ item.serial || '-' }}</td>
           <td>{{ item.updated_at | date: 'dd/MM/yyyy HH:mm' }}</td>
           <td>{{ item.old_user?.full_name || '-' }}</td>
+          <td>{{ item.old_user?.mobile || '-' }}</td>
+          <td>{{ item.old_user?.email || '-' }}</td>
+          <td>{{ getUnitName(item.old_user?.unit_id) || '-' }}</td>
           <td>{{ item.new_user?.full_name || '-' }}</td>
+          <td>{{ item.new_user?.mobile || '-' }}</td>
+          <td>{{ item.new_user?.email || '-' }}</td>
+          <td>{{ getUnitName(item.new_user?.unit_id) || '-' }}</td>
           <td>{{ item.note || '-' }}</td>
         </tr>
         <tr *ngIf="list.length === 0">

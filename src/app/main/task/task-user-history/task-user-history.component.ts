@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TaskService } from 'app/auth/service/task.service';
+import { UnitService } from 'app/auth/service/unit.service';
 import { SweetAlertService } from 'app/utils/sweet-alert.service';
 import * as dayjs from 'dayjs';
 
@@ -45,9 +46,16 @@ export class TaskUserHistoryComponent implements OnInit {
   constructor(
     private readonly taskService: TaskService,
     private readonly alertService: SweetAlertService,
+    private readonly unitService: UnitService,
+    
   ) {}
 
   ngOnInit(): void {
+    this.unitService.getAllUnits().subscribe(res => {
+      this.listUnit = res.data || res;
+      console.log(this.listUnit)
+      
+    });
     this.loadData();
   }
 
@@ -55,9 +63,11 @@ export class TaskUserHistoryComponent implements OnInit {
     if (this.dateRange?.startDate && this.dateRange?.endDate) {
       const tzoffset = new Date().getTimezoneOffset() * 60000;
       this.searchForm.from_date = new Date(new Date(this.dateRange.startDate.toISOString()).getTime() - tzoffset)
-        .toISOString().slice(0, 10);
-      this.searchForm.to_date = new Date(new Date(this.dateRange.endDate.toISOString()).getTime() - tzoffset)
-        .toISOString().slice(0, 10);
+        .toISOString();
+
+      const endDateLocal = new Date(this.dateRange.endDate);
+      endDateLocal.setHours(23, 59, 59, 999);
+      this.searchForm.to_date = new Date(endDateLocal.getTime() - tzoffset).toISOString();
     } else {
       this.searchForm.from_date = '';
       this.searchForm.to_date = '';
@@ -129,4 +139,8 @@ export class TaskUserHistoryComponent implements OnInit {
     });
   }
 
+   getUnitName(unit_id: number): string {
+    const unit = this.listUnit.find(u => u.id === unit_id);
+    return unit ? unit.name : 'Chưa có đơn vị';
+  }
 }

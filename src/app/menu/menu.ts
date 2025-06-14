@@ -39,7 +39,7 @@ export const menu: CoreMenu[] = [
         icon: 'book',
         // role: ['TELECOM'],
         badge: {
-          title: '4',
+          title: '3',
           translate: '',
           classes: 'badge-light-success badge-pill'
         },
@@ -60,16 +60,6 @@ export const menu: CoreMenu[] = [
           //   icon: 'circle',
           //   url: 'telecom/change-sim'
           // },
-
-          {
-            id: 'historySim',
-            title: 'Lịch sử đấu nối',
-            translate: '',
-            type: 'item',
-            icon: 'circle',
-            exactMatch: true,
-            url: 'telecom'
-          },
           // {
           //   id: 'changeSim',
           //   title: 'Đơn KITTING',
@@ -89,13 +79,13 @@ export const menu: CoreMenu[] = [
             url: 'task/sim-register'
           },
           {
-            id: 'smsHistory',
-            title: 'Lịch sử tin nhắn',
+            id: 'historySim',
+            title: 'Lịch sử đấu nối',
             translate: '',
             type: 'item',
             icon: 'circle',
-            // role: [ServiceCode.SIM_REGISTER],
-            url: 'telecom/sms-history'
+            exactMatch: true,
+            url: 'telecom'
           },
           // {
           //   id: 'updateSim',
