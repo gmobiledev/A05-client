@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DatatableComponent } from '@swimlane/ngx-datatable';
@@ -59,7 +59,9 @@ export class TaskDetailComponent implements OnInit {
   dataUpdate = {
     amount: 0
   }
-  test;
+  invalidMsisdns: any[] = [];
+  @ViewChild('msisdnStatesModal') msisdnStatesModal: TemplateRef<any>;
+
   constructor(
     private readonly modalService: NgbModal,
     private readonly taskService: TaskService,
@@ -328,6 +330,15 @@ export class TaskDetailComponent implements OnInit {
     }
   }
 
+  onCheckMsisdnStates() {
+    this.modalService.open(this.msisdnStatesModal, { size: 'lg', centered: true });
+  }
+  getInvalidMsisdns() {
+    this.taskService.getMsisdn(this.data.id).subscribe({
+      next: (res) => this.invalidMsisdns = res || [],
+      error: (err) => this.alertService.showMess(err)
+    });
+  }
   async getData() {
     this.itemBlockUI.start();
     let res = await this.taskService.getTaskDetail(this.id).toPromise();
@@ -362,6 +373,8 @@ export class TaskDetailComponent implements OnInit {
       this.contentHeader.breadcrumb.links[1].link = '/task/kitting';
       this.currency = '';
     } else if (this.data.service_code == ServiceCode.SIM_REGISTER) {
+        this.getInvalidMsisdns();
+
       this.contentHeader.headerTitle = 'Chi tiết yêu cầu ĐKTTTB';
       this.contentHeader.breadcrumb.links[1].name = 'Danh sách yêu cầu ĐKTTTB';
       this.contentHeader.breadcrumb.links[1].link = '/task/sim-register';

@@ -3,7 +3,7 @@
         <div class="image-upload" *ngIf="!imageSelfie">
             <label for="file-input">
             <img src="/assets/images/icons/selfie.png" class="img-fluid" alt="">
-            <h6 class="text-center">Tải ảnh chân dung</h6>
+            <h6 class="text-center">Tải ảnh chân dung <span class="text-danger">*</span></h6>
             </label>
             <input id="file-input" type="file" (change)="onSelectFileSelfie($event)" />
         </div>

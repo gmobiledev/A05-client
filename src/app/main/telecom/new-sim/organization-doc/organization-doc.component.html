@@ -14,7 +14,7 @@
         <div class="row" style="margin-top: 30px;">
             <div class="col-md-12">
                 <div class="form-group row">
-                    <label for="license_no" class="col-md-3 col-form-label">Số GPKD/MST</label>
+                    <label for="license_no" class="col-md-3 col-form-label">Số GPKD/MST <span class="text-danger">*</span></label>
                     <div class="col-md-9">
                         <input type="text" maxlength="20" formControlName="license_no" class="form-control"
                             placeholder="Số GPKD/Mã số thuế">
@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="license_file" class="col-md-3 col-form-label">Giấy phép KD</label>
+                    <label for="license_file" class="col-md-3 col-form-label">Giấy phép KD <span class="text-danger">*</span></label>
                     <div class="col-md-9">
                         <div class="col-md-12">
                             <input type="file" class="form-control" id="license_file" formControlName="license_file"
@@ -51,7 +51,7 @@
             <br>
             <div class="col-md-12">
                 <div class="form-group row">
-                    <label for="license_no" class="col-md-3 col-form-label">Số CCCD/CMND/Hộ chiếu</label>
+                    <label for="license_no" class="col-md-3 col-form-label">Số CCCD/CMND/Hộ chiếu <span class="text-danger">*</span></label>
                     <div class="col-md-9">
                         <input type="text" maxlength="20" class="form-control" formControlName="identification_no"
                             placeholder="Số CCCD/CMND/Hộ chiếu" />
@@ -63,7 +63,7 @@
             </div>
             <div class="col-md-12">
                 <div class="form-group row">
-                    <label for="license_no" class="col-md-3 col-form-label">Loại giấy tờ</label>
+                    <label for="license_no" class="col-md-3 col-form-label">Loại giấy tờ <span class="text-danger">*</span></label>
                     <div class="col-md-9">
                         <select formControlName="identification_type" id="identification_type" class="form-control">
                             <option value="">--Chọn loại giấy tờ --</option>
@@ -83,7 +83,7 @@
                 <div class="image-upload" *ngIf="!imageFront" style="text-align:center">
                     <label for="identification_front_file">
                         <img src="/assets/images/icons/cccd_front.png" class="img-fluid" alt="">
-                        <h6 class="text-center">Ảnh CCCD/CMND mặt trước</h6>
+                        <h6 class="text-center">Ảnh CCCD/CMND mặt trước <span class="text-danger">*</span></h6>
                     </label>
                     <input id="identification_front_file" type="file" (change)="onSelectFileFront($event)"
                         fromControlName="identification_front_file" />
@@ -106,7 +106,7 @@
                 <div class="image-upload" *ngIf="!imageBack" style="text-align:center">
                     <label for="identification_back_file">
                         <img src="/assets/images/icons/cccd_back.png" class="img-fluid" alt="">
-                        <h6 class="text-center">Ảnh CCCD/CMND mặt sau</h6>
+                        <h6 class="text-center">Ảnh CCCD/CMND mặt sau <span class="text-danger">*</span></h6>
                     </label>
                     <input id="identification_back_file" type="file" (change)="onSelectFileBack($event)"
                         fromControlName="identification_back_file" />
@@ -129,7 +129,7 @@
                         <img *ngIf="!imageSelfie" src="/assets/images/icons/selfie.png" class="img-fluid"
                             style="width:200px" alt="">
                         <img *ngIf="imageSelfie" [src]="imageSelfie" alt="" class="img-fluid img-margin-bottom">
-                        <h6 class="text-center">Tải ảnh chân dung</h6>
+                        <h6 class="text-center">Tải ảnh chân dung <span class="text-danger">*</span></h6>
                     </label>
                     <input type="file" class="form-control" id="identification_selfie_file"
                         (change)="onSelectFileSelfie($event)" fromControlName="identification_selife_file" />

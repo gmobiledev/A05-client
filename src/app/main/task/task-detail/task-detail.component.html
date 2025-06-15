@@ -67,6 +67,51 @@
                                             *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_KITTING_ESIM, taskServiceCode.SIM_REGISTER,                                 
                                 taskServiceCode.ADD_MOBILE_PACKAGE].includes(data?.service_code) "
                                             ><i data-feather="rotate-cw" class="cursor-pointer"></i></a>
+                                            <a (click)="onCheckMsisdnStates()" 
+                                            class="ml-1 btn btn-outline-warning float-right btn-sm"
+                                            ngbTooltip="Kiểm tra trạng thái số">
+                                            <i data-feather="search" class="cursor-pointer"></i>
+                                            </a>
+                                           <ng-template #msisdnStatesModal let-modal>
+                                        <div class="modal-header" *ngIf="invalidMsisdns?.length">
+                                            <h5 class="modal-title" class="text-success font-weight-bold">Các số chưa ĐKTTTB</h5>
+                                            <button type="button" class="close" (click)="modal.dismiss('Cross click')">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+
+                                        <div class="modal-body" *ngIf="invalidMsisdns?.length; else allOk">
+                                            <table class="table table-bordered table-sm">
+                                            <thead>
+                                                <tr>
+                                                <th>#</th>
+                                                <th>MSISDN</th>
+                                                <th>State</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of invalidMsisdns; let i = index">
+                                                <td>{{ i + 1 }}</td>
+                                                <td>{{ item.msisdn }}</td>
+                                                <td>{{ item.state }}</td>
+                                                </tr>
+                                            </tbody>
+                                            </table>
+                                        </div>
+
+                                        <ng-template #allOk>
+                                            <div class="modal-body text-center">
+                                            <div class="text-success font-weight-bold" style="font-size: 1.2rem;">
+                                                Tất cả các số đã ĐKTTTB thành công!
+                                            </div>
+                                            </div>
+                                        </ng-template>
+
+                                        <div class="modal-footer">
+                                            <button class="btn btn-secondary btn-sm" (click)="modal.close()">Đóng</button>
+                                        </div>
+                                        </ng-template>
+
                                         </div>
 
                                         

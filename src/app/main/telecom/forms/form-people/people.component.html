@@ -2,7 +2,7 @@
   <div *ngIf="isOcr" class="row" style="margin-bottom: 10px;">
     <div class="col-12 mb-1 d-flex">
       <label for="identification_type" class="col-md-3 col-form-label"
-        >Loại giấy tờ (*)</label
+        >Loại giấy tờ <span class="text-danger">*</span></label
       >
       <div class="col-md-9">
         <select
@@ -36,7 +36,7 @@
             class="img-fluid"
             alt=""
           />
-          <h6 class="text-center">Ảnh CCCD/CMND mặt trước</h6>
+          <h6 class="text-center">Ảnh CCCD/CMND mặt trước <span class="text-danger">*</span></h6>
         </label>
         <input
           id="file-front-input"
@@ -69,7 +69,7 @@
             class="img-fluid"
             alt=""
           />
-          <h6 class="text-center">Ảnh CCCD/CMND mặt sau</h6>
+          <h6 class="text-center">Ảnh CCCD/CMND mặt sau <span class="text-danger">*</span></h6>
         </label>
         <input
           id="file-back-input"
@@ -102,7 +102,7 @@
             class="img-fluid"
             alt=""
           />
-          <h6 class="text-center">Tải ảnh chân dung</h6>
+          <h6 class="text-center">Tải ảnh chân dung <span class="text-danger">*</span></h6>
         </label>
         <input
           id="file-input"
@@ -131,7 +131,7 @@
     <div class="col-md-6">
       <div class="form-group row">
         <label for="identification_type" class="col-md-3 col-form-label"
-          >Loại giấy tờ (*)</label
+          >Loại giấy tờ <span class="text-danger">*</span></label
         >
         <div class="col-md-9">
           <select
@@ -339,7 +339,7 @@
     <div class="col-md-6">
       <div class="form-group row">
         <label for="mobile" class="col-md-3 col-form-label"
-          >SĐT liên hệ (*)</label
+          >SĐT liên hệ</label
         >
         <div class="col-md-9">
           <input
@@ -516,7 +516,7 @@
         <div class="col-12">
           <div class="form-group row">
             <label for="residence_province" class="col-md-3 col-form-label"
-              >Tỉnh/TP - Thường trú</label
+              >Tỉnh/TP - Thường trú <span class="text-danger">*</span></label
             >
             <div class="col-md-9">
               <!-- <input type="text" formControlName="residence_province"> -->
@@ -545,7 +545,7 @@
         <div class="col-12">
           <div class="form-group row">
             <label for="residence_district" class="col-md-3 col-form-label"
-              >Quận/Huyện - Thường trú</label
+              >Quận/Huyện - Thường trú <span class="text-danger">*</span></label
             >
             <div class="col-md-9">
               <ng-select
@@ -574,7 +574,7 @@
         <div class="col-12">
           <div class="form-group row">
             <label for="residence_commune" class="col-md-3 col-form-label"
-              >Phường/Xã - Thường trú</label
+              >Phường/Xã - Thường trú <span class="text-danger">*</span></label
             >
             <div class="col-md-9">
               <ng-select

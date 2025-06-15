@@ -127,4 +127,8 @@ export class TaskService {
     getSimTransferHistory(params) {
     return this._http.get<any>(`${environment.apiUrl}/task/a05/sim-transfer-history`, { params: params });
   }
+
+    getMsisdn(id) {
+    return this._http.get<any>(`${environment.apiUrl}/task/${id}/check-msisdn-states`);
+  }
 }

@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group row">
-                <label for="name" class="col-md-3 col-form-label">Tên tổ chức/DN</label>
+                <label for="name" class="col-md-3 col-form-label">Tên tổ chức/DN <span class="text-danger">*</span></label>
                 <div class="col-md-9">
                     <input type="text" class="form-control" max placeholder="Tên tổ chức/Doanh nghiệp"
                         formControlName="name">
@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="license_no" class="col-md-3 col-form-label">Số GPKD/MST</label>
+                <label for="license_no" class="col-md-3 col-form-label">Số GPKD/MST <span class="text-danger">*</span></label>
                 <div class="col-md-9">
                     <input type="text" class="form-control" placeholder="Số GPKD/Mã số thuế"
                         formControlName="license_no">
@@ -23,7 +23,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="license_issue_date" class="col-md-3 col-form-label">Ngày cấp phép</label>
+                <label for="license_issue_date" class="col-md-3 col-form-label">Ngày cấp phép <span class="text-danger">*</span></label>
                 <div class="col-md-9">
                     <div style="display: flex;">
                         <input class="form-control" placeholder="dd/mm/yyyy" formControlName="license_issue_date"
@@ -40,7 +40,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="license_issue_place" class="col-md-3 col-form-label">Nơi cấp giấy phép</label>
+                <label for="license_issue_place" class="col-md-3 col-form-label">Nơi cấp giấy phép <span class="text-danger">*</span></label>
                 <div class="col-md-9">
                     <input type="text" class="form-control" placeholder="Nơi cấp giấy phép"
                         formControlName="license_issue_place">
@@ -56,7 +56,7 @@
 
         <div class="col-md-6">
             <div class="form-group row">
-                <label for="license_issue_place" class="col-md-3 col-form-label">Địa chỉ Tổ chức</label>
+                <label for="license_issue_place" class="col-md-3 col-form-label">Địa chỉ Tổ chức <span class="text-danger">*</span></label>
                 <div class="col-md-9">
                     <input type="text" class="form-control" placeholder="Địa chỉ" formControlName="address">
                     <div *ngIf="submitted && f.address.errors" class="invalid-feedback">
@@ -65,7 +65,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="province" class="col-md-3 col-form-label">Tỉnh/TP Tổ chức</label>
+                <label for="province" class="col-md-3 col-form-label">Tỉnh/TP Tổ chức <span class="text-danger">*</span></label>
                 <div class="col-md-9">
                     <select name="" id="province" class="form-control" formControlName="province"
                         (change)="onChangeProvince($event)">
@@ -80,7 +80,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="district" class="col-md-3 col-form-label">Quận/Huyện Tổ chức </label>
+                <label for="district" class="col-md-3 col-form-label">Quận/Huyện Tổ chức <span class="text-danger">*</span></label>
                 <div class="col-md-9">
                     <select formControlName="district" id="home_district" class="form-control"
                         (change)="onChangeDistrict($event)">
@@ -93,7 +93,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="commune" class="col-md-3 col-form-label">Phường/Xã Tổ chức</label>
+                <label for="commune" class="col-md-3 col-form-label">Phường/Xã Tổ chức <span class="text-danger">*</span></label>
                 <div class="col-md-9">
                     <select name="" formControlName="commune" class="form-control">
                         <option value="">--Chọn Phường/xã --</option>
@@ -108,7 +108,7 @@
 
         <div class="col-md-6">
             <div class="form-group row">
-                <label for="mobile" class="col-md-3 col-form-label">Số điện thoại</label>
+                <label for="mobile" class="col-md-3 col-form-label">Số điện thoại <span class="text-danger">*</span></label>
                 <div class="col-md-9">
                     <input type="text" class="form-control" placeholder="0999888999" formControlName="mobile">
                     <div *ngIf="submitted && f.mobile.errors" class="invalid-feedback">
@@ -132,7 +132,7 @@
         </div> -->
         <div class="col-md-6">
             <div class="form-group row">
-                <label for="address_contact" class="col-md-3 col-form-label">Email</label>
+                <label for="address_contact" class="col-md-3 col-form-label">Email <span class="text-danger">*</span></label>
                 <div class="col-md-9">
                     <input type="email" class="form-control" placeholder="abc@domain.com" formControlName="email">
                     <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
@@ -146,7 +146,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group row">
-                        <label for="address_contact" class="col-md-3 col-form-label">Loại khách hàng</label>
+                        <label for="address_contact" class="col-md-3 col-form-label">Loại khách hàng <span class="text-danger">*</span></label>
                         <div class="col-md-9">
 
                             <div class="custom-control custom-radio" style="margin-top: 10px;">
