@@ -9,9 +9,6 @@
         <input class="form-control" [(ngModel)]="searchForm.phone_or_serial" name="phone_or_serial" placeholder="Nhập số ĐT hoặc serial SIM" />
       </div>
       <div class="col-md-4 mb-2">
-        <input class="form-control" [(ngModel)]="searchForm.old_user_name" name="old_user_name" placeholder="Tên người nhận cũ" />
-      </div>
-      <div class="col-md-4 mb-2">
         <input class="form-control" [(ngModel)]="searchForm.new_user_name" name="new_user_name" placeholder="Tên người nhận mới" />
       </div>
       <div class="col-md-4 mb-2">
@@ -61,11 +58,8 @@
           <th>Số điện thoại</th>
           <th>Serial SIM</th>
           <th>Thời gian cập nhật</th>
-          <th>Tên người cũ</th>
-          <th>SĐT liên hệ người cũ</th>
-          <th>Email người cũ</th>
-          <th>Đơn vị người cũ</th>
           <th>Tên người mới</th>
+          <th>Mã CBNV người mới</th>
           <th>SĐT liên hệ người mới</th>
           <th>Email người mới</th>
           <th>Đơn vị người mới</th>
@@ -79,11 +73,8 @@
           <td>{{ item.msisdn || '-' }}</td>
           <td>{{ item.serial || '-' }}</td>
           <td>{{ item.updated_at | date: 'dd/MM/yyyy HH:mm' }}</td>
-          <td>{{ item.old_user?.full_name || '-' }}</td>
-          <td>{{ item.old_user?.mobile || '-' }}</td>
-          <td>{{ item.old_user?.email || '-' }}</td>
-          <td>{{ getUnitName(item.old_user?.unit_id) || '-' }}</td>
           <td>{{ item.new_user?.full_name || '-' }}</td>
+          <td>{{ item.new_user?.user_code || '-' }}</td>
           <td>{{ item.new_user?.mobile || '-' }}</td>
           <td>{{ item.new_user?.email || '-' }}</td>
           <td>{{ getUnitName(item.new_user?.unit_id) || '-' }}</td>
