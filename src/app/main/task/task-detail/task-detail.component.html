@@ -52,11 +52,10 @@
                                             <div class="d-flex align-items-center">Search<input type="search" placeholder="Search"
                                                     class="form-control ml-25" (keyup)="filterList($event)" /></div>
                                         <select (change)="onChangeStateMsisnd($event)" name="" id="" class="form-control w-auto ml-1" *ngIf="[taskServiceCode.SIM_KITTING, taskServiceCode.SIM_REGISTER].includes(data?.service_code)">
-                                            <option value="">Lọc trạng thái</option>                                            
-                                            <option value="{{ msisdnStatus.STATUS_KITTED }}">Kitting thành công</option>
-                                            <option value="{{ msisdnStatus.STATUS_KIT_FAIL }}">Kitting lỗi</option>                                            
-                                            <option value="{{ msisdnStatus.STATUS_PACKAGED }}">Đã đăng ký gói</option>
-                                            <option value="{{ msisdnStatus.STATUS_PACKAGE_FAIL }}">Đăng ký gói lỗi</option>
+                                            <option value="">Lọc trạng thái</option>                
+                                            <option value="{{ msisdnStatus.STATUS_PROCESSED_MNO_SUCCESS }}">Thành công</option>                            
+                                            <option value="{{ msisdnStatus.STATUS_KITTED}}">Chưa thành công</option>  
+                                            <option value="{{ msisdnStatus.STATUS_KIT_FAIL || msisdnStatus.STATUS_KIT_FAIL}}">Thất bại</option>                                                                      
                                         </select>
                                         <a (click)="exportExcel()" class="ml-1 btn btn-outline-warning float-right btn-sm"
                                         ngbTooltip="Tải file excel"

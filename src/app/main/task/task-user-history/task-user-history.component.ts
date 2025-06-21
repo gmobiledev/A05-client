@@ -13,6 +13,7 @@ export class TaskUserHistoryComponent implements OnInit {
 
   public selectedSim: any;
   public modalRef: any;
+  listSellChannel: any[] = [];
 
   listUnit: any[] = [];
   list: any[] = [];
@@ -22,6 +23,7 @@ export class TaskUserHistoryComponent implements OnInit {
 
   searchForm = {
     channel_name: '',
+    channel_id: '',
     phone_or_serial: '',
     old_user_name: '',
     new_user_name: '',
@@ -54,7 +56,12 @@ export class TaskUserHistoryComponent implements OnInit {
     this.unitService.getAllUnits().subscribe(res => {
       this.listUnit = res.data || res;
       console.log(this.listUnit)
-      
+    });
+    this.taskService.listSellChannelAll().subscribe(res => {
+      this.listSellChannel = [
+        { id: '', name: 'Tất cả kho' },
+        ...res.data.items
+      ];
     });
     this.loadData();
   }

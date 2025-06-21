@@ -9,12 +9,19 @@
         <input class="form-control" [(ngModel)]="searchForm.search" name="search" placeholder="Nhập số/serial sim" />
       </div>
       <div class="col-md-4 mb-2">
-        <input
-          class="form-control"
-          [(ngModel)]="searchForm.channelName"
-          name="channelName"
-          placeholder="Nhập tên kho"
-        />
+            <ng-select
+              class="custom-ng-select w-100"
+              [items]="listSellChannel"
+              bindLabel="name"
+              bindValue="id"
+              [(ngModel)]="searchForm.channelId"
+              name="channelName"
+              placeholder="Chọn kho"
+              [searchable]="false"
+              [clearable]="false"
+              [dropdownPosition]="'auto'"
+             >
+            </ng-select>
       </div>
       <div class="col-md-4 mb-2">
         <input class="form-control" [(ngModel)]="searchForm.assignedUser" name="assignedUser" placeholder="Tên người được giao" />

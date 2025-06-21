@@ -131,4 +131,8 @@ export class TaskService {
     getMsisdn(id) {
     return this._http.get<any>(`${environment.apiUrl}/task/${id}/check-msisdn-states`);
   }
+
+  listSellChannelAll(params = null) {
+    return this._http.get<any>(`${environment.apiUrl}/task/channel/getAll`);
+  }
 }

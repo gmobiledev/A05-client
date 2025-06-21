@@ -90,9 +90,7 @@ export class TaskDetailComponent implements OnInit {
         const taskId = res.data.data;
         this.alertService.showSuccess(res.message);
         this.getData();
-        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-          this.router.navigate(['/task', taskId]);
-        });
+        this.modalClose();
       }, error => {
         this.alertService.showMess(error);
       })

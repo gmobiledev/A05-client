@@ -8,16 +8,23 @@
       <div class="col-md-4 mb-2">
         <input class="form-control" [(ngModel)]="searchForm.phone_or_serial" name="phone_or_serial" placeholder="Nhập số ĐT hoặc serial SIM" />
       </div>
-      <div class="col-md-4 mb-2">
-        <input class="form-control" [(ngModel)]="searchForm.new_user_name" name="new_user_name" placeholder="Tên người nhận mới" />
+            <div class="col-md-4 mb-2">
+            <ng-select
+              class="custom-ng-select w-100"
+              [items]="listSellChannel"
+              bindLabel="name"
+              bindValue="id"
+              name="channel_name"
+              [(ngModel)]="searchForm.channel_id"
+              placeholder="Chọn kho"
+              [searchable]="false"
+              [clearable]="false"
+              [dropdownPosition]="'auto'"
+              >
+            </ng-select>
       </div>
       <div class="col-md-4 mb-2">
-        <input
-          class="form-control"
-          [(ngModel)]="searchForm.channel_name"
-          name="channel_name"
-          placeholder="Nhập tên kho"
-        />
+        <input class="form-control" [(ngModel)]="searchForm.new_user_name" name="new_user_name" placeholder="Tên người nhận mới" />
       </div>
       <div class="col-md-4 mb-2">
         <input
@@ -58,11 +65,11 @@
           <th>Số điện thoại</th>
           <th>Serial SIM</th>
           <th>Thời gian cập nhật</th>
-          <th>Tên người mới</th>
-          <th>Mã CBNV người mới</th>
-          <th>SĐT liên hệ người mới</th>
-          <th>Email người mới</th>
-          <th>Đơn vị người mới</th>
+          <th>Tên</th>
+          <th>Mã CBNV</th>
+          <th>SĐT liên hệ</th>
+          <th>Email</th>
+          <th>Đơn vị</th>
           <th>Ghi chú</th>
         </tr>
       </thead>

@@ -39,7 +39,7 @@ export const menu: CoreMenu[] = [
         icon: 'book',
         // role: ['TELECOM'],
         badge: {
-          title: '3',
+          title: '5',
           translate: '',
           classes: 'badge-light-success badge-pill'
         },
@@ -87,6 +87,22 @@ export const menu: CoreMenu[] = [
             exactMatch: true,
             url: 'telecom'
           },
+                    {
+            id: 'task-product',
+            title: 'Danh sách số đã sử dụng',
+            translate: '',
+            type: 'item',
+            icon: 'circle',
+            url: 'task/task-product'
+          },
+          {
+            id: 'user-history',
+            title: 'Lịch sử chuyển sử dụng',
+            translate: '',
+            type: 'item',
+            icon: 'circle',
+            url: 'task/user-history'
+          },
           // {
           //   id: 'updateSim',
           //   title: 'Cập nhật TTTB',
@@ -104,7 +120,7 @@ export const menu: CoreMenu[] = [
         type: 'collapsible',
         icon: 'folder',
         badge: {
-          title: '3',
+          title: '1',
           translate: '',
           classes: 'badge-light-success badge-pill'
         },
@@ -116,22 +132,6 @@ export const menu: CoreMenu[] = [
             type: 'item',
             icon: 'circle',
             url: 'units'
-          },
-          {
-            id: 'task-product',
-            title: 'Danh sách số đã sử dụng',
-            translate: '',
-            type: 'item',
-            icon: 'circle',
-            url: 'task/task-product'
-          },
-          {
-            id: 'user-history',
-            title: 'Lịch sử chuyển sử dụng',
-            translate: '',
-            type: 'item',
-            icon: 'circle',
-            url: 'task/user-history'
           },
         ]
       }

@@ -18,6 +18,7 @@ export class TaskProductComponent implements OnInit {
   public modalRef: any;
 
   listUnit: any[] = [];
+  listSellChannel: any[] = [];
   list: any[] = [];
   totalPage = 0;
   public totalItems: number;
@@ -34,6 +35,7 @@ export class TaskProductComponent implements OnInit {
 
   searchForm = {
     search: '',
+    channelId: '',
     channelName: '',
     assignedUser: '',
     fromDate: '',
@@ -65,6 +67,12 @@ export class TaskProductComponent implements OnInit {
       this.unitService.getAllUnits().subscribe(res => {
       this.listUnit = res.data || res;
       console.log(this.listUnit)
+    });
+      this.taskService.listSellChannelAll().subscribe(res => {
+      this.listSellChannel = [
+        { id: '', name: 'Tất cả kho' },
+        ...res.data.items
+      ];
       
     });
     this.loadData();
