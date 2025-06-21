@@ -249,19 +249,22 @@ export class TaskDetailComponent implements OnInit {
     this.table.offset = 0;
   }
 
-  onChangeStateMsisnd(event) {
-    
-    const val = event.target.value;
-    console.log("onChangeStateMsisnd",val)
+  selectedStatus: string | null = null;
+
+  onChangeStateMsisnd(val: string | null) {
+    console.log('Trạng thái lọc:', val, typeof val);
+
     let temp;
-    if(val) {
-      temp = this.listSerial.filter(x => { return x.state == val })
+    if (val !== null) {
+      temp = this.listSerial.filter(x => x.state == val);
     } else {
-      temp = this.listSerial.filter(x => {return !val})
+      temp = this.listSerial.filter(x => x.state == null);
     }
+
     this.listSerialShow = temp;
     this.table.offset = 0;
   }
+
 
   async onUpdateStateMsisndRetry(event, id) {
     const val = event.target.value;
