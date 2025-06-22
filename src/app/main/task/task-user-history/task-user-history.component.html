@@ -10,17 +10,17 @@
       </div>
             <div class="col-md-4 mb-2">
             <ng-select
+              *ngIf="listSellChannel?.length"
               class="custom-ng-select w-100"
               [items]="listSellChannel"
               bindLabel="name"
               bindValue="id"
-              name="channel_name"
+              name="channel_id"
               [(ngModel)]="searchForm.channel_id"
               placeholder="Chọn kho"
-              [searchable]="false"
-              [clearable]="false"
-              [dropdownPosition]="'auto'"
-              >
+              [searchable]="true"
+              [virtualScroll]="listSellChannel.length > 1000"
+              [clearable]="false">
             </ng-select>
       </div>
       <div class="col-md-4 mb-2">

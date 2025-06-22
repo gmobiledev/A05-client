@@ -55,7 +55,6 @@ export class TaskUserHistoryComponent implements OnInit {
   ngOnInit(): void {
     this.unitService.getAllUnits().subscribe(res => {
       this.listUnit = res.data || res;
-      console.log(this.listUnit)
     });
     this.taskService.listSellChannelAll().subscribe(res => {
       this.listSellChannel = [
