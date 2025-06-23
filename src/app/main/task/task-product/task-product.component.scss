@@ -69,7 +69,9 @@ td,
   align-items: center;
   color: #6c757d;
 }
-
+::ng-deep .custom-ng-select .ng-arrow {
+  display: none !important; /* ẩn icon mặc định */
+}
 ::ng-deep .custom-ng-select .ng-arrow-wrapper::after {
   content: '';
   display: inline-block;
