@@ -579,13 +579,31 @@
             <!-- Import file -->
             <div class="form-group mt-2">
               <div class="d-flex align-items-center flex-wrap">
-                <label class="mb-0 mr-2" style="white-space: nowrap;">Hoặc import file:</label>
-                <input type="file" class="form-control-file mr-2" (change)="onFileChangeExcelSerial($event)" style="width: auto;" />
-                <span class="text-muted mr-3">{{ fileLabel }}</span>
+                
+                <!-- Switch toggle -->
+                <label class="switch mb-0 mr-1">
+                  <input type="checkbox"
+                        [checked]="isUploadEnabled"
+                        (change)="isUploadEnabled = $event.target.checked" />
+                  <span class="slider round"></span>
+                </label>
 
-                <a href="/assets/sim-profile-serial.xlsx" class="text-success d-flex align-items-center" target="_blank">
-                  <i class="fa fa-download mr-1"></i> Tải file mẫu
-                </a>
+                <label class="mb-0 mr-2" style="white-space: nowrap;">Hoặc import file:</label>
+                <ng-container *ngIf="isUploadEnabled">
+                  <input type="file"
+                        class="form-control-file mr-2"
+                        (change)="onFileChangeExcelSerial($event)"
+                        style="width: auto;" />
+
+                  <span class="text-muted mr-3">{{ fileLabel }}</span>
+
+                  <a href="/assets/sim-profile-serial.xlsx"
+                    class="text-success d-flex align-items-center"
+                    target="_blank">
+                    <i class="fa fa-download mr-1"></i> Tải file mẫu
+                  </a>
+                </ng-container>
+
               </div>
             </div>
 

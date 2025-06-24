@@ -36,6 +36,8 @@ export class TaskComponent implements OnInit {
     email: '',
     unit: ''
   };
+isUploadEnabled: boolean = false;
+
   public contentHeader: any = {
     headerTitle: "Danh sách",
     actionButton: true,
