@@ -33,6 +33,11 @@ export class TaskDetailComponent implements OnInit {
           link: '/'
         },
         {
+          name: 'Danh sách yêu cầu ĐKTTTB',
+          isLink: true,
+          link: '/task/sim-register'
+        },
+        {
           name: 'Chi tiết xác nhận ĐKTTTB',
           isLink: false
         }
@@ -361,26 +366,31 @@ export class TaskDetailComponent implements OnInit {
     this.price = res.data.amount;
     this.itemBlockUI.stop();
 
-    if([ServiceCode.SIM_KITTING, ServiceCode.SIM_KITTING_ESIM, ServiceCode.SIM_BUNDLE].includes(res.data.service_code)) {
-      const packgeItems = await this.packageService.getAll({code: this.getJSONDetail('package')}).toPromise();
-      this.price = packgeItems.data.packages[0].price * res.data.msisdns.length;
-    } else if ([ ServiceCode.ADD_MOBILE_PACKAGE].includes(res.data.service_code)) {
-      const packgeItems = await this.packageService.getAll({code: this.getJSONDetail('package')}).toPromise();
-      this.price = packgeItems.data.packages[0].price * res.data.details.filter(x => x.attribute == 'msisdn').length;
-    }
-   if (this.data.service_code == ServiceCode.SIM_KITTING) {
-      this.contentHeader.headerTitle = 'Chi tiết đơn kitting';
-      this.contentHeader.breadcrumb.links[1].name = 'Danh sách kitting';
-      this.contentHeader.breadcrumb.links[1].link = '/task/kitting';
-      this.currency = '';
-    } else if (this.data.service_code == ServiceCode.SIM_REGISTER) {
-        this.getInvalidMsisdns();
+  //   if([ServiceCode.SIM_KITTING, ServiceCode.SIM_KITTING_ESIM, ServiceCode.SIM_BUNDLE].includes(res.data.service_code)) {
+  //     const packgeItems = await this.packageService.getAll({code: this.getJSONDetail('package')}).toPromise();
+  //     this.price = packgeItems.data.packages[0].price * res.data.msisdns.length;
+  //   } else if ([ ServiceCode.ADD_MOBILE_PACKAGE].includes(res.data.service_code)) {
+  //     const packgeItems = await this.packageService.getAll({code: this.getJSONDetail('package')}).toPromise();
+  //     this.price = packgeItems.data.packages[0].price * res.data.details.filter(x => x.attribute == 'msisdn').length;
+  //   }
+  //  if (this.data.service_code == ServiceCode.SIM_KITTING) {
+  //     this.contentHeader.headerTitle = 'Chi tiết đơn kitting';
+  //     this.contentHeader.breadcrumb.links[1].name = 'Danh sách kitting';
+  //     this.contentHeader.breadcrumb.links[1].link = '/task/kitting';
+  //     this.currency = '';
+  //   } else if (this.data.service_code == ServiceCode.SIM_REGISTER) {
+  //       this.getInvalidMsisdns();
 
-      this.contentHeader.headerTitle = 'Chi tiết yêu cầu ĐKTTTB';
-      this.contentHeader.breadcrumb.links[1].name = 'Danh sách yêu cầu ĐKTTTB';
-      this.contentHeader.breadcrumb.links[1].link = '/task/sim-register';
-      this.currency = '';
-    }
+  //     this.contentHeader.breadcrumb.links[1].name = 'Danh sách yêu cầu ĐKTTTB';
+  //     this.contentHeader.breadcrumb.links[1] = {
+  //         name: "Danh sách yêu cầu ĐKTTTB",
+  //         isLink: true,
+  //         link: "/task/sim-register"
+  //       };
+  //     this.contentHeader.breadcrumb.links[2].name = 'Chi tiết yêu cầu ĐKTTTB';
+
+  //       this.currency = '';
+  //   }
   }
 
 }
