@@ -163,6 +163,7 @@ export class TaskProductComponent implements OnInit {
       return; 
     }
     this.pendingUpdatePayload = {
+      product_id: this.selectedSim.product_id,
       serial: this.selectedSim.serial,
       employeeCode: this.updateSimForm.code,
       fullName: this.updateSimForm.name,
