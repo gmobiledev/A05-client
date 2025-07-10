@@ -160,7 +160,7 @@
                     >
                       <option value="">Chọn trạng thái</option>
                       <option
-                        *ngFor="let item of taskTelecomStatus | keyvalue"
+                        *ngFor="let item of filteredTaskTelecomStatus | keyvalue"
                         [value]="item.value"
                         [id]="item.key"
                       >

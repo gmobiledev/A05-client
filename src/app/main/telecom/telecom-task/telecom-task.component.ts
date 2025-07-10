@@ -78,7 +78,7 @@ export class TelecomTaskComponent implements OnInit {
   public fileContract;
   public customer_id;
   notData = false;
-
+  public filteredTaskTelecomStatus
   public searchForm: any = {
     // mobile: '',
     action: "",
@@ -125,6 +125,15 @@ export class TelecomTaskComponent implements OnInit {
           return obj;
         }, {});
 
+    this.filteredTaskTelecomStatus = {
+      STATUS_NEW_ORDER: TaskTelecomStatus.STATUS_NEW_ORDER,
+      STATUS_PROCESSING: TaskTelecomStatus.STATUS_PROCESSING,
+      STATUS_NEW_ORDER_ORGANIZATION: TaskTelecomStatus.STATUS_NEW_ORDER_ORGANIZATION,
+      STATUS_SUCCESS: TaskTelecomStatus.STATUS_SUCCESS,
+      STATUS_REJECT: TaskTelecomStatus.STATUS_REJECT,
+      STATUS_CANCEL: TaskTelecomStatus.STATUS_CANCEL,
+      STATUS_INIT: TaskTelecomStatus.STATUS_INIT
+    };
       // this.searchForm.mobile = params['mobile'] && params['mobile'] != undefined ? params['mobile'] : '';
       this.searchForm.status =
         params["status"] && params["status"] != undefined
