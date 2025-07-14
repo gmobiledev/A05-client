@@ -109,8 +109,16 @@ export class UnitsComponent implements OnInit {
   }
 
   onConfirmDelete(modal: any): void {
-    this.deleteUnit(this.unitToDelete.id);
-    modal.close();
+    let a = this.unitService.deleteUnit(this.unitToDelete.id).subscribe({
+      next: () => {
+        modal.close();
+        this.alertService.showMess('Xóa đơn vị thành công!');
+      },
+      error: (error) => {
+        const errorMessage = error || 'Xóa đơn vị thất bại. Vui lòng thử lại.';
+        this.alertService.showMess(errorMessage);
+      }
+    });
   }
 
   onSubmit(modal): void {
